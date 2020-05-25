@@ -1,0 +1,130 @@
+﻿@{
+    Layout = null;
+}
+
+
+<title>@ViewBag.Title</title> //The Title will show Here.
+
+<fieldset>
+    <div>
+        Select CQI:
+
+        @Html.DropDownList("FooBarDropDown", new List<SelectListItem>
+{
+    new SelectListItem{ Text="CQI", Value = "1" },
+    new SelectListItem{ Text="RSRP", Value = "2" },
+    new SelectListItem{ Text="RSSNR", Value = "3" },
+
+
+ })
+    </div>
+
+
+
+
+    <div id="gpstest" style="width: 800px; height: 600px;">
+        @*set google map size .*@
+    </div>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkVZYQFe4YYva_g5ulymGDt9EBoVjjZJ8"></script>
+    <script src="~/Scripts/jquery-3.4.1.js"></script>
+    @*api key after sign in your google account.*@
+    <script type="text/javascript">
+
+        var markers = @Html.Raw(ViewBag.Markers); //all string value of column properties to viewbag.
+        var ddvalue = 0;
+
+
+ $(document).ready(function()
+{
+    $("#FooBarDropDown").on("change", function()
+    {
+        Selectfilterdata();
+        window.location.reload();
+    });
+ });
+
+
+
+        function cQIFilter(data) {
+            if (ddvalue == "1") { return data.sCQI >= 6 && data.sCQI <= 7; }
+            if (ddvalue == "2") { return data.sCQI >= 8 && data.sCQI <= 10; }
+            if (ddvalue == "3") { return data.sCQI >=11 && data.sCQI <= 12; }
+            if (ddvalue == "4") { return data.sCQI >12; }
+
+        }
+
+        Selectfilterdata();
+        function Selectfilterdata() {
+               ddvalue = document.getElementById("FooBarDropDown").value;
+              //alert(ddvalue);
+        //if (ddvalue >= "1") {
+            markers = markers.filter(cQIFilter);
+          //  }
+
+        //alert(markers);
+            window.onload = function () {
+            var mapOptions = {
+                center: new google.maps.LatLng(markers[1].sLatitude, markers[1].sLongitude), //which city will be shown.
+                zoom: 20, //google map page zoom
+                mapTypeId: google.maps.MapTypeId.ROADMAP //type of view.
+            };
+            var infoWindow = new google.maps.InfoWindow();
+            var map = new google.maps.Map(document.getElementById("gpstest"), mapOptions);//pass div id and google map load values.
+            for (i = 0; i < markers.length; i++) { //here load all city map name
+                var data = markers[i]
+                //alert(data.sLatitude);
+                var icolor = '';
+                if (this.parseInt(data.sCQI) == 6 || this.parseInt(data.sCQI) == 7) {
+                    icolor = "blu";//"blue";
+                    //icolor = "~/Images/blu-blank-lv.png";
+                }
+                else if (this.parseInt(data.sCQI) >= 8 && this.parseInt(data.sCQI) <= 10) {
+                    icolor = "ylw"//"yellow";
+                    //icolor = "~/Images/ylw-blank-lv.png";
+                }
+                else if (this.parseInt(data.sCQI) >= 11 && this.parseInt(data.sCQI) <= 12) {
+                    icolor = "grn";
+                   // icolor = 'C:\Users\Mihir\Desktop\Images\grn-blank-lv.png';
+                }
+                else
+                {
+                     icolor = "red";
+                }
+
+                var mailURL = "http://maps.google.com/mapfiles/kml/paddle/ylw-blank-lv.png";
+                // var image = "'C:\\Users\\Mihir\\Desktop\\Images\\grn-blank-lv.png'";
+
+                //icolor = "http://maps.google.com/mapfiles/kml/paddle/" +icolor + "-blank-lv.png";
+
+                var image = {
+                     url: 'http://maps.google.com/mapfiles/kml/paddle/' +icolor + '-blank-lv.png',
+                            // This marker is 20 pixels wide by 32 pixels high.
+                     size: new google.maps.Size(4, 4),
+                            // The origin for this image is (0, 0).
+                     origin: new google.maps.Point(0, 0),
+                            // The anchor for this image is the base of the flagpole at (0, 32).
+                    anchor: new google.maps.Point(0, 32)
+                };
+
+                var myLatlng = new google.maps.LatLng(data.sLatitude, data.sLongitude); //here i assigned lat and long.
+                var marker = new google.maps.Marker({
+                    position: myLatlng, //lat and long value
+                    map: map, //div id
+                    title: data.sCQI,
+                    icon: image//'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    //marker.setIcon()
+                });
+                (function (marker, data) { //here city map description after click on it.
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent("testing"); //city description value
+                        infoWindow.open(map, marker); //then pop will show  the description
+                    });
+                })(marker, data);
+            }
+        }
+        }
+
+
+
+    </script>
+</fieldset>

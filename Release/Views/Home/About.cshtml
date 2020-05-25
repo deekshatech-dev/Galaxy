@@ -1,0 +1,84 @@
+﻿@{
+    ViewBag.Title = "Map Ploting";
+    List<GPSMap.Helper.LocationDTO> lstLoc = ViewBag.ListOfLocation;
+}
+
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDgJDbn0VP_AnX4HsXSjN3cIn0MoEJ4vOw&sensor=false"></script>
+
+
+<style>
+    #mapplot {
+        width: 500px;
+        height: 300px;
+    }
+</style>
+
+<h2>@ViewBag.Title.</h2>
+<h3>@ViewBag.Message</h3>
+
+<p> Map</p>
+@*<div id="mapplot">
+
+    </div>*@
+
+@*
+    <table border="1">
+        <thead>
+            <tr>
+                <td>Base64</td>
+                <td>Simple Str</td>
+                <td>Encode UTF8</td>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                foreach (GPSMap.Helper.LocationDTO item in lstLoc)
+                {
+
+                    <tr>
+                        <td>
+                            @item.strGPSFromB64Str
+                        </td>
+                        <td>
+                            @item.strGPSFromB64Str
+                        </td>
+                        <td>
+                            @item.strGPSFromB64Str
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+*@
+@*<script type="text/javascript">
+        var map = new google.maps.Map(
+            $('#mapplot')[0],
+            {
+                zoom: 50,
+                center: new google.maps.LatLng(54.0206654, 9.382691),
+                mapTypeId: 'terrain',
+                streetViewControl: true
+            }
+        );
+
+        map.StreetView = new google.maps.StreetViewPanorama(
+            $('#mapplot')[0],
+            {
+                position: map.getCenter(),
+                pov: {
+                    heading: 0, pitch: 0, zoom: 1
+                }
+            });
+    </script>*@
+
+@*@foreach (var item in Model)
+    {
+        <text>
+            var marker = new google.maps.Marker({
+            map: map,
+            position: { lat: @item.VehicleLocation.Latitude, lng: @item.VehicleLocation.Longitude },
+            title: 'Hello World!'
+            });
+        </text>
+    }*@

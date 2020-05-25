@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container content icons" id="data" style="display:none">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="#" onclick="toggleDiv('maindiv');">
+                    <img src="~/Images/back.png" alt="" style="width: 25%;" />
+                    <h3>Back</h3>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="~/Upload/Index">
+                    <img src="~/Images/upload.png" alt="" style="width:25%;">
+                    <h3>Upload</h3>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="~/Home/Index">
+                    <img src="~/Images/interface.png" alt="" style="width:25%;">
+                    <h3>Map</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container content icons" id="parser" style="display:none">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="#" onclick="toggleDiv('maindiv');">
+                    <img src="~/Images/back.png" alt="" style="width: 25%;" />
+                    <h3>Back</h3>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="~/Home/XMLResult">
+                    <img src="~/Images/upload.png" alt="" style="width:25%;">
+                    <h3>Parser</h3>
+                </a>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="thumbnail">
+                <a href="~/Ericsson/Index">
+                    <img src="~/Images/interface.png" alt="" style="width:25%;">
+                    <h3>5g Parser</h3>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container content icons" id="maindiv">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="#">
+                    <img src="~/Images/auto-cm.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="#">
+                    <img src="~/Images/data-storage.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="javascript:void(0)" onclick="toggleDiv('data');">
+                    <img src="~/Images/dt-data.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="javascript:void(0)" onclick="toggleDiv('parser');">
+                    <img src="~/Images/pm-counter.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="#">
+                    <img src="~/Images/network-audit.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="/Home">
+                    <img src="~/Images/oss.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="/Home">
+                    <img src="~/Images/trace.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script>
+        function toggleDiv(sectionName) {
+            $(".icons").hide();
+            $("#" + sectionName).toggle();
+        }
+
+        $(document).ready(function () {
+
+        });
+    </script>
+}

@@ -1,0 +1,157 @@
+﻿@model GPSMap.Models.SearchXMLViewModel
+
+@{
+    ViewBag.Title = "EricssonXMLResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("XMLResult", "Home", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default" style="margin-top:10px;">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="exampleInputName2">Select Vendor</label>
+                                @Html.DropDownListFor(x => x.VendorType, new List<SelectListItem>
+
+                                    {
+                                       new SelectListItem{ Text="Select Vendor", Value = "0" },
+                                       new SelectListItem{ Text="Nokia", Value = "Nokia" },
+                                       new SelectListItem{ Text="Ericsson", Value = "Ericsson" }
+                                    }, new { @class = "form-control" })
+
+                            </div>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-from'>
+                                    @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-to'>
+                                    @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="exampleInputName2">Select Batch</label>
+                                @Html.DropDownListFor(x => x.BatchID, new List<SelectListItem>
+
+                                    {
+                                       new SelectListItem{ Text="Select Batch", Value = "0" },
+                                       new SelectListItem{ Text="1", Value = "1" },
+                                       new SelectListItem{ Text="2", Value = "2" }
+                                    }, new { @class = "form-control" })
+
+                            </div>
+                            <button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <table id="example" class="cell-border compact stripe" style="width:100%">
+                        <thead>
+                            <tr>
+                                <th>SubNetwork</th>
+                                <th>MeContext</th>
+                                <th>ManagedElementId</th>
+                                <th>DataContainer</th>
+                                <th>MOC</th>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                                <th>GUIValue</th>
+                                <th>Discrepency</th>
+                                <th>Schedule</th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script>
+
+        var gridData = @Html.Raw(Json.Encode(ViewBag.map));
+        var popupSearchIds = [];
+        var table = null;
+        if (gridData) {
+            $(document).ready(function () {
+                if (gridData && gridData.length > 0) {
+                    plotToMap.init($("#KPI").val(), gridData);
+                    plotToMap.loadMap();
+                } else {
+                    toastr.error("No Records found for the selected dates");
+                }
+            });
+        }
+
+        $('#p-from').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+
+        $('#p-to').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+
+        table = $('#example').DataTable({
+            data: gridData,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'clear filter',
+                    className: 'btn btn-primary btn-sm',
+                    action: function (e, dt, node, config) {
+
+                        table
+                            .search('')
+                            .columns().search('')
+                            .draw();
+                    }
+                }
+            ],
+            columns: [
+                { data: "SubNetwork" },
+                { data: "MeContext" },
+                { data: "ManagedElementId" },
+                { data: "DataContainer" },
+                { data: "MOC" },
+                { data: "Parameter" },
+                { data: "Value" },
+                { data: "GUIValue" },
+                { data: "Discrepency" },
+                { data: "Schedule" }
+            ],
+            orderCellsTop: true,
+            fixedHeader: true,
+            responsive: true,
+            scrollX: false,
+            autoWidth: true,
+        });
+
+        table.on('search.dt', function () {
+            //number of filtered rows
+            //console.log(table.rows({ filter: 'applied' }).nodes().length);
+            //filtered rows data as arrays
+            //console.log(table.rows({ filter: 'applied' }).data());
+            popupSearchIds = $.map(table.rows({ filter: 'applied' }).data(), function (item) {
+                return item.Id;
+            })
+        });
+
+    </script>
+}
+

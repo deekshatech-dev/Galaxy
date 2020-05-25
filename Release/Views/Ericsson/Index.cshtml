@@ -1,0 +1,181 @@
+﻿@model GPSMap.Models.Ericsson5gXMLSearch
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Index", "Ericsson", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default" style="margin-top:10px;">
+                        <div class="panel-body">
+
+                            <div class="form-group col-md-2">
+                                <div class='input-group date' id='p-from'>
+                                    @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <div class='input-group date' id='p-to'>
+                                    @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+
+                                <div class='input-group' id='p-moc'>
+                                    @Html.TextBoxFor(x => x.MOClass, new { placeholder = "MOClass", @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <div class='input-group' id='p-me'>
+                                    @Html.TextBoxFor(x => x.ManagedElement, new { placeholder = "Managed Element", @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+                            <div class="form-group col-md-2">
+                                <div class='input-group' id='p-cnt'>
+                                    @Html.TextBoxFor(x => x.counter, new { placeholder = "Counter", @class = "form-control", autocomplete = "off" })
+                                </div>
+                            </div>
+
+                            <div class="form-group col-md-2">
+                                <div class='input-group' id='p-btn'>
+                                    <button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>
+                                </div>
+                            </div>
+
+
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <table id="example"  class="cell-border compact stripe" style="width:100%;">
+                        <thead>
+                            <tr>
+                                <th>MOClass</th>
+                                <th>MOClassValue</th>
+                                <th>ManagedElement</th>
+                                <th>counter</th>
+                                <th>CounterValue</th>
+                            </tr>
+                        </thead>
+
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+
+
+@section scripts{
+    <script>
+
+        var gridData = @Html.Raw(Json.Encode(ViewBag.map));
+        var popupSearchIds = [];
+        var table = null;
+        if (gridData) {
+            $(document).ready(function () {
+                if (gridData && gridData.length > 0) {
+                 
+
+                   
+                } else {
+                    
+                    toastr.error("No Records found for the selected dates");
+                }
+            });
+           
+        }
+        else {
+           
+        }
+
+
+        $('#p-from').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+
+        $('#p-to').datetimepicker({
+            format: 'DD/MM/YYYY'
+        });
+
+        table = $('#example').DataTable({
+            data: gridData,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'clear filter',
+                    className: 'btn btn-primary btn-sm',
+                    action: function (e, dt, node, config) {
+
+                        table
+                            .search('')
+                            .columns().search('')
+                            .draw();
+                    }
+                }
+            ],
+            columns: [
+                { data: "MOClass" },
+                { data: "MOClassValue" },
+                { data: "ManagedElement" },
+                { data: "counter" },
+                { data: "CounterValue" }
+            ],
+            orderCellsTop: true,
+            fixedHeader: true,
+            responsive: true,
+            scrollX: false,
+            autoWidth: true,
+        });
+
+        table.on('search.dt', function () {
+            //number of filtered rows
+            //console.log(table.rows({ filter: 'applied' }).nodes().length);
+            //filtered rows data as arrays
+            //console.log(table.rows({ filter: 'applied' }).data());
+            popupSearchIds = $.map(table.rows({ filter: 'applied' }).data(), function (item) {
+                return item.Id;
+            })
+        });
+
+        setUpSearchHeader();
+
+
+        function setUpSearchHeader() {
+            // Setup - add a text input to each footer cell
+            //ref: https://datatables.net/extensions/fixedheader/examples/options/columnFiltering.html
+            $('#example thead tr').clone(true).appendTo('#example thead');
+            $('#example thead tr:eq(1) th').each(function (i) {
+                var title = $(this).text();
+                $(this).html('<input class="u-search-input" type="text" placeholder="Search ' + title + '" />');
+
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        }
+
+    </script>
+}
+
+

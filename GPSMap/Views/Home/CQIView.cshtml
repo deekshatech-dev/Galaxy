@@ -1,0 +1,77 @@
+﻿@{
+    Layout = null;
+}
+
+
+<title>@ViewBag.Title</title> //The Title will show Here.
+
+
+<fieldset>
+    <div id="gpstest1" style="width: 800px; height: 600px;">
+        @*set google map size .*@
+    </div>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkVZYQFe4YYva_g5ulymGDt9EBoVjjZJ8"></script>
+    @*api key after sign in your google account.*@
+    <script type="text/javascript">
+
+        var markers = @Html.Raw(ViewBag.Markers); //all string value of column properties to viewbag.
+        //alert(markers);
+        window.onload = function () {
+            var mapOptions = {
+                center: new google.maps.LatLng(markers[1].LTE_UE_GPS_latitude, markers[1].LTE_UE_GPS_longitude), //which city will be shown.
+                zoom: 20, //google map page zoom
+                mapTypeId: google.maps.MapTypeId.ROADMAP //type of view.
+            };
+            var infoWindow = new google.maps.InfoWindow();
+            var map = new google.maps.Map(document.getElementById("gpstest1"), mapOptions);//pass div id and google map load values.
+            for (i = 0; i < markers.length; i++) { //here load all city map name
+                var data = markers[i]
+                var icolor = 'red';
+                //alert(data.sLatitude);
+                if (data.LTE_UE_CQI_CQI === "") {
+                   //alert('hi');
+                }
+                else {
+                if (this.parseInt(data.LTE_UE_CQI_CQI) == 6 || this.parseInt(data.LTE_UE_CQI_CQI) == 7) {
+                    icolor = "blu";//"blue";
+                }
+                else if (this.parseInt(data.LTE_UE_CQI_CQI) >= 8 && this.parseInt(data.LTE_UE_CQI_CQI) <= 10) {
+                    icolor = "ylw"//"yellow";
+                }
+                else if (this.parseInt(data.LTE_UE_CQI_CQI) >= 11 && this.parseInt(data.LTE_UE_CQI_CQI) <= 12) {
+                    icolor = "grn";
+                    }
+
+                    }
+
+                var mailURL = "http://maps.google.com/mapfiles/kml/paddle/ylw-blank-lv.png";
+                // icolor = "http://maps.google.com/mapfiles/kml/paddle/" +icolor + "-blank-lv.png";
+                  var image = {
+                     url: 'http://maps.google.com/mapfiles/kml/paddle/' +icolor + '-blank-lv.png',
+                            // This marker is 20 pixels wide by 32 pixels high.
+                     size: new google.maps.Size(4, 4),
+                            // The origin for this image is (0, 0).
+                     origin: new google.maps.Point(0, 0),
+                            // The anchor for this image is the base of the flagpole at (0, 32).
+                    anchor: new google.maps.Point(0, 32)
+                };
+
+                var myLatlng = new google.maps.LatLng(data.LTE_UE_GPS_latitude, data.LTE_UE_GPS_longitude); //here i assigned lat and long.
+                var marker = new google.maps.Marker({
+                    position: myLatlng, //lat and long value
+                    map: map, // div id
+                    title: data.LTE_UE_CQI_CQI,
+                   icon: image //'http://maps.google.com/mapfiles/ms/icons/green-dot.png'
+                    // icon: self.imageWithImage(image: UIImage(named: "imageName")!, scaledToSize: CGSize(width: 3.0, height: 3.0))
+                    // marker.setIcon()
+                });
+                (function (marker, data) { // here city map description after click on it.
+                    google.maps.event.addListener(marker, "click", function (e) {
+                        infoWindow.setContent("testing"); // city description value
+                        infoWindow.open(map, marker); // then pop will show  the description
+                    });
+                })(marker, data);
+            }
+        }
+    </script>
+</fieldset>

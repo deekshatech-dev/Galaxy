@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPSMap", "GPSMap\GPSMap.csproj", "{C31967F5-226F-4A7E-9EC1-697F5CCABEEA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NMFReaderForGPS", "NMFReaderForGPS\NMFReaderForGPS.csproj", "{AEA9A80E-1C6E-475E-9F0E-ED353A776019}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GPSDB", "GPSDB\GPSDB.csproj", "{5851DC43-CDCB-433F-9D97-6A8813FD3D1F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C31967F5-226F-4A7E-9EC1-697F5CCABEEA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C31967F5-226F-4A7E-9EC1-697F5CCABEEA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C31967F5-226F-4A7E-9EC1-697F5CCABEEA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C31967F5-226F-4A7E-9EC1-697F5CCABEEA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEA9A80E-1C6E-475E-9F0E-ED353A776019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA9A80E-1C6E-475E-9F0E-ED353A776019}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA9A80E-1C6E-475E-9F0E-ED353A776019}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA9A80E-1C6E-475E-9F0E-ED353A776019}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5851DC43-CDCB-433F-9D97-6A8813FD3D1F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5851DC43-CDCB-433F-9D97-6A8813FD3D1F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5851DC43-CDCB-433F-9D97-6A8813FD3D1F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5851DC43-CDCB-433F-9D97-6A8813FD3D1F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {02A08A07-1871-47DC-965B-E71C5EE8192F}
+	EndGlobalSection
+EndGlobal
