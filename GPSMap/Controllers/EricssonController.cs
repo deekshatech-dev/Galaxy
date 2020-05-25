@@ -3,6 +3,7 @@ using GPSMap.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Web;
 using System.Web.Mvc;
 
@@ -66,6 +67,46 @@ namespace GPSMap.Controllers
             }
 
             return View(form);
+        }
+
+        [HttpPost]
+        public FileResult ExportCSV()
+        {
+
+            using (var dbContext = new DatabaseContext())
+            {
+                List<object> ericsson_5gdetail = (from ericsson in dbContext.ericsson_5gdetail.ToList().Take(5000)
+                                                  select new[] { ericsson.MOClass.ToString(),
+                                                            ericsson.MOClassValue,
+                                                           ericsson.JobID,
+                                                           ericsson.ManagedElement,
+                                                           ericsson.Equipment,
+                                                           ericsson.MOClass1,
+                                                           ericsson.MOClass2,
+                                                           ericsson.counter,
+                                                           ericsson.CellName,
+                                                           ericsson.CounterValue,
+                                               }).ToList<object>();
+
+                ericsson_5gdetail.Insert(0, new string[10] { "MOClass", "MOClassValue", "JobID", "ManagedElement", "Equipment", "MOClass1", "MOClass2", "counter", "CellName", "CounterValue" });
+
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i < ericsson_5gdetail.Count; i++)
+                {
+                    string[] ericsson_dtl = (string[])ericsson_5gdetail[i];
+                    for (int j = 0; j < ericsson_dtl.Length; j++)
+                    {
+                        //Append data with separator.
+                        sb.Append(ericsson_dtl[j] + ',');
+                    }
+
+                    //Append new line character.
+                    sb.Append("\r\n");
+
+                }
+
+                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "Ericsson.csv");
+            }
         }
     }
 }

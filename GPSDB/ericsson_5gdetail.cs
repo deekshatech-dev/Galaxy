@@ -23,6 +23,8 @@ namespace GPSDB
         public string CounterValue { get; set; }
         public DateTime CreatedDate { get; set; }
 
+        public string CellName { get; set; }
+
 
     }
 }
