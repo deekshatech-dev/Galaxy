@@ -162,7 +162,12 @@ textarea {
 .navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
     background-color: #001a40;
     color: white !important;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
 }
+
     .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
         color: white !important;
     }
@@ -172,18 +177,26 @@ textarea {
 .navbar-header {
     margin-top:17px;
 }
+.input-group .form-control{
+    z-index: 0;
+}
 .content {
-    margin-top:0px !important;
+    margin-top: 0px !important;
 }
 .navbar-nav li a {
     /*border-right: 1px solid #fff;*/
 }
 
+.body-content{
+    margin-top: 85px;
+    z-index: 0;
+}
 footer {
+    z-index:1;
     background-color: #001a40;
     color: #fff;
     text-align: left;
-    position: absolute;
+    position: fixed;
     bottom: 0;
     width: 100%;
     height: 60px; /* Height of the footer */

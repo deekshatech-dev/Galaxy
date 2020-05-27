@@ -7,10 +7,14 @@ using System.Reflection;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
+using GPSMap.Helper;
+using Newtonsoft.Json;
+using System.Web.Script.Serialization;
+using GPSMap.Data;
 
 namespace GPSMap.Controllers
 {
-   
+
 
     [Authorize]
     public class EricssonController : Controller
@@ -28,9 +32,9 @@ namespace GPSMap.Controllers
 
             using (var dbContext = new DatabaseContext())
             {
-               // var mst = dbContext.ericsson_5gmaster.AsQueryable();
+                // var mst = dbContext.ericsson_5gmaster.AsQueryable();
                 var dtl = dbContext.ericsson_5gdetail.AsQueryable();
-                 
+
                 if (form.ToDate != null)
                 {
                     dtl = dtl.Where(t => t.CreatedDate <= form.ToDate.Value);
@@ -62,11 +66,63 @@ namespace GPSMap.Controllers
             return View(form);
         }
 
+        public ActionResult Dashboard()
+        {
+            ViewBag.map = "{}";
+            using (var dbContext = new DatabaseContext())
+            {
+                ViewBag.KPIValues = new SelectList(dbContext.ericsson_kpi_5g_data.Distinct().Take(15).ToList().Select(n => new SelectListItem
+                {
+                    Text = n.KPIName,
+                    Value = n.KPIValue
+                }), "Value", "Text");
+            }
+            var form = new SearchViewModel();
+            return View(form);
+        }
+
+        [HttpPost]
+        public ActionResult Dashboard(SearchViewModel form, FormCollection formData)
+        {
+            using (var dbContext = new DatabaseContext())
+            {
+                var map = dbContext.MapPoints.Join(dbContext.MapAttributes,
+                     mp => mp.attribute_id,
+                     ma => ma.attributeid,
+                    (mp, ma) => new { MapPoints = mp, MapAttributes = ma }).AsQueryable();
+
+                if (form.ToDate != null)
+                {
+                    map = map.Where(t => t.MapPoints.period_to <= form.ToDate.Value);
+                }
+                if (form.FromDate != null)
+                {
+                    map = map.Where(t => t.MapPoints.period_from >= form.FromDate.Value);
+                }
+                if (form.Id != null && form.Id.Any())
+                {
+                    map = map.Where(t => form.Id.Contains(t.MapPoints.Id));
+                }
+
+                var maplist = map.ToList();
+
+                JavaScriptSerializer serializer = new JavaScriptSerializer();
+                serializer.MaxJsonLength = Int32.MaxValue;
+                ViewBag.map = serializer.Serialize(maplist);
+            }
+
+            ViewBag.KPIValues = KPIValues.LTE_UE_CQI_CQI.ToSelectList(formData["KPI"]);
+            form.KPI = formData["KPI"];
+            return View(form);
+        }
+
+
+
         [HttpPost]
         [MultipleButton(Name = "action", Argument = "ExportCSV")]
         public FileResult ExportCSV(Ericsson5gXMLSearch form)
         {
-                      
+
 
             using (var dbContext = new DatabaseContext())
             {
@@ -95,7 +151,7 @@ namespace GPSMap.Controllers
 
 
                 List<object> ericsson_5gdetail = (from ericsson in dtl.ToList().Take(5000)
-                                                                   select new[] { ericsson.MOClass.ToString(),
+                                                  select new[] { ericsson.MOClass.ToString(),
                                                                    ericsson.MOClassValue,
                                                                   ericsson.JobID,
                                                                   ericsson.ManagedElement,
@@ -112,26 +168,26 @@ namespace GPSMap.Controllers
                 StringBuilder sb = new StringBuilder();
                 for (int i = 0; i < ericsson_5gdetail.Count; i++)
                 {
-                    
-                        string[] ericsson_dtl = (string[])ericsson_5gdetail[i];
-                        for (int j = 0; j < ericsson_dtl.Length; j++)
-                        {
-                            //Append data with separator.
-                            sb.Append(ericsson_dtl[j] + ',');
-                        }
-                    
+
+                    string[] ericsson_dtl = (string[])ericsson_5gdetail[i];
+                    for (int j = 0; j < ericsson_dtl.Length; j++)
+                    {
+                        //Append data with separator.
+                        sb.Append(ericsson_dtl[j] + ',');
+                    }
+
                     //Append new line character.
                     sb.Append("\r\n");
 
-                    }
-                    Ericsson5gXMLSearch ercs = new Ericsson5gXMLSearch();
+                }
+                Ericsson5gXMLSearch ercs = new Ericsson5gXMLSearch();
 
-               return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "Ericsson.csv");
+                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "Ericsson.csv");
 
             }
 
 
-        
+
 
         }
     }
@@ -142,6 +198,7 @@ namespace GPSMap.Controllers
     {
         public string Name { get; set; }
         public string Argument { get; set; }
+        public object ViewBag { get; private set; }
 
         public override bool IsValidName(ControllerContext controllerContext, string actionName, MethodInfo methodInfo)
         {
@@ -156,6 +213,7 @@ namespace GPSMap.Controllers
             }
 
             return isValidName;
-        }
+        }        
     }
+
 }

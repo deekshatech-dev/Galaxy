@@ -1,0 +1,307 @@
+﻿@using GPSMap.Data;
+@model GPSMap.Models.SearchViewModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-inline" }))
+{
+    @Html.HiddenFor(x => x.Ids)
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default" style="margin-top:10px;">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="exampleInputName2">Select KPI</label>
+                                @*@Html.DropDownListFor(x => x.KPI, KPIValues.LTE_UE_CQI_CQI.ToSelectList(), "Select KPI", new { @class = "form-control", multiple = "multiple" })*@
+                                <select id="KPI" multiple="multiple" required name="KPI">
+                                    <option>Select KPI</option>
+                                    @if (ViewBag.KPIValues != null)
+                                    {
+                                        foreach (var item in ViewBag.KPIValues)
+                                        {
+                                            if (item.Text != null)
+                                            {
+                                                if (Model.KPI != null && Model.KPI.Split(',').ToList().Any(s => s.ToLower() == item.Value.ToLower()))
+                                                {
+                                                    <option value="@item.Value" selected>
+                                                        @item.Text
+                                                    </option>
+                                                }
+                                                else
+                                                {
+                                                    <option value="@item.Value">
+                                                        @item.Text
+                                                    </option>
+                                                }
+
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-from'>
+                                    @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-to'>
+                                    @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <button id="generateplot" class="btn btn-primary btn-sm" type="submit">Show Plot</button>
+                            <button id="showfilter" type="button" class="btn btn-primary btn-sm" onclick="BindPopup();">
+                                Show Filter
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="width:800px; height:600px; text-align:center;">
+                    <canvas id="myChart"></canvas>
+                </div>
+
+                <div class="col-md-12" id="map_section" style="display:none;">
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="overflow:hidden" id="map_view">
+                            @* <fieldset id="map_view">*@
+
+                            @*<div id="gpstest1" style="width: auto; height: auto;">
+                    </div>*@
+                            @*</fieldset>*@
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-lg" role="document" style="width:90%;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Map Data</h4>
+            </div>
+            <div class="modal-body">
+                <div class="table-responsive">
+                    <table id="popup-tbl" class="table table-striped table-bordered responsive"></table>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" onclick="popupGenerateMapClick()">Generate Map</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script src="~/js/Plotmap.js"></script>
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCkVZYQFe4YYva_g5ulymGDt9EBoVjjZJ8"></script>
+
+    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+
+    <script>
+        $('#KPI').multiselect({
+            includeSelectAllOption: false
+        });
+        var gridData = @Html.Raw(ViewBag.map);
+        var popupSearchIds = [];
+        var table = null;
+        if (gridData && Object.keys(gridData).length > 0) {
+            $("#map_section").show();
+            $("#showfilter").show();
+            $(document).ready(function () {
+                if (gridData && gridData.length > 0) {
+                    plotToMap.init($("#KPI").val(), gridData);
+//                    plotToMap.loadMap();
+                } else {
+                    toastr.error("No Records found for the selected dates");
+                }
+            });
+        } else {
+            $("#map_section").hide();
+            $("#showfilter").hide();
+        }
+
+        $('#p-from').datetimepicker({
+            format: 'DD/MM/YYYY',
+            showClear: true
+        });
+
+        $('#p-to').datetimepicker({
+            format: 'DD/MM/YYYY',
+			showClear: true
+        });
+
+        @*function GeneratePlot() {
+            alert($("#KPI").val());
+           // @Model.KPI = $("#KPI").val();
+            return true;
+        };*@
+
+        function popupGenerateMapClick() {
+            $('#Ids').val(JSON.stringify(popupSearchIds));
+            $("#generateplot").click();
+        };
+
+        function BindPopup() {
+            var thead = `<thead>
+                            <tr>
+                                <th>Name</th>
+                                <th class="col-lat">IMEI</th>
+                                <th class="col-lat">IMSI</th>
+                                <th class="col-80">Id</th>
+                                <th class="col-lat">Latitude</th>
+                                <th class="col-lat">Longitude</th>
+                                <th>Period_from</th>
+                            </tr>
+                        </thead>`
+
+            $('#myModal').modal('show');
+            if ($.fn.DataTable.isDataTable('#popup-tbl')) {
+                $('#popup-tbl').DataTable().destroy();
+            }
+
+            $('#popup-tbl').html(thead);
+
+            setUpSearchHeader();
+            debugger;
+            table = $('#popup-tbl').DataTable({
+                data: gridData,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        text: 'clear filter',
+                        className: 'btn btn-primary btn-sm',
+                        action: function (e, dt, node, config) {
+
+                            table
+                                .search('')
+                                .columns().search('')
+                                .draw();
+                        }
+                    }
+                ],
+                columns: [
+                    { data: "MapAttributes.name" },
+                    { data: "MapAttributes.imei" },
+                    { data: "MapAttributes.imsi" },
+                    { data: "MapPoints.Id"},
+                    { data: "MapPoints.LTE_UE_GPS_latitude" },
+                    { data: "MapPoints.LTE_UE_GPS_longitude" },
+                    {
+                        data: "period_from",
+                        "mRender": function (data, type, row) {
+                            return moment(row.period_from).format("DD/MM/YYYY HH:mm");
+                        },
+                    }
+                ],
+                orderCellsTop: true,
+                fixedHeader: true,
+                responsive: true,
+                scrollX: false,
+                autoWidth:true,
+            });
+
+            table.on('search.dt', function () {
+                //number of filtered rows
+                //console.log(table.rows({ filter: 'applied' }).nodes().length);
+                //filtered rows data as arrays
+                //console.log(table.rows({ filter: 'applied' }).data());
+                popupSearchIds = $.map(table.rows({ filter: 'applied' }).data(), function (item) {
+                    return item.Id;
+                })
+            });
+
+
+        };
+
+        function setUpSearchHeader() {
+            // Setup - add a text input to each footer cell
+            //ref: https://datatables.net/extensions/fixedheader/examples/options/columnFiltering.html
+            $('#popup-tbl thead tr').clone(true).appendTo('#popup-tbl thead');
+            $('#popup-tbl thead tr:eq(1) th').each(function (i) {
+                var title = $(this).text();
+                $(this).html('<input class="u-search-input" type="text" placeholder="Search ' + title + '" />');
+
+                $('input', this).on('keyup change', function () {
+                    if (table.column(i).search() !== this.value) {
+                        table
+                            .column(i)
+                            .search(this.value)
+                            .draw();
+                    }
+                });
+            });
+        }
+        $(function () {
+            //$('#KPI').multiselect({
+            //    includeSelectAllOption: false
+            //});
+            $(document).on('shown.bs.modal', function (e) {
+                // clear previous junk if any
+                $.fn.dataTable.tables({ visible: true, api: true }).columns.adjust();
+
+            });
+        });
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script>
+        var ctx = document.getElementById('myChart').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: ['N Addition SgNB Prep Successes', 'SN Addition SgNB Attempts', 'SN Connection Limitation Failure Rate', 'Network Connection QCI 8 Drop Rate', 'Network RAB QCI 8 Drops', 'SN Addition SgNB Addition Prep Success Rate'],
+                datasets: [{
+                    label: '# of Votes',
+                    data: [12, 19, 3, 5, 2, 3],
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132, 1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+}
