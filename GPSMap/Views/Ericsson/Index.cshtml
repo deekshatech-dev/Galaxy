@@ -5,105 +5,108 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-@using (Html.BeginForm("Index", "Ericsson", FormMethod.Post, new { @class = "form-inline" }))
-{
-    <div class="container">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default" style="margin-top:10px;">
-                        <div class="panel-body">
+    @*<form action="" method="post">
+        <input type="submit" value="Save" name="action:Save" />
+        <input type="submit" value="Cancel" name="action:Cancel" />
+    </form>*@
 
-                            <div class="form-group col-md-2">
-                                <div class='input-group date' id='p-from'>
-                                    @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+@*@using (Html.BeginForm("Index", "Ericsson", FormMethod.Post, new { @class = "form-inline" }))
+{*@
+    <form action="" method="post">
+        <div class="container">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="panel panel-default" style="margin-top:10px;">
+                            <div class="panel-body">
+
+                                <div class="form-group col-md-2">
+                                    <div class='input-group date' id='p-from'>
+                                        @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <div class='input-group date' id='p-to'>
-                                    @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                                <div class="form-group col-md-2">
+                                    <div class='input-group date' id='p-to'>
+                                        @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group col-md-2">
+                                <div class="form-group col-md-2">
 
-                                <div class='input-group' id='p-moc'>
-                                    @Html.TextBoxFor(x => x.MOClass, new { placeholder = "MOClass", @class = "form-control", autocomplete = "off" })
+                                    <div class='input-group' id='p-moc'>
+                                        @Html.TextBoxFor(x => x.MOClass, new { placeholder = "MOClass", @class = "form-control", autocomplete = "off" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <div class='input-group' id='p-me'>
-                                    @Html.TextBoxFor(x => x.ManagedElement, new { placeholder = "Managed Element", @class = "form-control", autocomplete = "off" })
+                                <div class="form-group col-md-2">
+                                    <div class='input-group' id='p-me'>
+                                        @Html.TextBoxFor(x => x.ManagedElement, new { placeholder = "Managed Element", @class = "form-control", autocomplete = "off" })
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="form-group col-md-2">
-                                <div class='input-group' id='p-cnt'>
-                                    @Html.TextBoxFor(x => x.counter, new { placeholder = "Counter", @class = "form-control", autocomplete = "off" })
+                                <div class="form-group col-md-2">
+                                    <div class='input-group' id='p-cnt'>
+                                        @Html.TextBoxFor(x => x.counter, new { placeholder = "Counter", @class = "form-control", autocomplete = "off" })
+                                    </div>
                                 </div>
-                            </div>
 
-                            @*<div class="form-group col-md-2">
-            <div class='input-group' id='p-btn'>
-                <button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>
-            </div>
-        </div>*@
+                                <div class="form-group col-md-1">
+                                    <div class='input-group' id='p-btn'>
+                                        @*<button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>*@
+                                        @*@using (Html.BeginForm("Index", "Ericsson", FormMethod.Post))
+                                        {
+                                            <input type="submit" id="btnSubmit1" value="Get Data" />
+                                        }*@
+                                        <input type="submit" value="Get Data" name="action:Index" />
 
-                            <div class="form-group col-md-1">
-                                <div class='input-group' id='p-btn'>
-                                    @*<button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>*@
-                                    @using (Html.BeginForm("Index", "Ericsson", FormMethod.Post))
-                                    {
-                                        <input type="submit" id="btnSubmit1" value="Get Data" />
-                                    }
-
+                                    </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group col-md-1">
-                                <div class='input-group' id='p-btn'>
-                                    @*<button id="exportcsv" class="btn btn-primary btn-sm" type="submit">Export CSV</button>*@
-                                    @using (Html.BeginForm("ExportCSV", "Ericsson", FormMethod.Post))
-                                    {
-                                        <input type="submit" id="btnSubmit" value="Export" />
-                                    }
+                                <div class="form-group col-md-1">
+                                    <div class='input-group' id='p-btn'>
+                                        @*<button id="exportcsv" class="btn btn-primary btn-sm" type="submit">Export CSV</button>*@
+                                        @*@using (Html.BeginForm("ExportCSV", "Ericsson", FormMethod.Post))
+                                        {
+                                            <input type="submit" id="btnSubmit" value="Export" />
+                                        }*@
+                                        <input type="submit" value="Export" name="action:ExportCSV" />
+                                    </div>
                                 </div>
+
+
+
+
                             </div>
-
-
-
-
                         </div>
                     </div>
+
+                    <div class="col-md-12">
+                        <table id="example" class="cell-border compact stripe" style="width:100%;">
+                            <thead>
+                                <tr>
+                                    <th>MOClass</th>
+                                    <th>MOClassValue</th>
+                                    <th>ManagedElement</th>
+                                    <th>counter</th>
+                                    <th>CounterValue</th>
+                                </tr>
+                            </thead>
+
+                        </table>
+                    </div>
+
                 </div>
-
-                <div class="col-md-12">
-                    <table id="example"  class="cell-border compact stripe" style="width:100%;">
-                        <thead>
-                            <tr>
-                                <th>MOClass</th>
-                                <th>MOClassValue</th>
-                                <th>ManagedElement</th>
-                                <th>counter</th>
-                                <th>CounterValue</th>
-                            </tr>
-                        </thead>
-
-                    </table>
-                </div>
-
             </div>
         </div>
-    </div>
-}
+    </form>        
+@*}*@
 
 
-@section scripts{
-    <script>
+        @section scripts{
+            <script>
 
         var gridData = @Html.Raw(Json.Encode(ViewBag.map));
         var popupSearchIds = [];
@@ -111,18 +114,18 @@
         if (gridData) {
             $(document).ready(function () {
                 if (gridData && gridData.length > 0) {
-                 
 
-                   
+
+
                 } else {
-                    
+
                     toastr.error("No Records found for the selected dates");
                 }
             });
-           
+
         }
         else {
-           
+
         }
 
 
@@ -196,7 +199,10 @@
             });
         }
 
-    </script>
-}
+
+
+
+            </script>
+        }
 
 
