@@ -113,31 +113,34 @@ namespace GPSMap.Controllers
                     date = Convert.ToDateTime(request.Date);
                 }
 
+                chartValues.Labels = new List<string>();
                 if (request.Trend == "Monthly")
                 {
                     foreach (var item in this.GetDays(date.Year, date.Month))
                     {
-                        var dayRecord = records.Where(g => g.CreatedDate.Day == item);
-                        var numeratorSum = 0M;
-                        var denominatorSum = 0M;
-                        var dayKPIValue = numeratorSum;
-                        if (dayRecord.Any())
+                        if (!string.IsNullOrEmpty(Convert.ToString(item)))
                         {
-                            numeratorSum = dayRecord.Sum(s => s.Numerator);
-                            denominatorSum = dayRecord.Sum(s => s.Denominator);
-                            if (denominatorSum > 0)
+                            var dayRecord = records.Where(g => g.CreatedDate.Day == item && g.CreatedDate.Month == date.Month);
+                            var numeratorSum = 0M;
+                            var denominatorSum = 0M;
+                            var dayKPIValue = numeratorSum;
+                            if (dayRecord.Any())
                             {
-                                dayKPIValue = numeratorSum / denominatorSum;
+                                numeratorSum = dayRecord.Sum(s => s.Numerator);
+                                denominatorSum = dayRecord.Sum(s => s.Denominator);
+                                if (denominatorSum > 0)
+                                {
+                                    dayKPIValue = numeratorSum / denominatorSum;
+                                }
                             }
+                            chartValues.ChartData.Add(dayKPIValue.ToString());
+                            chartValues.Labels.Add(item.ToString());
                         }
-                        chartValues.ChartData.Add(dayKPIValue.ToString());
-                        chartValues.Labels.Add(item.ToString());
                     }
                 }
                 else
                 {
                     // chartValues.Labels = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.ToList();
-                    chartValues.Labels = new List<string>();
                     for (var i = 0; i < 23; i++)
                     {
                         // var dayValue = records.Where(g => DateTime.ParseExact(g.CreatedDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).Month == i).Sum(s => s.KPIValue.ToDecimal());
