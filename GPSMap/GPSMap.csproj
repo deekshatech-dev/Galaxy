@@ -194,6 +194,8 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EricssonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\ChartSearchModel.cs" />
+    <Compile Include="Models\KPIChartDataModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Controllers\UploadController.cs" />
     <Compile Include="Data\Extensions.cs" />

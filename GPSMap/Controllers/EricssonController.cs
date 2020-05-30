@@ -11,6 +11,8 @@ using GPSMap.Helper;
 using Newtonsoft.Json;
 using System.Web.Script.Serialization;
 using GPSMap.Data;
+using System.Globalization;
+using System.Data.Entity;
 
 namespace GPSMap.Controllers
 {
@@ -68,52 +70,73 @@ namespace GPSMap.Controllers
 
         public ActionResult Dashboard()
         {
-            ViewBag.map = "{}";
+            var chart = new KPIChartDataModel();
             using (var dbContext = new DatabaseContext())
             {
-                ViewBag.KPIValues = new SelectList(dbContext.ericsson_kpi_5g_data.Distinct().Take(15).ToList().Select(n => new SelectListItem
+                chart.KPIValues = new SelectList(dbContext.ericsson_kpi_5g_data.Distinct().Take(15).ToList().Select(n => new SelectListItem
                 {
                     Text = n.KPIName,
                     Value = n.KPIValue
                 }), "Value", "Text");
+                var chartSearch = new ChartSearchModel();
+                chart.SearchModel = chartSearch;
             }
-            var form = new SearchViewModel();
-            return View(form);
+
+            return View(chart);
         }
 
-        [HttpPost]
-        public ActionResult Dashboard(SearchViewModel form, FormCollection formData)
+        public List<int> GetDays(int year, int month)
         {
+            return Enumerable.Range(1, DateTime.DaysInMonth(year, month))
+                             // Days: 1, 2 ... 31 etc.
+                             .Select(day => new DateTime(year, month, day).Day)
+                             // Map each day to a date
+                             .ToList(); // Load dates into a list
+        }
+
+        public JsonResult GetChartData(ChartRequest request)
+        {
+            var chartValues = new ChartValues();
             using (var dbContext = new DatabaseContext())
             {
-                var map = dbContext.MapPoints.Join(dbContext.MapAttributes,
-                     mp => mp.attribute_id,
-                     ma => ma.attributeid,
-                    (mp, ma) => new { MapPoints = mp, MapAttributes = ma }).AsQueryable();
+                // var kpiName = request.KPIName;
+                var kpiName = "RACH Preamble Response Success Rate";
+                // X PLMN KPI = SUM(X KPI Nem, for all the day for all the meneged elements)/ 
+                // SUM(Den of X KPI of all the day for all the managed elements) ;
+                var records = dbContext.ericsson_kpi_5g_data.Where(k => k.KPIName == kpiName && k.ManagedElement == k.ManagedElement);
 
-                if (form.ToDate != null)
+
+                chartValues.ChartData = new List<string>();
+                var date = System.DateTime.Now;
+                if (request.Date != null)
                 {
-                    map = map.Where(t => t.MapPoints.period_to <= form.ToDate.Value);
-                }
-                if (form.FromDate != null)
-                {
-                    map = map.Where(t => t.MapPoints.period_from >= form.FromDate.Value);
-                }
-                if (form.Id != null && form.Id.Any())
-                {
-                    map = map.Where(t => form.Id.Contains(t.MapPoints.Id));
+                    date = Convert.ToDateTime(request.Date);
                 }
 
-                var maplist = map.ToList();
+                if (request.Trend == "Monthly")
+                {
+                    foreach (var item in this.GetDays(date.Year, date.Month))
+                    {
+                        var dayValue = records.Where(g => g.CreatedDate.Day == item).Sum(s => s.KPIValue.ToDecimal());
+                        chartValues.ChartData.Add(dayValue.ToString());
+                        chartValues.Labels.Add(item.ToString());
+                    }
+                }
+                else
+                {
+                    // chartValues.Labels = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.ToList();
 
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                serializer.MaxJsonLength = Int32.MaxValue;
-                ViewBag.map = serializer.Serialize(maplist);
+                    for (var i = 0; i < 23; i++)
+                    {
+                        // var dayValue = records.Where(g => DateTime.ParseExact(g.CreatedDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).Month == i).Sum(s => s.KPIValue.ToDecimal());
+                        var dayValue = records.Where(g => g.CreatedDate.Hour == i).Sum(s => decimal.Parse(s.KPIValue));
+                        chartValues.Labels.Add(i.ToString());
+                        chartValues.ChartData.Add(dayValue.ToString());
+                    }
+                }
             }
 
-            ViewBag.KPIValues = KPIValues.LTE_UE_CQI_CQI.ToSelectList(formData["KPI"]);
-            form.KPI = formData["KPI"];
-            return View(form);
+            return Json(chartValues, JsonRequestBehavior.AllowGet);
         }
 
 
@@ -213,7 +236,7 @@ namespace GPSMap.Controllers
             }
 
             return isValidName;
-        }        
+        }
     }
 
 }
