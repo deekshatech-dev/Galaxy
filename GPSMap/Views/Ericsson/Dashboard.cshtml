@@ -41,16 +41,21 @@
                                 </div>
                             </div>
                             <div class="form-group">
-                                <div class="dropup">
-                                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        Select Trend
-                                        <span class="caret"></span>
-                                    </button>
-                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                        <li><a href="#">Monthly</a></li>
-                                        <li><a href="#">Daily</a></li>
-                                    </ul>
-                                </div>
+                                <label for="exampleInputName2">Select Trend</label>
+                                <select name="Trend" id="Trend" class="form-control">
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Daily">Daily</option>
+                                </select>
+                                @*<div class="dropup">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Select Trend
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            <li><a href="#">Monthly</a></li>
+                                            <li><a href="#">Daily</a></li>
+                                        </ul>
+                                    </div>*@
                             </div>
                             <button id="generatechart" class="btn btn-primary btn-sm" onclick="GenerateChart()">Generate Chart</button>
                         </div>
@@ -88,9 +93,9 @@
             type: "POST",
             url: '@Url.Action("GetChartData", "Ericsson")',
             data: JSON.stringify({
-                "Trend": $("#dropdownMenu2").val(),
+                "Trend": $("#Trend").val(),
                 "KPIName": $("#KPI").val(),
-                "Date": $("#p-for").val(),
+                "Date": $('#p-for').data('date')
             }),
             contentType: "application/json",
             dataType: "json",
@@ -109,9 +114,9 @@
            },
            "error": function (data) {
                alert("Some Error Occured!");
-           } 
+           }
         });
         }
-      
+
     </script>
 }
