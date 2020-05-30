@@ -15,9 +15,10 @@ namespace GPSMap
 						"~/Scripts/jquery.validate*"));
 
             //Added for toaster
-            bundles.Add(new ScriptBundle("~/bundles/toastr").Include(
+            bundles.Add(new ScriptBundle("~/bundles/galaxy").Include(
                        "~/Scripts/toastr.js*",
-                       "~/Scripts/toastrImp.js"));
+                       "~/Scripts/toastrImp.js",
+						"~/Scripts/jquery.blockUI.min.js"));
 
             // Use the development version of Modernizr to develop with and learn from. Then, when you're
             // ready for production, use the build tool at https://modernizr.com to pick only the tests you need.

@@ -71,7 +71,7 @@
 
 @section scripts{
     <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
-    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
 
     <script>
         $('#KPI').multiselect({
@@ -89,33 +89,39 @@
     <script>
 
         function GenerateChart() {
-             $.ajax({
-            type: "POST",
-            url: '@Url.Action("GetChartData", "Ericsson")',
-            data: JSON.stringify({
-                "Trend": $("#Trend").val(),
-                "KPIName": $("#KPI").val(),
-                "Date": $('#p-for').data('date')
-            }),
-            contentType: "application/json",
-            dataType: "json",
-            success: function (chData) {
+            $.blockUI();
+            $.ajax({
+                type: "POST",
+                url: '@Url.Action("GetChartData", "Ericsson")',
+                data: JSON.stringify({
+                    "Trend": $("#Trend").val(),
+                    "KPIName": $("#KPI").val(),
+                    "Date": $('#p-for').data('date')
+                }),
+                contentType: "application/json",
+                dataType: "json",
+                success: function(chData) {
                     var ctx = document.getElementById('myChart').getContext('2d');
-                    var myChart = new Chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: chData.Labels,
-                            datasets: [{
-                                label: chData.Labels,
-                                data: chData.ChartData,
-                            }]
-                        }
-                    });
-           },
-           "error": function (data) {
-               alert("Some Error Occured!");
-           }
-        });
+                    var myChart = new Chart(ctx,
+                        {
+                            type: 'line',
+                            data: {
+                                labels: chData.Labels,
+                                datasets: [
+                                    {
+                                        label: chData.Labels,
+                                        data: chData.ChartData,
+                                    }
+                                ]
+                            }
+                        });
+                },
+                "error": function(data) {
+                    alert("Some Error Occured!");
+                }
+            }).always(function() {
+                $.unblockUI();
+            });;
         }
 
     </script>
