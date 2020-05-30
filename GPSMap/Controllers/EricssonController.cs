@@ -103,7 +103,7 @@ namespace GPSMap.Controllers
                 var kpiName = "RACH Preamble Response Success Rate";
                 // X PLMN KPI = SUM(X KPI Nem, for all the day for all the meneged elements)/ 
                 // SUM(Den of X KPI of all the day for all the managed elements) ;
-                var records = dbContext.ericsson_kpi_5g_data.Where(k => k.KPIName == kpiName && k.ManagedElement == k.ManagedElement);
+                var records = dbContext.ericsson_kpi_data.Where(k => k.KPIName == kpiName && k.ManagedElement == k.ManagedElement);
 
 
                 chartValues.ChartData = new List<string>();
@@ -117,21 +117,45 @@ namespace GPSMap.Controllers
                 {
                     foreach (var item in this.GetDays(date.Year, date.Month))
                     {
-                        var dayValue = records.Where(g => g.CreatedDate.Day == item).Sum(s => s.KPIValue.ToDecimal());
-                        chartValues.ChartData.Add(dayValue.ToString());
+                        var dayRecord = records.Where(g => g.CreatedDate.Day == item);
+                        var numeratorSum = 0M;
+                        var denominatorSum = 0M;
+                        var dayKPIValue = numeratorSum;
+                        if (dayRecord.Any())
+                        {
+                            numeratorSum = dayRecord.Sum(s => s.Numerator);
+                            denominatorSum = dayRecord.Sum(s => s.Denominator);
+                            if (denominatorSum > 0)
+                            {
+                                dayKPIValue = numeratorSum / denominatorSum;
+                            }
+                        }
+                        chartValues.ChartData.Add(dayKPIValue.ToString());
                         chartValues.Labels.Add(item.ToString());
                     }
                 }
                 else
                 {
                     // chartValues.Labels = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.ToList();
-
+                    chartValues.Labels = new List<string>();
                     for (var i = 0; i < 23; i++)
                     {
                         // var dayValue = records.Where(g => DateTime.ParseExact(g.CreatedDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).Month == i).Sum(s => s.KPIValue.ToDecimal());
-                        var dayValue = records.Where(g => g.CreatedDate.Hour == i).Sum(s => decimal.Parse(s.KPIValue));
+                        var hourRecord = records.Where(g => g.CreatedDate.Hour == i);
+                        var numeratorSum = 0M;
+                        var denominatorSum = 0M;
+                        var hourKPIValue = numeratorSum;
+                        if (hourRecord.Any())
+                        {
+                            numeratorSum = hourRecord.Sum(s => s.Numerator);
+                            denominatorSum = hourRecord.Sum(s => s.Denominator);
+                            if (denominatorSum > 0)
+                            {
+                                hourKPIValue = numeratorSum / denominatorSum;
+                            }
+                        }
                         chartValues.Labels.Add(i.ToString());
-                        chartValues.ChartData.Add(dayValue.ToString());
+                        chartValues.ChartData.Add(hourKPIValue.ToString());
                     }
                 }
             }

@@ -26,6 +26,7 @@ namespace GPSDB
         public DbSet<ericsson_5gdetail> ericsson_5gdetail { get; set; }
 
         public DbSet<Ericsson_KPI_5g_Data> ericsson_kpi_5g_data { get; set; }
+        public DbSet<Ericsson_KPI_Data> ericsson_kpi_data { get; set; }
 
         public DbSet<Users> Users { get; set; }
 
