@@ -1,0 +1,122 @@
+﻿@using GPSMap.Data;
+@model GPSMap.Models.KPIChartDataModel
+@{
+    ViewBag.Title = "Home Page";
+}
+
+
+@using (Html.BeginForm("Index", "Ericsson", FormMethod.Post, new { @class = "form-inline" }))
+{
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="panel panel-default" style="margin-top:10px;">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label for="exampleInputName2">Select KPI</label>
+                                @*@Html.DropDownListFor(x => x.KPI, KPIValues.LTE_UE_CQI_CQI.ToSelectList(), "Select KPI", new { @class = "form-control", multiple = "multiple" })*@
+                                <select id="KPI" multiple="multiple" required name="KPI">
+                                    <option>Select KPI</option>
+                                    @if (Model.KPIValues != null)
+                                    {
+                                        foreach (var item in Model.KPIValues)
+                                        {
+                                            if (item.Text != null)
+                                            {
+                                                <option value="@item.Value">
+                                                    @item.Text
+                                                </option>
+                                            }
+                                        }
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-for'>
+                                    @Html.TextBoxFor(x => x.SearchModel.ForDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="exampleInputName2">Select Trend</label>
+                                <select name="Trend" id="Trend" class="form-control">
+                                    <option value="Monthly">Monthly</option>
+                                    <option value="Daily">Daily</option>
+                                </select>
+                                @*<div class="dropup">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Select Trend
+                                            <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                            <li><a href="#">Monthly</a></li>
+                                            <li><a href="#">Daily</a></li>
+                                        </ul>
+                                    </div>*@
+                            </div>
+                            <button id="generatechart" class="btn btn-primary btn-sm" onclick="GenerateChart()">Generate Chart</button>
+                        </div>
+                    </div>
+                </div>
+                <div style="width:800px; height:600px; text-align:center;">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts{
+    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+
+    <script>
+        $('#KPI').multiselect({
+            includeSelectAllOption: false
+        });
+
+        $('#p-for').datetimepicker({
+            format: 'DD/MM/YYYY',
+            showClear: true
+        });
+
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script>
+
+        function GenerateChart() {
+             $.ajax({
+            type: "POST",
+            url: '@Url.Action("GetChartData", "Ericsson")',
+            data: JSON.stringify({
+                "Trend": $("#Trend").val(),
+                "KPIName": $("#KPI").val(),
+                "Date": $('#p-for').data('date')
+            }),
+            contentType: "application/json",
+            dataType: "json",
+            success: function (chData) {
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    var myChart = new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: chData.Labels,
+                            datasets: [{
+                                label: chData.Labels,
+                                data: chData.ChartData,
+                            }]
+                        }
+                    });
+           },
+           "error": function (data) {
+               alert("Some Error Occured!");
+           }
+        });
+        }
+
+    </script>
+}
