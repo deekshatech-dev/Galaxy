@@ -24,6 +24,6 @@ namespace GPSDB
         public string KPIValue { get; set; }
         public string Numerator { get; set; }
         public string Denominator { get; set; }
-        public string CreatedDate { get; set; }
+        public DateTime CreatedDate { get; set; }
     }
 }
