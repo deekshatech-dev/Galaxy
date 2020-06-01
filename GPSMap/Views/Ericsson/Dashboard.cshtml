@@ -4,76 +4,67 @@
     ViewBag.Title = "Home Page";
 }
 
-
-@using (Html.BeginForm("Index", "Ericsson", FormMethod.Post, new { @class = "form-inline" }))
-{
-    <div class="container">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default" style="margin-top:10px;">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label for="exampleInputName2">Select KPI</label>
-                                @*@Html.DropDownListFor(x => x.KPI, KPIValues.LTE_UE_CQI_CQI.ToSelectList(), "Select KPI", new { @class = "form-control", multiple = "multiple" })*@
-                                <select id="KPI" multiple="multiple" required name="KPI">
-                                    <option>Select KPI</option>
-                                    @if (Model.KPIValues != null)
-                                    {
-                                        foreach (var item in Model.KPIValues)
-                                        {
-                                            if (item.Text != null)
-                                            {
-                                                <option value="@item.Value">
-                                                    @item.Text
-                                                </option>
-                                            }
-                                        }
-                                    }
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <div class='input-group date' id='p-for'>
-                                    @Html.TextBoxFor(x => x.SearchModel.ForDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label for="exampleInputName2">Select Trend</label>
-                                <select name="Trend" id="Trend" class="form-control">
-                                    <option value="Monthly">Monthly</option>
-                                    <option value="Daily">Daily</option>
-                                </select>
-                                @*<div class="dropup">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Select Trend
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu2">
-                                            <li><a href="#">Monthly</a></li>
-                                            <li><a href="#">Daily</a></li>
-                                        </ul>
-                                    </div>*@
-                            </div>
-                            <button id="generatechart" class="btn btn-primary btn-sm" onclick="GenerateChart()">Generate Chart</button>
-                        </div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default" style="margin-top:10px;">
+            <div class="panel-body form-inline">
+                <div class="form-group">
+                    <label for="exampleInputName2">Select KPI</label>
+                    <select id="KPI" multiple="multiple" required name="KPI">
+                        <option>Select KPI</option>
+                        @if (Model.KPIValues != null)
+                        {
+                            foreach (var item in Model.KPIValues)
+                            {
+                                if (item.Text != null)
+                                {
+                                    <option value="@item.Value">
+                                        @item.Text
+                                    </option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class='input-group date' id='p-for'>
+                        @Html.TextBoxFor(x => x.SearchModel.ForDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
                     </div>
                 </div>
-                <div style="width:800px; height:600px; text-align:center;">
-                    <canvas id="myChart"></canvas>
+                <div class="form-group">
+                    <label for="exampleInputName2">Select Trend</label>
+                    <select name="Trend" id="Trend" class="form-control">
+                        <option value="Monthly">Monthly</option>
+                        <option value="Daily">Daily</option>
+                    </select>
                 </div>
+
+                <input name="ShowSeparate" type="checkbox" checked data-toggle="toggle" data-on="Show Seperate" data-off="Show Single" data-onstyle="success" data-offstyle="warning">
+
+                <button id="generatechart" class="btn btn-primary btn-sm" onclick="GenerateChart()">Generate Chart</button>
             </div>
         </div>
     </div>
-}
-
+    <div style="width:800px; height:600px; text-align:center;">
+        <canvas id="myChart"></canvas>
+    </div>
+</div>
 @section scripts{
-    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
-    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css"/>
-
     <script>
+        
+        window.chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            yellow: 'rgb(255, 205, 86)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)',
+            purple: 'rgb(153, 102, 255)',
+            grey: 'rgb(201, 203, 207)'
+        };
+
         $('#KPI').multiselect({
             includeSelectAllOption: false
         });
@@ -82,11 +73,6 @@
             format: 'DD/MM/YYYY',
             showClear: true
         });
-
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
-            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
-    <script>
 
         function GenerateChart() {
             $.blockUI();
@@ -111,6 +97,7 @@
                                     {
                                         label: chData.Labels,
                                         data: chData.ChartData,
+                                        backgroundColor: window.chartColors.blue
                                     }
                                 ]
                             }

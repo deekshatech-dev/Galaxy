@@ -27,5 +27,6 @@ namespace GPSMap.Models
         public string Trend { get; set; }
         public string KPIName { get; set; }
         public string Date { get; set; }
+        public bool ShowSeparate { get; set; }
     }
 }

@@ -24,19 +24,6 @@ textarea {
     max-width: 280px;
 }
 
-.navbar-inverse {
-    background-color: darkgray;
-    border-color: #080808;
-}
-
-    .navbar-inverse .navbar-nav > li > a {
-        color: #ffffff;
-    }
-
-.navbar-nav {
-    margin-left: 50px;
-    font-size: 20px !important;
-}
 
 .content {
     text-align: center;
@@ -158,34 +145,14 @@ textarea {
         transform: rotate(359deg);
     }
 }
-.navbar-default,
-.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
-    background-color: #001a40;
-    color: white !important;
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 1;
-}
 
-    .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-        color: white !important;
-    }
-    .navbar-default .navbar-nav > li > a {
-        color: #FFF;
-    }
-.navbar-header {
-    margin-top:17px;
-}
 .input-group .form-control{
     z-index: 0;
 }
 .content {
     margin-top: 0px !important;
 }
-.navbar-nav li a {
-    /*border-right: 1px solid #fff;*/
-}
+
 
 .body-content{
     margin-top: 85px;
@@ -199,5 +166,48 @@ footer {
     position: fixed;
     bottom: 0;
     width: 100%;
-    height: 60px; /* Height of the footer */
+    height: 50px; /* Height of the footer */
 }
+    footer p {
+        margin: 0 20px;
+        padding-top: 17px;
+    }
+
+
+    /*Nav bar*/
+
+/*.navbar-inverse {
+    background-color: darkgray;
+    border-color: #080808;
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    color: #ffffff;
+}
+
+.navbar-nav {
+    margin-left: 50px;
+    font-size: 20px !important;
+}
+
+.navbar-default,
+.navbar-default .navbar-nav > .open > a, .navbar-default .navbar-nav > .open > a:hover, .navbar-default .navbar-nav > .open > a:focus {
+    background-color: #001a40;
+    color: white !important;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1;
+}
+
+.navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
+    color: white !important;
+}
+
+.navbar-default .navbar-nav > li > a {
+    color: #FFF;
+}
+
+.navbar-header {
+    margin-top: 17px;
+}*/
