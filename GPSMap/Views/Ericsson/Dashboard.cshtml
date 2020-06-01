@@ -74,41 +74,64 @@
             showClear: true
         });
 
+    </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script>
+        function isValidate() {
+            if ($("#KPI").val() == "" || $("#KPI").val() == []) {
+                toastr.error("Please select at least one KPI.");
+                return false;
+            }
+            //if ($("#p-for").val() == "") {
+            //    toastr.error("Please select the date.");
+            //    return false;
+            //}
+            if ($("#Trend").val() == "") {
+                toastr.error("Please select chart type.");
+                return false;
+            }
+            return true;
+        }
         function GenerateChart() {
-            $.blockUI();
-            $.ajax({
-                type: "POST",
-                url: '@Url.Action("GetChartData", "Ericsson")',
-                data: JSON.stringify({
-                    "Trend": $("#Trend").val(),
-                    "KPIName": $("#KPI").val(),
-                    "Date": $('#p-for').data('date')
-                }),
-                contentType: "application/json",
-                dataType: "json",
-                success: function(chData) {
-                    var ctx = document.getElementById('myChart').getContext('2d');
-                    var myChart = new Chart(ctx,
-                        {
-                            type: 'line',
-                            data: {
-                                labels: chData.Labels,
-                                datasets: [
-                                    {
-                                        label: chData.Labels,
-                                        data: chData.ChartData,
+            if (isValidate()) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        url: '@Url.Action("GetChartData", "Ericsson")',
+                        data: JSON.stringify({
+                            "Trend": $("#Trend").val(),
+                            "KPIName": $("#KPI").val(),
+                            "Date": $('#p-for').data('date')
+                        }),
+                        contentType: "application/json",
+                        dataType: "json",
+                        success: function(chData) {
+                            var ctx = document.getElementById('myChart').getContext('2d');
+                            var myChart = new Chart(ctx,
+                                {
+                                    type: 'line',
+                                    data: {
+                                        labels: chData.Labels,
+                                        datasets: [
+                                            {
+                                                label: chData.Labels,
+                                                data: chData.ChartData,
+                                            }
+                                        ]
                                         backgroundColor: window.chartColors.blue
                                     }
-                                ]
-                            }
-                        });
-                },
-                "error": function(data) {
-                    alert("Some Error Occured!");
-                }
-            }).always(function() {
-                $.unblockUI();
-            });;
+                                });
+                        },
+                        "error": function(data) {
+                            alert("Some Error Occured!");
+                        }
+                    }).always(function() {
+                        $.unblockUI();
+                    });;
+            } else {
+                return false;
+            }
         }
 
     </script>
