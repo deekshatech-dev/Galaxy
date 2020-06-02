@@ -14,6 +14,12 @@ namespace GPSMap.Models
 
         public SelectList KPIValues { get; set; }
     }
+    public class ChartKPIValues
+    {
+        public string KPI { get; set; }
+        public ChartValues ChartData { get; set; }
+
+    }
 
     public class ChartValues
     {
@@ -25,7 +31,7 @@ namespace GPSMap.Models
     public class ChartRequest
     {
         public string Trend { get; set; }
-        public string KPIName { get; set; }
+        public string[] KPIName { get; set; }
         public string Date { get; set; }
         public bool ShowSeparate { get; set; }
     }

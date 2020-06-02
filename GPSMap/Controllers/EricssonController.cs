@@ -76,7 +76,7 @@ namespace GPSMap.Controllers
                 chart.KPIValues = new SelectList(dbContext.ericsson_kpi_5g_data.Distinct().Take(15).ToList().Select(n => new SelectListItem
                 {
                     Text = n.KPIName,
-                    Value = n.KPIValue
+                    Value = n.KPIName
                 }), "Value", "Text");
                 var chartSearch = new ChartSearchModel();
                 chart.SearchModel = chartSearch;
@@ -96,74 +96,90 @@ namespace GPSMap.Controllers
 
         public JsonResult GetChartData(ChartRequest request)
         {
-            var chartValues = new ChartValues();
             using (var dbContext = new DatabaseContext())
             {
                 // var kpiName = request.KPIName;
-                var kpiName = "RACH Preamble Response Success Rate";
+                // var kpiName = "RACH Preamble Response Success Rate";
                 // X PLMN KPI = SUM(X KPI Nem, for all the day for all the meneged elements)/ 
                 // SUM(Den of X KPI of all the day for all the managed elements) ;
-                var records = dbContext.ericsson_kpi_data.Where(k => k.KPIName == kpiName && k.ManagedElement == k.ManagedElement);
 
-
-                chartValues.ChartData = new List<string>();
-                var date = System.DateTime.Now;
-                if (request.Date != null)
+                if (request.KPIName != null && request.KPIName.Length > 0)
                 {
-                    date = Convert.ToDateTime(request.Date);
-                }
-
-                chartValues.Labels = new List<string>();
-                if (request.Trend == "Monthly")
-                {
-                    foreach (var item in this.GetDays(date.Year, date.Month))
+                    var KPIValues = new List<ChartKPIValues>();
+                    foreach (var name in request.KPIName)
                     {
-                        if (!string.IsNullOrEmpty(Convert.ToString(item)))
+                        var records = dbContext.ericsson_kpi_data.Where(k => k.KPIName == name && k.ManagedElement == k.ManagedElement);
+
+                        var KPI = new ChartKPIValues();
+                        var chartValues = new ChartValues();
+
+                        chartValues.ChartData = new List<string>();
+                        var date = System.DateTime.Now;
+                        if (request.Date != null)
                         {
-                            var dayRecord = records.Where(g => g.CreatedDate.Day == item && g.CreatedDate.Month == date.Month);
-                            var numeratorSum = 0M;
-                            var denominatorSum = 0M;
-                            var dayKPIValue = numeratorSum;
-                            if (dayRecord.Any())
+                            date = Convert.ToDateTime(request.Date);
+                        }
+
+                        chartValues.Labels = new List<string>();
+                        if (request.Trend == "Monthly")
+                        {
+                            foreach (var item in this.GetDays(date.Year, date.Month))
                             {
-                                numeratorSum = dayRecord.Sum(s => s.Numerator);
-                                denominatorSum = dayRecord.Sum(s => s.Denominator);
-                                if (denominatorSum > 0)
+                                if (!string.IsNullOrEmpty(Convert.ToString(item)))
                                 {
-                                    dayKPIValue = numeratorSum / denominatorSum;
+                                    var dayRecord = records.Where(g => g.CreatedDate.Day == item && g.CreatedDate.Month == date.Month);
+                                    var numeratorSum = 0M;
+                                    var denominatorSum = 0M;
+                                    var dayKPIValue = numeratorSum;
+                                    if (dayRecord.Any())
+                                    {
+                                        numeratorSum = dayRecord.Sum(s => s.Numerator);
+                                        denominatorSum = dayRecord.Sum(s => s.Denominator);
+                                        if (denominatorSum > 0)
+                                        {
+                                            dayKPIValue = numeratorSum / denominatorSum;
+                                        }
+                                    }
+
+                                    chartValues.ChartData.Add(dayKPIValue.ToString());
+                                    chartValues.Labels.Add(item.ToString());
                                 }
                             }
-                            chartValues.ChartData.Add(dayKPIValue.ToString());
-                            chartValues.Labels.Add(item.ToString());
                         }
-                    }
-                }
-                else
-                {
-                    // chartValues.Labels = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.ToList();
-                    for (var i = 0; i < 23; i++)
-                    {
-                        // var dayValue = records.Where(g => DateTime.ParseExact(g.CreatedDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).Month == i).Sum(s => s.KPIValue.ToDecimal());
-                        var hourRecord = records.Where(g => g.CreatedDate.Hour == i);
-                        var numeratorSum = 0M;
-                        var denominatorSum = 0M;
-                        var hourKPIValue = numeratorSum;
-                        if (hourRecord.Any())
+                        else
                         {
-                            numeratorSum = hourRecord.Sum(s => s.Numerator);
-                            denominatorSum = hourRecord.Sum(s => s.Denominator);
-                            if (denominatorSum > 0)
+                            // chartValues.Labels = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.ToList();
+                            for (var i = 0; i < 23; i++)
                             {
-                                hourKPIValue = numeratorSum / denominatorSum;
+                                // var dayValue = records.Where(g => DateTime.ParseExact(g.CreatedDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).Month == i).Sum(s => s.KPIValue.ToDecimal());
+                                var hourRecord = records.Where(g => g.CreatedDate.Hour == i);
+                                var numeratorSum = 0M;
+                                var denominatorSum = 0M;
+                                var hourKPIValue = numeratorSum;
+                                if (hourRecord.Any())
+                                {
+                                    numeratorSum = hourRecord.Sum(s => s.Numerator);
+                                    denominatorSum = hourRecord.Sum(s => s.Denominator);
+                                    if (denominatorSum > 0)
+                                    {
+                                        hourKPIValue = numeratorSum / denominatorSum;
+                                    }
+                                }
+                                chartValues.Labels.Add(i.ToString());
+                                chartValues.ChartData.Add(hourKPIValue.ToString());
                             }
                         }
-                        chartValues.Labels.Add(i.ToString());
-                        chartValues.ChartData.Add(hourKPIValue.ToString());
+
+
+                        KPI.KPI = name;
+                        KPI.ChartData = chartValues;
+                        KPIValues.Add(KPI);
                     }
+
+                    return Json(KPIValues, JsonRequestBehavior.AllowGet);
                 }
             }
-
-            return Json(chartValues, JsonRequestBehavior.AllowGet);
+            return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
         }
 
 
