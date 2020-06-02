@@ -5,14 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
-using System.Web;
 using System.Web.Mvc;
-using GPSMap.Helper;
-using Newtonsoft.Json;
-using System.Web.Script.Serialization;
-using GPSMap.Data;
-using System.Globalization;
-using System.Data.Entity;
 
 namespace GPSMap.Controllers
 {
@@ -96,6 +89,7 @@ namespace GPSMap.Controllers
 
         public JsonResult GetChartData(ChartRequest request)
         {
+            var KPIValues = new List<ChartKPIValues>();
             using (var dbContext = new DatabaseContext())
             {
                 // var kpiName = request.KPIName;
@@ -105,7 +99,6 @@ namespace GPSMap.Controllers
 
                 if (request.KPIName != null && request.KPIName.Length > 0)
                 {
-                    var KPIValues = new List<ChartKPIValues>();
                     foreach (var name in request.KPIName)
                     {
                         var records = dbContext.ericsson_kpi_data.Where(k => k.KPIName == name && k.ManagedElement == k.ManagedElement);
@@ -175,11 +168,9 @@ namespace GPSMap.Controllers
                         KPI.ChartData = chartValues;
                         KPIValues.Add(KPI);
                     }
-
-                    return Json(KPIValues, JsonRequestBehavior.AllowGet);
                 }
             }
-            return Json(new object[] { new object() }, JsonRequestBehavior.AllowGet);
+            return Json(KPIValues, JsonRequestBehavior.AllowGet);
         }
 
 

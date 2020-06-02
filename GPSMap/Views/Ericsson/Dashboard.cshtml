@@ -42,19 +42,19 @@
                     </select>
                 </div>
 
-                <input name="ShowSeparate" type="checkbox" checked data-toggle="toggle" data-on="Show Seperate" data-off="Show Single" data-onstyle="success" data-offstyle="warning">
+                <input name="ShowSeparate" id="ShowSeparate" type="checkbox" checked data-toggle="toggle" data-on="Show Seperate" data-off="Show Single" data-onstyle="success" data-offstyle="warning">
 
                 <button id="generatechart" class="btn btn-primary btn-sm" onclick="GenerateChart()">Generate Chart</button>
             </div>
         </div>
     </div>
-    <div style="width:800px; height:600px; text-align:center;">
-        <canvas id="myChart"></canvas>
+    <div id="chart-container" class="row">
+
     </div>
 </div>
 @section scripts{
     <script>
-        
+
         window.chartColors = {
             red: 'rgb(255, 99, 132)',
             orange: 'rgb(255, 159, 64)',
@@ -83,20 +83,18 @@
                 toastr.error("Please select at least one KPI.");
                 return false;
             }
-            //if ($("#p-for").val() == "") {
-            //    toastr.error("Please select the date.");
-            //    return false;
-            //}
             if ($("#Trend").val() == "") {
                 toastr.error("Please select chart type.");
                 return false;
             }
             return true;
         }
+
         function GenerateChart() {
             if (isValidate()) {
-                    $.blockUI();
-                    $.ajax({
+                $.blockUI();
+
+                $.ajax({
                         type: "POST",
                         url: '@Url.Action("GetChartData", "Ericsson")',
                         data: JSON.stringify({
@@ -107,32 +105,74 @@
                         contentType: "application/json",
                         dataType: "json",
                         success: function(chData) {
-                            var ctx = document.getElementById('myChart').getContext('2d');
-                            var myChart = new Chart(ctx,
-                                {
-                                    type: 'line',
-                                    data: {
-                                        labels: chData.Labels,
-                                        datasets: [
-                                            {
-                                                label: chData.Labels,
-                                                data: chData.ChartData,
-                                            }
-                                        ]
-                                        backgroundColor: window.chartColors.blue
-                                    }
-                                });
+                            bindChart(chData);
                         },
                         "error": function(data) {
                             alert("Some Error Occured!");
                         }
-                    }).always(function() {
+                    })
+                    .always(function() {
                         $.unblockUI();
-                    });;
+                    });
+                return false;
             } else {
                 return false;
             }
-        }
+        };
+
+        var generateChart = function(ctx, data) {
+            debugger;
+            console.log(data);
+
+            var myChart = new Chart(ctx,
+                {
+                    type: 'line',
+                    data: {
+                        labels: data[0].ChartData.Labels,
+                        datasets: [
+                            {
+                                label: data[0].KPI,
+                                data: data[0].ChartData.ChartData
+                            }
+                        ]
+                    }
+                });
+        };
+
+        var bindChart = function(chart) {
+            $('#chart-container').empty();
+         
+            var createMultiple = false;
+
+            if ($('#ShowSeparate').is(":checked") && chart.length > 1) {
+                createMultiple = true;
+            }
+
+            if (createMultiple) {
+                for (var i = 0; i < chart.length; i++) {
+                    var chartId = 'myChart' + i;
+                    var newCanvas =
+                        $('<canvas/>', { 'class': 'radHuh', 'id': chartId });
+                    $('#chart-container').append(newCanvas);
+                    var ctx = document.getElementById('myChart').getContext('2d');
+                    generateChart(ctx, chart[i]);
+                }
+            } else {
+                // plot single chart 
+                var chartId = 'myChart';
+                var newCanvas =
+                    $('<canvas/>', { 'class': 'radHuh', 'id': chartId });
+
+                var panel = `<div class="panel panel-default">
+                              <div class="panel-heading">${chartId}</div>
+                              <div class="panel-body">${newCanvas}</div>
+                            </div>`;
+                $('#chart-container').append(newCanvas);
+                var ctx = document.getElementById('myChart').getContext('2d');
+                generateChart(ctx, chart);
+            }
+
+        };
 
     </script>
 }
