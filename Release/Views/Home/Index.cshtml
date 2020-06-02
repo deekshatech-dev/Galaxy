@@ -115,7 +115,8 @@
 
     <script>
         $('#KPI').multiselect({
-            includeSelectAllOption: false
+            includeSelectAllOption: false,
+            numberDisplayed:1
         });
         var gridData = @Html.Raw(ViewBag.map);
         var popupSearchIds = [];

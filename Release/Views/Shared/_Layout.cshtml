@@ -5,82 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title</title>
     @Scripts.Render("~/bundles/modernizr")
-
+    <link href="~/Content/mdb.css" rel="stylesheet" />
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap.min.css" rel="stylesheet" />
     <link href="https://cdn.datatables.net/autofill/2.3.4/css/autoFill.bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.css" />
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> @*https://www.bootstraptoggle.com/*@
+    <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
+
     @Styles.Render("~/Content/css")
+    @RenderSection("css", required: false)
 </head>
 <body>
-    <div id="overlay"></div>
-    <div id="spinner" class="spinner"></div>
-    <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header" style="margin-top:0px;">
-                <ul class="nav navbar-nav">
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+      
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="@Url.Action("Index", "Dashboard")">
+            
+            </a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <ul class="nav navbar-nav">
+               
+                @if (User.Identity.IsAuthenticated)
+                {
                     <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data<span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("Upload Nmf", "Index", "Upload")</li>
                             <li>@Html.ActionLink("Reports", "Index", "Home")</li>
                         </ul>
                     </li>
                     <li class="dropdown">
-                        <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PM Counter<span class="caret"></span></a>
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PM Counter <span class="caret"></span></a>
                         <ul class="dropdown-menu">
                             <li>@Html.ActionLink("5g Parser", "Index", "Ericsson")</li>
                             <li>@Html.ActionLink("Parser", "XMLResult", "Home")</li>
                             <li>@Html.ActionLink("Dashboard", "Dashboard", "Ericsson")</li>
                         </ul>
                     </li>
-                    @if (User.Identity.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
-                    }
-                    else
-                    {
-                        <li>@Html.ActionLink("LogIn", "LogIn", "Account")</li>
-                    }
+                    <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
+                }
+                else
+                {
 
-                </ul>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav navbar-right">
-                    <li>
-                        <a href="/Dashboard" style="padding:0px;height:55px"><img src="~/Images/logo_21.png" style="height:50px;padding-right:8px;" /><img src="~/Images/logo3.png" /></a>
-                    </li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav>
-    <div class="container body-content">
+                    <li>@Html.ActionLink("LogIn", "LogIn", "Account")</li>
+                }
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <img src="~/Images/logo_21.png" style="height: 40px; padding-right: 8px;"/><img src="~/Images/logo3.png"/>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+<div class="body-content">
         @RenderBody()
-
     </div>
     <footer>
-        <p style="padding-top: 17px;">
-            <span>Copyrights © 2010-2020 - deekshatech L</span> <span style="padding-left:8px;"> All Rights Reserved </span>
+        <p>
+            <span>Copyrights © 2010-@DateTime.Now.Year - deekshatech L</span> <span style="padding-left:8px;"> All Rights Reserved </span>
             <a target="_blank" href="http://www.deekshatech.in" style="padding-left:10px;color:#fff"><span class="glyphicon glyphicon-globe"></span><span style="padding-left:10px">www.deekshatech.in</span></a>
             <a href="mailto:support@deekshatech.in" style="padding-left:10px;color:#fff"><span class="glyphicon glyphicon-envelope"></span><span style="padding-left:10px">support@deekshatech.in</span></a>
         </p>
     </footer>
     @Scripts.Render("~/bundles/jquery")
-    @*<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" rel="stylesheet"
-              integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
-                integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
-                crossorigin="anonymous"></script>
-        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js"
-                integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm"
-                crossorigin="anonymous"></script>*@
-
     @Scripts.Render("~/bundles/bootstrap")
-    @Scripts.Render("~/bundles/toastr")
+    @Scripts.Render("~/bundles/galaxy")
     <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
@@ -89,11 +90,16 @@
     <script src="https://cdn.datatables.net/autofill/2.3.4/js/autoFill.bootstrap.min.js"></script>
     <script type="text/javascript" src="~/scripts/moment.min.js"></script>
     <script type="text/javascript" src="~/scripts/bootstrap-datetimepicker.js"></script>
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
+            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
+    <script src="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/js/bootstrap-multiselect.js"></script>
+
     <script>
         function ShowOverlay() {
             $("#overlay").show();
             $("#spinner").show();
-            debugger;
+
         }
         function HideOverlay() {
             $("#overlay").hide();
@@ -115,7 +121,9 @@
                 "showEasing": "swing",
                 "hideEasing": "linear",
                 "showMethod": "fadeIn",
-                "hideMethod": "fadeOut"
+                "hideMethod": "fadeOut",
+                "preventDuplicates": true,
+                "preventOpenDuplicates": true
             };
         });
     </script>
