@@ -28,39 +28,42 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="@Url.Action("Index", "Dashboard")">
-               @* <img src="~/Images/logo_21.png" style="height: 50px; padding-right: 8px;"/><img src="~/Images/logo3.png"/>*@
+            
             </a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("Upload Nmf", "Index", "Upload")</li>
-                        <li>@Html.ActionLink("Reports", "Index", "Home")</li>
-                    </ul>
-                </li>
-                <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PM Counter <span class="caret"></span></a>
-                    <ul class="dropdown-menu">
-                        <li>@Html.ActionLink("5g Parser", "Index", "Ericsson")</li>
-                        <li>@Html.ActionLink("Parser", "XMLResult", "Home")</li>
-                        <li>@Html.ActionLink("Dashboard", "Dashboard", "Ericsson")</li>
-                    </ul>
-                </li>
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
+               
                 @if (User.Identity.IsAuthenticated)
                 {
+                    <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Upload Nmf", "Index", "Upload")</li>
+                            <li>@Html.ActionLink("Reports", "Index", "Home")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PM Counter <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("5g Parser", "Index", "Ericsson")</li>
+                            <li>@Html.ActionLink("Parser", "XMLResult", "Home")</li>
+                            <li>@Html.ActionLink("Dashboard", "Dashboard", "Ericsson")</li>
+                        </ul>
+                    </li>
                     <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
                 }
                 else
                 {
+
                     <li>@Html.ActionLink("LogIn", "LogIn", "Account")</li>
                 }
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <img src="~/Images/logo_21.png" style="height: 40px; padding-right: 8px;"/><img src="~/Images/logo3.png"/>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
