@@ -135,7 +135,7 @@ namespace GPSMap.Controllers
                                     }
 
                                     chartValues.ChartData.Add(dayKPIValue.ToString());
-                                    chartValues.Labels.Add(item.ToString());
+                                    chartValues.Labels.Add(date.ToString("dd/MM/YYYY"));
                                 }
                             }
                         }

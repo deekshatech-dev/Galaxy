@@ -3,119 +3,183 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div class="row">
+    <div class="col-md-3">
+        <div class="treeview-animated border mx-4 my-4">
+            <h3 class="pt-3 pl-3" style="text-align:center;">Public Directories</h3>
+            <hr>
+            <ul class="treeview-animated-list mb-3">
+                <li class="treeview-animated-items">
+                    <a class="closed">
+                        <i class="fas fa-angle-right"></i>
+                        <span>GEO</span>
+                    </a>
+                    <ul class="nested">
+                        <li>
+                            Air Interface
+                        </li>
+                        <li>
+                            Quality of Services
+                        </li>
+                        <li>
+                            Single User
+                        </li>
+                        <li>
+                            Traffic Density
+                        </li>
+                    </ul>
+                </li>
+                <li class="treeview-animated-items">
+                    <a class="closed">
+                        <i class="fas fa-angle-right"></i>
+                        <span>Reports</span>
+                    </a>
+                    <ul class="nested">
+                        <li>
+                            Dashboard
+                        </li>
+                        <li>
+                            Level 1 Top Performance Indicators
+                        </li>
+                        <li>
+                            Level 1 Root Cause Analysis
+                        </li>
+                        <li>
+                            Level 3 Troubleshooting
+                        </li>
+                        <li>
+                            single User
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="col-md-9">
+        <div id="data" style="display:none">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="#" onclick="toggleDiv('maindiv');">
+                            <img src="~/Images/back.png" alt="" style="width: 25%;" />
+                            <h3>Back</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="~/Upload/Index">
+                            <img src="~/Images/upload.png" alt="" style="width:25%;">
+                            <h3>Upload</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="~/Home/Index">
+                            <img src="~/Images/interface.png" alt="" style="width:25%;">
+                            <h3>Map</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="parser" style="display:none">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="#" onclick="toggleDiv('maindiv');">
+                            <img src="~/Images/back.png" alt="" style="width: 25%;" />
+                            <h3>Back</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="~/Home/XMLResult">
+                            <img src="~/Images/upload.png" alt="" style="width:25%;">
+                            <h3>Parser</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="~/Ericsson/Index">
+                            <img src="~/Images/interface.png" alt="" style="width:25%;">
+                            <h3>5g Parser</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="maindiv">
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="#">
+                            <img src="~/Images/auto-cm.png" style="width: 50%;" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="#">
+                            <img src="~/Images/data-storage.png" style="width: 50%;" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="javascript:void(0)" onclick="toggleDiv('data');">
+                            <img src="~/Images/dt-data.png" style="width: 50%;" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="javascript:void(0)" onclick="toggleDiv('parser');">
+                            <img src="~/Images/pm-counter.png" style="width: 50%;" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="#">
+                            <img src="~/Images/network-audit.png" style="width: 50%;" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="/Home">
+                            <img src="~/Images/oss.png" style="width: 50%;" alt="">
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="thumbnail">
+                        <a href="/Home">
+                            <img src="~/Images/trace.png" style="width: 50%;" alt="">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section css{
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Google Fonts Roboto -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+    <link href="~/Content/mdb.css" rel="stylesheet" />
+}
 
-<div class="container content icons" id="data" style="display:none">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="thumbnail">
-                <a href="#" onclick="toggleDiv('maindiv');">
-                    <img src="~/Images/back.png" alt="" style="width: 25%;" />
-                    <h3>Back</h3>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="thumbnail">
-                <a href="~/Upload/Index">
-                    <img src="~/Images/upload.png" alt="" style="width:25%;">
-                    <h3>Upload</h3>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="thumbnail">
-                <a href="~/Home/Index">
-                    <img src="~/Images/interface.png" alt="" style="width:25%;">
-                    <h3>Map</h3>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container content icons" id="parser" style="display:none">
-    <div class="row">
-        <div class="col-md-4">
-            <div class="thumbnail">
-                <a href="#" onclick="toggleDiv('maindiv');">
-                    <img src="~/Images/back.png" alt="" style="width: 25%;" />
-                    <h3>Back</h3>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="thumbnail">
-                <a href="~/Home/XMLResult">
-                    <img src="~/Images/upload.png" alt="" style="width:25%;">
-                    <h3>Parser</h3>
-                </a>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="thumbnail">
-                <a href="~/Ericsson/Index">
-                    <img src="~/Images/interface.png" alt="" style="width:25%;">
-                    <h3>5g Parser</h3>
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
-<div class="container content icons" id="maindiv">
-    <div class="row">
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <a href="#">
-                    <img src="~/Images/auto-cm.png" style="width: 50%;" alt="">
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <a href="#">
-                    <img src="~/Images/data-storage.png" style="width: 50%;" alt="">
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <a href="javascript:void(0)" onclick="toggleDiv('data');">
-                    <img src="~/Images/dt-data.png" style="width: 50%;" alt="">
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <a href="javascript:void(0)" onclick="toggleDiv('parser');">
-                    <img src="~/Images/pm-counter.png" style="width: 50%;" alt="">
-                </a>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <a href="#">
-                    <img src="~/Images/network-audit.png" style="width: 50%;" alt="">
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <a href="/Home">
-                    <img src="~/Images/oss.png" style="width: 50%;" alt="">
-                </a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <a href="/Home">
-                    <img src="~/Images/trace.png" style="width: 50%;" alt="">
-                </a>
-            </div>
-        </div>
-    </div>
-</div>
 @section scripts{
+    <script src="~/js/mdb.js"></script>
+    <script src="~/js/popper.js"></script>
     <script>
         function toggleDiv(sectionName) {
             $(".icons").hide();
@@ -123,7 +187,7 @@
         }
 
         $(document).ready(function () {
-
+            $('.treeview-animated').mdbTreeview();
         });
     </script>
 }
