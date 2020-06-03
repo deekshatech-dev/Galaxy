@@ -108,6 +108,7 @@
     <Compile Include="ericssonxmldetail.cs" />
     <Compile Include="Ericsson_KPI_5g_Data.cs" />
     <Compile Include="Ericsson_KPI_Data.cs" />
+    <Compile Include="KPIMaster.cs" />
     <Compile Include="MapAttributes.cs" />
     <Compile Include="MapPoints.cs" />
     <Compile Include="nokiaxmldetail.cs" />
