@@ -97,12 +97,11 @@ namespace GPSMap.Controllers
                 // X PLMN KPI = SUM(X KPI Nem, for all the day for all the meneged elements)/ 
                 // SUM(Den of X KPI of all the day for all the managed elements) ;
 
-                if (request.KPIName != null && request.KPIName.Length > 0)
+                if (request.KPIId != null && request.KPIId.Length > 0)
                 {
-                    foreach (var name in request.KPIName)
+                    foreach (var id in request.KPIId)
                     {
-                        var records = dbContext.ericsson_kpi_data.Where(k => k.KPIName == name && k.ManagedElement == k.ManagedElement);
-
+                        var records = dbContext.ericsson_kpi_data.Where(k => k.KPIId == id && k.ManagedElement == k.ManagedElement).ToList();
                         var KPI = new ChartKPIValues();
                         var chartValues = new ChartValues();
 
@@ -116,20 +115,30 @@ namespace GPSMap.Controllers
                         chartValues.Labels = new List<string>();
                         if (request.Trend == "Monthly")
                         {
-                            //var recordQuery = from c in records
-                            //              group c by new
-                            //              {
-                            //                  c.School,
-                            //                  c.Friend,
-                            //                  c.FavoriteColor,
-                            //              } into gcs
-                            //              select new ConsolidatedChild()
-                            //              {
-                            //                  School = gcs.Key.School,
-                            //                  Friend = gcs.Key.Friend,
-                            //                  FavoriteColor = gcs.Key.FavoriteColor,
-                            //                  Children = gcs.ToList(),
-                            //              };
+                            //var daysOfMonth = this.GetDays(date.Year, date.Month);
+                            //var recordquery = from r in records
+                            //                  group r by new
+                            //                  {
+                            //                      r.CreatedDate.Day,
+                            //                      r.CreatedDate.Month,
+                            //                      r.CreatedDate.Year,
+                            //                  } into gcs
+                            //                  select new 
+                            //                  {
+                            //                      Day = gcs.Key.Day,
+                            //                      Numerator = gcs.Sum(x=>x.Numerator),
+                            //                      Denominator = gcs.Sum(x=>x.Denominator)
+                            //                  };
+
+                            //var dsd = recordquery.ToList();
+                            //var finallist = (from d in daysOfMonth
+                            //                join rq in recordquery on d equals rq.Day into gj
+                            //                from days in gj.DefaultIfEmpty()
+                            //                select new {
+                            //                    Day = d,
+                            //                    KPIValue = days?.Denominator != null && days?.Denominator > 0 ? days?.Numerator / days?.Denominator : days?.Numerator
+                            //                }).ToList();
+                            //var dd = finallist;
                             foreach (var item in this.GetDays(date.Year, date.Month))
                             {
 
@@ -150,7 +159,7 @@ namespace GPSMap.Controllers
                                     }
 
                                     chartValues.ChartData.Add(dayKPIValue.ToString());
-                                    chartValues.Labels.Add(date.ToString("dd/MM/YYYY"));
+                                    chartValues.Labels.Add(date.ToString("dd/MM/yyyy"));
                                 }
                             }
                         }
@@ -179,12 +188,12 @@ namespace GPSMap.Controllers
                         }
 
 
-                        KPI.KPI = name;
+                        KPI.KPI = dbContext.kpimaster.FirstOrDefault(s=>s.KPIId == id).KPIName;
                         KPI.ChartData = chartValues;
                         KPIValues.Add(KPI);
                     }
                 }
-            }
+            } 
             return Json(KPIValues, JsonRequestBehavior.AllowGet);
         }
 

@@ -31,7 +31,7 @@ namespace GPSMap.Models
     public class ChartRequest
     {
         public string Trend { get; set; }
-        public string[] KPIName { get; set; }
+        public int[] KPIId{ get; set; }
         public string Date { get; set; }
         public bool ShowSeparate { get; set; }
     }

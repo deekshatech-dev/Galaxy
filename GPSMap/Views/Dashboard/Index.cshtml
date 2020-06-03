@@ -6,55 +6,9 @@
 }
 <div class="row">
     <div class="col-md-3">
-        <div class="treeview-animated border mx-4 my-4">
-            @*<h3 class="pt-3 pl-3" style="text-align:center;">Public Directories</h3>*@
-            @*<hr>*@
-            <ul class="treeview-animated-list mb-3">
-                <li class="treeview-animated-items">
-                    <a class="closed">
-                        <i class="fas fa-angle-right"></i>
-                        <span>GEO</span>
-                    </a>
-                    <ul class="nested">
-                        <li>
-                            Air Interface
-                        </li>
-                        <li>
-                            Quality of Services
-                        </li>
-                        <li>
-                            Single User
-                        </li>
-                        <li>
-                            Traffic Density
-                        </li>
-                    </ul>
-                </li>
-                <li class="treeview-animated-items">
-                    <a class="closed">
-                        <i class="fas fa-angle-right"></i>
-                        <span>Reports</span>
-                    </a>
-                    <ul class="nested">
-                        <li>
-                            Dashboard
-                        </li>
-                        <li>
-                            Level 1 Top Performance Indicators
-                        </li>
-                        <li>
-                            Level 1 Root Cause Analysis
-                        </li>
-                        <li>
-                            Level 3 Troubleshooting
-                        </li>
-                        <li>
-                            single User
-                        </li>
-                    </ul>
-                </li>
-            </ul>
-        </div>
+       @* <div class="treeview-animated mx-4 my-4">*@
+            <div id="treeview4" class="treeview"></div>
+        @*</div>*@
     </div>
     <div class="col-md-9">
         <div id="data" style="display:none">
@@ -297,16 +251,13 @@
     </div>
 </div>
 @section css{
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
-    <!-- Google Fonts Roboto -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+
+    <link href="~/Content/bootstrap-treeview.css" rel="stylesheet" />
 
 }
 
 @section scripts{
-    <script src="~/js/mdb.js"></script>
-    <script src="~/js/popper.js"></script>
+    <script src="~/js/bootstrap-treeview.js"></script>
     <script>
         function toggleDiv(sectionName) {
             $(".icons").hide();
@@ -317,8 +268,6 @@
 
 
         $(document).ready(function () {
-            $('.treeview-animated').mdbTreeview();
-
             $(".anchorDetail").click(function () {
                 debugger;
                 var $buttonClicked = $(this);
@@ -344,7 +293,7 @@
                 $('#myModal').modal(options);
                 $('#myModal').modal('show');
             });
-        
+
             $("#closbtn").click(function () {
                 $('#myModal').modal('hide');
             });
@@ -358,6 +307,77 @@
                 format: 'DD/MM/YYYY',
                 showClear: true
             });
+
+            var defaultData = [
+                {
+                    text: 'Public Directories',
+                    href: '#pd',
+                    tags: ['10'],
+                    nodes: [
+                        {
+                            text: 'GEO',
+                            href: '#geo',
+                            tags: ['4'],
+                            nodes: [
+                                {
+                                    text: 'Air Interface',
+                                    href: '#interface',
+                                    tags: ['0']
+                                },
+                                {
+                                    text: 'Quality of Services',
+                                    href: '#services',
+                                    tags: ['0']
+                                },
+                                {
+                                    text: 'Single User',
+                                    href: '#user',
+                                    tags: ['0']
+                                },
+                                {
+                                    text: 'Traffic Density',
+                                    href: '#traffic',
+                                    tags: ['0']
+                                }
+                            ]
+                        },
+                        {
+                            text: 'Reports',
+                            href: '#reports',
+                            tags: ['4'],
+                            nodes: [
+                                {
+                                    text: 'Dashboard',
+                                    href: '#dashboard',
+                                    tags: ['0']
+                                },
+                                {
+                                    text: 'Level 1 Top Performance Indicators',
+                                    href: '#indicators',
+                                    tags: ['0']
+                                },
+                                {
+                                    text: 'Level 1 Root Cause Analysis',
+                                    href: '#analysis',
+                                    tags: ['0']
+                                },
+                                {
+                                    text: 'Level 3 Troubleshooting',
+                                    href: '#traffic',
+                                    tags: ['0']
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ];
+
+            $('#treeview4').treeview({
+
+                color: "#428bca",
+                data: defaultData
+            });
+
         });
 
     </script>
