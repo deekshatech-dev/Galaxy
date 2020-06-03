@@ -66,10 +66,10 @@ namespace GPSMap.Controllers
             var chart = new KPIChartDataModel();
             using (var dbContext = new DatabaseContext())
             {
-                chart.KPIValues = new SelectList(dbContext.ericsson_kpi_5g_data.Distinct().Take(15).ToList().Select(n => new SelectListItem
+                chart.KPIValues = new SelectList(dbContext.kpimaster.Take(15).ToList().Select(n => new SelectListItem
                 {
                     Text = n.KPIName,
-                    Value = n.KPIName
+                    Value = n.KPIId.ToString()
                 }), "Value", "Text");
                 var chartSearch = new ChartSearchModel();
                 chart.SearchModel = chartSearch;
@@ -116,8 +116,23 @@ namespace GPSMap.Controllers
                         chartValues.Labels = new List<string>();
                         if (request.Trend == "Monthly")
                         {
+                            //var recordQuery = from c in records
+                            //              group c by new
+                            //              {
+                            //                  c.School,
+                            //                  c.Friend,
+                            //                  c.FavoriteColor,
+                            //              } into gcs
+                            //              select new ConsolidatedChild()
+                            //              {
+                            //                  School = gcs.Key.School,
+                            //                  Friend = gcs.Key.Friend,
+                            //                  FavoriteColor = gcs.Key.FavoriteColor,
+                            //                  Children = gcs.ToList(),
+                            //              };
                             foreach (var item in this.GetDays(date.Year, date.Month))
                             {
+
                                 if (!string.IsNullOrEmpty(Convert.ToString(item)))
                                 {
                                     var dayRecord = records.Where(g => g.CreatedDate.Day == item && g.CreatedDate.Month == date.Month);
