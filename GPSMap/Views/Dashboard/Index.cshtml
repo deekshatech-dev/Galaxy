@@ -1,4 +1,5 @@
-﻿
+﻿@using GPSMap.Data;
+@model GPSMap.Models.SearchViewModel
 @{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -6,8 +7,8 @@
 <div class="row">
     <div class="col-md-3">
         <div class="treeview-animated border mx-4 my-4">
-            <h3 class="pt-3 pl-3" style="text-align:center;">Public Directories</h3>
-            <hr>
+            @*<h3 class="pt-3 pl-3" style="text-align:center;">Public Directories</h3>*@
+            @*<hr>*@
             <ul class="treeview-animated-list mb-3">
                 <li class="treeview-animated-items">
                     <a class="closed">
@@ -60,7 +61,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <a href="#" onclick="toggleDiv('maindiv');">
+                        <a href="~/Dashboard/Index" onclick="toggleDiv('maindiv');">
                             <img src="~/Images/back.png" alt="" style="width: 25%;" />
                             <h3>Back</h3>
                         </a>
@@ -88,7 +89,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <div class="thumbnail">
-                        <a href="#" onclick="toggleDiv('maindiv');">
+                        <a href="~/Dashboard/Index" onclick="toggleDiv('maindiv');">
                             <img src="~/Images/back.png" alt="" style="width: 25%;" />
                             <h3>Back</h3>
                         </a>
@@ -112,33 +113,67 @@
                 </div>
             </div>
         </div>
+        <div id="Reports" style="display:none">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="~/Dashboard/Index" onclick="toggleDiv('maindiv');">
+                            <img src="~/Images/back.png" alt="" style="width: 25%;" />
+                            <h3>Back</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        @*<a href="~/Home/XMLResult">*@
+                        @*<a href="/Dashboard/OpenExe" class="openexe">*@
+                        <a href="javascript:void(0);" class="anchorDetail" data-id="123">
+                            <img src="~/Images/upload.png" alt="" style="width:25%;">
+                            <h3>Report</h3>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="thumbnail">
+                        <a href="~/Ericsson/Index">
+                            <img src="~/Images/interface.png" alt="" style="width:25%;">
+                            <h3>Geo</h3>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div id="maindiv">
             <div class="row">
                 <div class="col-md-3">
                     <div class="thumbnail">
                         <a href="#">
-                            <img src="~/Images/auto-cm.png" style="width: 50%;" alt="">
+                            @*<img src="~/Images/auto-cm.jpg" style="width: 70%;" alt="auto-cm">*@
+                            <h3>Auto CM Configuration</h3>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="thumbnail">
                         <a href="#">
-                            <img src="~/Images/data-storage.png" style="width: 50%;" alt="">
+                            @*<img src="~/Images/data-storage.jpg" style="width: 70%;" alt="data-storage">*@
+                            <h3>Data Storage</h3>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="thumbnail">
                         <a href="javascript:void(0)" onclick="toggleDiv('data');">
-                            <img src="~/Images/dt-data.png" style="width: 50%;" alt="">
+                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="network-audit">*@
+                            <h3>Network Audit</h3>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="thumbnail">
                         <a href="javascript:void(0)" onclick="toggleDiv('parser');">
-                            <img src="~/Images/pm-counter.png" style="width: 50%;" alt="">
+                            @*<img src="~/Images/pm-counter.jpg" style="width: 70%;" alt="pm-counter">*@
+                            <h3>PM Counter</h3>
                         </a>
                     </div>
                 </div>
@@ -146,25 +181,117 @@
             <div class="row">
                 <div class="col-md-3">
                     <div class="thumbnail">
-                        <a href="#">
-                            <img src="~/Images/network-audit.png" style="width: 50%;" alt="">
+                        <a href="javascript:void(0);" class="anchorDetail" data-id="123">
+                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="Network-Audit">*@
+                            <h3>Network Audit</h3>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="thumbnail">
-                        <a href="/Home">
-                            <img src="~/Images/oss.png" style="width: 50%;" alt="">
+                        <a href="javascript:void(0)" onclick="toggleDiv('Reports');">
+                            @*<img src="~/Images/oss.jpg" style="width: 70%;" alt="OSS">*@
+                            <h3>Oss Reporting</h3>
                         </a>
                     </div>
                 </div>
                 <div class="col-md-3">
                     <div class="thumbnail">
-                        <a href="/Home">
-                            <img src="~/Images/trace.png" style="width: 50%;" alt="">
+                        <a href="">
+                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="trace">*@
+                            <h3>Trace Analyser</h3>
                         </a>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+<div id='myModal' class='modal'>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div id='myModalContent'>
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Report Parameters</h4>
+                </div>
+                <hr />
+                @using (Html.BeginForm("OpenExe", "Dashboard", FormMethod.Post, new { @class = "form-inline" }))
+                {
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Path
+                        </dt>
+                        <dd>
+                            /PublicFolders/Reports/Dashboard/Cluster daily
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Time From
+                        </dt>
+                        <dd>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-from'>
+                                    @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Time To
+                        </dt>
+                        <dd>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-to'>
+                                    @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Object
+                        </dt>
+                        <dd>
+                            PLMN
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            file path
+                        </dt>
+                        <dd>
+                            D:/weekly_reports/$[yyyy]_$[mm]_$[dd]_Cluster daily.ttr
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+
+                        </dt>
+                        <dd>
+                            <button id="calculate" class="btn btn-primary btn-sm" type="submit">Calculate</button>
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                    </dl>
+                }
             </div>
         </div>
     </div>
@@ -174,7 +301,7 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
     <!-- Google Fonts Roboto -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
-    
+
 }
 
 @section scripts{
@@ -183,11 +310,55 @@
     <script>
         function toggleDiv(sectionName) {
             $(".icons").hide();
+            $("#maindiv").hide();
             $("#" + sectionName).toggle();
         }
 
+
+
         $(document).ready(function () {
             $('.treeview-animated').mdbTreeview();
+
+            $(".anchorDetail").click(function () {
+                debugger;
+                var $buttonClicked = $(this);
+                var id = $buttonClicked.attr('data-id');
+                var options = { "backdrop": "static", keyboard: true };
+                //$.ajax({
+                // type: "GET",
+                // url: TeamDetailPostBackURL,
+                // contentType: "application/json; charset=utf-8",
+                // data: { "Id": id },
+                // datatype: "json",
+                // success: function (data) {
+                // debugger;
+                // $('#myModalContent').html(data);
+                // $('#myModal').modal(options);
+                // $('#myModal').modal('show');
+
+                // },
+                // error: function () {
+                // alert("Dynamic content load failed.");
+                // }
+                //});
+                $('#myModal').modal(options);
+                $('#myModal').modal('show');
+            });
+        
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+
+            $('#p-from').datetimepicker({
+                format: 'DD/MM/YYYY',
+                showClear: true
+            });
+
+            $('#p-to').datetimepicker({
+                format: 'DD/MM/YYYY',
+                showClear: true
+            });
         });
+
     </script>
 }
