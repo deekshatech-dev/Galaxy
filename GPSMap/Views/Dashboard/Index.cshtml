@@ -375,7 +375,8 @@
             $('#treeview4').treeview({
 
                 color: "#428bca",
-                data: defaultData
+                //data: defaultData
+                data: @Html.Raw(ViewBag.TreeViewData)
             });
 
         });

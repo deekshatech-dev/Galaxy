@@ -16,7 +16,7 @@ namespace GPSMap.Helper
 
 		private static string Connection { get { return ConfigurationManager.ConnectionStrings["MySQLConnection"].ToString(); } }
 
-
+		private static string connectionLTE_Ericsson { get { return ConfigurationManager.ConnectionStrings["MySQLConnectionLTE_Ericsson"].ToString(); } }
 
 		public List<LocationDTO> GetLocationData()
 
@@ -226,5 +226,38 @@ namespace GPSMap.Helper
 
 			return lst;
 		}
+
+		public List<TreeViewNode> GetIFSData()
+		{
+			List<TreeViewNode> lstIFSData = new List<TreeViewNode>();
+
+			//string query = "SELECT id,object_id,session_id,kpiLTE_UE_GPS FROM lte_drive_test.tt_kpi_data2;";
+			string query = "select id, parent_id, name from tt_ifs where type = 0;"; // get directories only not files
+
+			// Create an instance of the User class
+
+			TreeViewNode treeViewNode;
+
+			using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_Ericsson, query))
+			{
+				// Check if the reader returned any rows
+
+				if (reader.HasRows)
+				{
+					while (reader.Read())
+					{
+						treeViewNode = new TreeViewNode();
+
+						treeViewNode.id = Convert.ToString(reader[0]);
+						treeViewNode.parentid = Convert.ToString(reader[1]);
+						treeViewNode.text = Convert.ToString(reader[2]);
+
+						lstIFSData.Add(treeViewNode);
+					}
+				}
+			}
+			return lstIFSData;
+		}
+
 	}
 }
