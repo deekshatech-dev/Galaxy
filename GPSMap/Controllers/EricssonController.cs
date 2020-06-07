@@ -166,7 +166,7 @@ namespace GPSMap.Controllers
                         else
                         {
                             // chartValues.Labels = System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.MonthNames.ToList();
-                            for (var i = 0; i < 23; i++)
+                            for (var i = 0; i <= 23; i++)
                             {
                                 // var dayValue = records.Where(g => DateTime.ParseExact(g.CreatedDate, "dd-MM-yyyy", CultureInfo.InvariantCulture).Month == i).Sum(s => s.KPIValue.ToDecimal());
                                 var hourRecord = records.Where(g => g.CreatedDate.Hour == i);
