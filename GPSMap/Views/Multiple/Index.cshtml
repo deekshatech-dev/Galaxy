@@ -2,8 +2,14 @@
 @{
     ViewBag.Title = "Map | Index";
 }
-
-@Html.Action("GetBaseMapResultContainer")
+<div class="row">
+    <div class="col-md-12 text-right">
+        <button class="btn btn-xs btn-warning" title="Reset map" onclick="location.reload();"><i class="glyphicon glyphicon-refresh"></i> Reset</button>
+    </div>
+</div>
+<div id="result">
+    @Html.Action("GetBaseMapResultContainer")
+</div>
 
 @section scripts
 {
@@ -12,7 +18,7 @@
 
     <script type="text/javascript" src="/scripts/app/map-controller.js"></script>
     <script>
-        var mapSections = [];
+        window.mapSections = [];
         window.chartColors = [
             'rgb(255, 99, 132)',
             'rgb(255, 159, 64)',
@@ -22,5 +28,23 @@
             'rgb(153, 102, 255)',
             'rgb(201, 203, 207)'
         ];
+
+        window.addMoreMap = function(id) {
+            $.blockUI();
+            $('.body-content').append($('<div/>', { 'id': id }));
+            $("div#" + id).load('@Url.Action("GetBaseMapResultContainer")',
+                function(data) {
+                    //do Something
+                    $.unblockUI();
+                    $('#addMore-map-btn-' + id).hide();
+                    $('#remove-map-btn-' + id).show();
+                });
+        };
+        window.removeMap = function (id) {
+            $('#' + id).remove();
+            $('#remove-map-btn-' + id).hide();
+            $('#addMore-map-btn-' + id).show();
+        };
+
     </script>
 }

@@ -6,6 +6,23 @@ galexy.MapController = function (config) {
     var $period = $("[data-period-id='" + config.filter.id + "']");
     var $chartContainer = $("#chart-container-" + config.filter.id);
     var $showSeperate = $("[data-seperate-id='" + config.filter.id + "']");
+    var $tell = $("#tell-" + config.filter.id);
+
+    var getPanelMarkup = function (chartId, isFullWidth) {
+        return `<div class="col-md-${isFullWidth ? 12 : 6}" >
+                                <div class="panel panel-default" id="panel-container-${chartId}">                                     
+                                     <div class="panel-body"></div>
+                                </div>
+                            </div>`;
+    };
+
+    var displayTell = function (show) {
+        if (show) {
+            $tell.show();
+        } else {
+            $tell.hide();
+        }
+    };
 
     var getRandomChart = function () {
         var max = window.chartColors.length;
@@ -88,14 +105,9 @@ galexy.MapController = function (config) {
         var ctx;
         if (createMultiple) {
             for (var i = 0; i < chart.length; i++) {
-                chartId = 'myChart' + i;
+                chartId = 'myChart-' + config.filter.id + i;
                 newCanvas = $('<canvas/>', { 'id': chartId });
-
-                panel = `<div class="col-md-6" >
-                                <div class="panel panel-default" id="panel-container-${chartId}">                                     
-                                     <div class="panel-body"></div>
-                                </div>
-                            </div>`;
+                panel = getPanelMarkup(chartId);
 
                 $chartContainer.append(panel);
                 panelid = `#panel-container-${chartId} .panel-body`;
@@ -105,19 +117,15 @@ galexy.MapController = function (config) {
             }
         } else {
             // plot single chart
-            chartId = 'myChart';
+            chartId = 'myChart-' + config.filter.id;
             newCanvas = $('<canvas/>', { 'id': chartId });
 
-            panel = `<div class="col-md-12" >
-                                <div class="panel panel-default" id="panel-container-${chartId}">                                     
-                                     <div class="panel-body"></div>
-                                </div>
-                            </div>`;
+            panel = getPanelMarkup(chartId,true);
 
             $chartContainer.append(panel);
             panelid = `#panel-container-${chartId} .panel-body`;
             $(panelid).html(newCanvas);
-            ctx = document.getElementById('myChart').getContext('2d');
+            ctx = document.getElementById(chartId).getContext('2d');
             generateChart(ctx, chart);
         }
 
@@ -150,6 +158,7 @@ galexy.MapController = function (config) {
                 dataType: "json",
                 success: function (data) {
                     bindChart(data);
+                    displayTell(true);
                 },
                 "error": function (data) {
                     alert("Some Error Occured!");

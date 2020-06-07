@@ -43,25 +43,31 @@
 
                 <input data-seperate-id="@Model.UniqueId" name="ShowSeparate" id="ShowSeparate" type="checkbox" checked data-toggle="toggle" data-on="Show Seperate" data-off="Show Single" data-onstyle="success" data-offstyle="warning">
 
-                <button data-gen-chart-id="@Model.UniqueId" class="btn btn-primary btn-sm" >Generate Chart</button>
+                <button data-gen-chart-id="@Model.UniqueId" class="btn btn-primary btn-sm">Generate Chart</button>
             </div>
         </div>
     </div>
 </div>
 <div class="row">
-    <div id="chart-container-@Model.UniqueId">
-
-    </div>
+    <div id="chart-container-@Model.UniqueId"></div>
 </div>
-
+<div class="text-right" id="tell-@Model.UniqueId" style="display: none; margin-bottom: 10px;">
+    <button class="btn btn-xs btn-success" title="Add comparision" id="addMore-map-btn-@Model.UniqueId" onclick="addMoreMap('@Model.UniqueId')"><i class="glyphicon glyphicon-plus-sign"></i> Add More</button>
+    <button class="btn btn-xs btn-danger" title="Remove map" id="remove-map-btn-@Model.UniqueId" style="display: none;" onclick="removeMap('@Model.UniqueId')"><i class="glyphicon glyphicon-minus-sign"></i> Remove</button>
+</div>
 <script>
     function load() {
         var config = {
             filter: { id: '@Model.UniqueId' },
             url: { chart: '@Url.Action("GetChartData", "Ericsson")' }
         };
-        var mapController = new galexy.MapController(config);
+        let mapController = new galexy.MapController(config);
         mapController.init();
+
+        window.mapSections.push({
+            id: config.filter.id,
+            mapInstance: mapController
+        });
     }
 
     window.setTimeout(load,1500);
