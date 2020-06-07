@@ -13,9 +13,6 @@
 
 @section scripts
 {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"
-            integrity="sha256-R4pqcOYV8lt7snxMQO/HSbVCFRPMdrhAFMH+vr9giYI=" crossorigin="anonymous"></script>
-
     <script type="text/javascript" src="/scripts/app/map-controller.js"></script>
     <script>
         window.mapSections = [];
@@ -40,11 +37,21 @@
                     $('#remove-map-btn-' + id).show();
                 });
         };
-        window.removeMap = function (id) {
+        window.removeMap = function(id) {
             $('#' + id).remove();
             $('#remove-map-btn-' + id).hide();
             $('#addMore-map-btn-' + id).show();
         };
+        window.onToggleFiter = function(id) {
+            if ($('#filter-toggle-'+ id).is(":checked")) {
+                // Hide
+                $('#filter-container-' + id).hide();
+            } else {
+               // Show 
+               $('#filter-container-' + id).show();
+            }
+        }
 
+        
     </script>
 }

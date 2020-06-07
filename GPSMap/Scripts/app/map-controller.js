@@ -186,6 +186,9 @@ galexy.MapController = function (config) {
         });
 
         $("[data-gen-chart-id='" + config.filter.id + "']").on('click', getChartData);
+
+        $('[data-seperate-id]').bootstrapToggle('destroy');
+        $('[data-seperate-id]').bootstrapToggle();
     };
 
     var init = function () {

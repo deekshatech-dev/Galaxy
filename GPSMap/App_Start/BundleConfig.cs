@@ -33,7 +33,8 @@ namespace GPSMap
 					  "~/Content/bootstrap.css",
 					  "~/Content/site.css",
 					  "~/Content/nav-bar.css",
-                      "~/Content/toastr.css"));
+                      "~/Content/switch.css",
+					  "~/Content/toastr.css"));
 		}
 	}
 }
