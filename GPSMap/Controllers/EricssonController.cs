@@ -159,7 +159,7 @@ namespace GPSMap.Controllers
                                     }
 
                                     chartValues.ChartData.Add(dayKPIValue.ToString());
-                                    chartValues.Labels.Add(date.ToString("dd/MM/yyyy"));
+                                    chartValues.Labels.Add(string.Format("{0}/{1}/{2}", date.Year, date.Month.ToString("00"),item.ToString("00")));
                                 }
                             }
                         }
