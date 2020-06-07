@@ -13,6 +13,8 @@ namespace GPSMap.Models
         public ChartValues ChartValues { get; set; }
 
         public SelectList KPIValues { get; set; }
+        public Guid UniqueId { get; set; }
+        
     }
     public class ChartKPIValues
     {

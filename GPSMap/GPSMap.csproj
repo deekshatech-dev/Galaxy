@@ -194,6 +194,7 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EricssonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\MultipleController.cs" />
     <Compile Include="Models\ChartSearchModel.cs" />
     <Compile Include="Models\KPIChartDataModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
@@ -259,6 +260,7 @@
     <Content Include="img\svg\arrow_right.svg" />
     <Content Include="js\mdb.js" />
     <Content Include="js\popper.js" />
+    <Content Include="Scripts\app\map-controller.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
     <Content Include="js\Plotmap.js" />
@@ -316,6 +318,8 @@
     <Content Include="Views\Shared\_Reports.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Ericsson\Dashboard.cshtml" />
+    <Content Include="Views\Multiple\Index.cshtml" />
+    <Content Include="Views\Multiple\_MapContainer.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

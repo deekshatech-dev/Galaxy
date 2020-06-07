@@ -1,0 +1,68 @@
+﻿@model GPSMap.Models.KPIChartDataModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <div class="panel panel-default" style="margin-top:10px;">
+            <div class="panel-body form-inline">
+                <div class="form-group">
+                    <label for="KPI">Select KPI</label>
+                    <select id="KPI" multiple="multiple" required name="KPI" data-kip-id="@Model.UniqueId">
+                        <option>Select KPI</option>
+                        @if (Model.KPIValues != null)
+                        {
+                            foreach (var item in Model.KPIValues)
+                            {
+                                if (item.Text != null)
+                                {
+                                    <option value="@item.Value">
+                                        @item.Text
+                                    </option>
+                                }
+                            }
+                        }
+                    </select>
+                </div>
+                <div class="form-group">
+                    <div class='input-group date' data-period-id="@Model.UniqueId">
+                        @Html.TextBoxFor(x => x.SearchModel.ForDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="Trend">Select Trend</label>
+                    <select name="Trend" id="Trend" class="form-control" data-trend-id="@Model.UniqueId">
+                        <option value="Monthly">Monthly</option>
+                        <option value="Daily">Daily</option>
+                    </select>
+                </div>
+
+                <input data-seperate-id="@Model.UniqueId" name="ShowSeparate" id="ShowSeparate" type="checkbox" checked data-toggle="toggle" data-on="Show Seperate" data-off="Show Single" data-onstyle="success" data-offstyle="warning">
+
+                <button data-gen-chart-id="@Model.UniqueId" class="btn btn-primary btn-sm" >Generate Chart</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div id="chart-container-@Model.UniqueId">
+
+    </div>
+</div>
+
+<script>
+    function load() {
+        var config = {
+            filter: { id: '@Model.UniqueId' },
+            url: { chart: '@Url.Action("GetChartData", "Ericsson")' }
+        };
+        var mapController = new galexy.MapController(config);
+        mapController.init();
+    }
+
+    window.setTimeout(load,1500);
+</script>
