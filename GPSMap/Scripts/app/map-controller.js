@@ -138,13 +138,12 @@ galexy.MapController = function (config) {
     var getChartData = function () {
         if (isValidate()) {
             $.blockUI();
-
             $.ajax({
                 type: "POST",
                 url: config.url.chart,
                 data: JSON.stringify({
                     "Trend": $trend.val(),
-                    "KPIName": $kpi.val(),
+                    "KpiId": $kpi.val(),
                     "Date": $period.data('date')
                 }),
                 contentType: "application/json",

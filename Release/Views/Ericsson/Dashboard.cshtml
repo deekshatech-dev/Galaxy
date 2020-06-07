@@ -44,26 +44,34 @@
 
                 <input name="ShowSeparate" id="ShowSeparate" type="checkbox" checked data-toggle="toggle" data-on="Show Seperate" data-off="Show Single" data-onstyle="success" data-offstyle="warning">
 
-                <button id="generatechart" class="btn btn-primary btn-sm" onclick="GenerateChart()">Generate Chart</button>
+                <button id="generatechart" class="btn btn-primary btn-sm" onclick="GetChartData()">Generate Chart</button>
             </div>
         </div>
     </div>
-    <div id="chart-container" class="row">
+    
+</div>
+<div class="row">
+    <div id="chart-container">
 
     </div>
 </div>
 @section scripts{
     <script>
 
-        window.chartColors = {
-            red: 'rgb(255, 99, 132)',
-            orange: 'rgb(255, 159, 64)',
-            yellow: 'rgb(255, 205, 86)',
-            green: 'rgb(75, 192, 192)',
-            blue: 'rgb(54, 162, 235)',
-            purple: 'rgb(153, 102, 255)',
-            grey: 'rgb(201, 203, 207)'
-        };
+        window.chartColors = [
+            'rgb(255, 99, 132)',
+            'rgb(255, 159, 64)',
+            'rgb(255, 205, 86)',
+            'rgb(75, 192, 192)',
+            'rgb(54, 162, 235)',
+            'rgb(153, 102, 255)',
+            'rgb(255, 127, 123)'
+        ];
+
+        var getRandomChart = function () {
+            var max = window.chartColors.length;
+            return window.chartColors[Math.floor(Math.random() * Math.floor(max))];
+        }
 
         $('#KPI').multiselect({
             includeSelectAllOption: false,
@@ -89,9 +97,9 @@
                 return false;
             }
             return true;
-        }
+        };
 
-        function GenerateChart() {
+        function GetChartData() {
             if (isValidate()) {
                 $.blockUI();
 
@@ -100,7 +108,7 @@
                         url: '@Url.Action("GetChartData", "Ericsson")',
                         data: JSON.stringify({
                             "Trend": $("#Trend").val(),
-                            "KPIName": $("#KPI").val(),
+                            "KPIId": $("#KPI").val(),
                             "Date": $('#p-for').data('date')
                         }),
                         contentType: "application/json",
@@ -122,54 +130,120 @@
         };
 
         var generateChart = function(ctx, data) {
-            debugger;
-            console.log(data);
+
+            // prepare data
+
+            var datasets = [];
+            var chartLabels;
+            if (Array.isArray(data)) {
+                chartLabels = data[0].ChartData.Labels;
+                $.each(data,
+                    function(index, value) {
+                        var chartDatasets = {
+                            label: value.KPI,
+                            data: value.ChartData.ChartData,
+                            borderColor: getRandomChart(),
+                            fill: false
+                        };
+                        datasets.push(chartDatasets);
+                    });
+            } else {
+                chartLabels = data.ChartData.Labels;
+                var chartDatasets = {
+                    label: data.KPI,
+                    data: data.ChartData.ChartData,
+                    borderColor: getRandomChart(),
+                    fill: false
+                };
+                datasets.push(chartDatasets);
+            }
+
+            var xAxes = "Dates";
+            if ($("#Trend").val() == "Daily") {
+                xAxes = "Hours";
+            }
 
             var myChart = new Chart(ctx,
                 {
                     type: 'line',
                     data: {
-                        labels: data[0].ChartData.Labels,
-                        datasets: [
-                            {
-                                label: data[0].KPI,
-                                data: data[0].ChartData.ChartData
-                            }
-                        ]
+                        labels: chartLabels, // chartLabels
+                        datasets: datasets
+                    },
+                    options: {
+                        scales: {
+                            xAxes: [
+                                {
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: xAxes
+                                    }
+                                }
+                            ],
+                            yAxes: [
+                                {
+                                    display: true,
+                                    scaleLabel: {
+                                        display: true,
+                                        labelString: 'KPI Value'
+                                    }
+                                }
+                            ]
+                        }
                     }
                 });
         };
 
-        var bindChart = function(chart) {
+        var bindChart = function (chart) {
+
             $('#chart-container').empty();
-         
             var createMultiple = false;
 
             if ($('#ShowSeparate').is(":checked") && chart.length > 1) {
                 createMultiple = true;
             }
 
-            if (createMultiple) {
-                for (var i = 0; i < chart.length; i++) {
-                    var chartId = 'myChart' + i;
-                    var newCanvas =
-                        $('<canvas/>', { 'class': 'radHuh', 'id': chartId });
-                    $('#chart-container').append(newCanvas);
-                    var ctx = document.getElementById('myChart').getContext('2d');
+            var newCanvas;
+            var chartId;
+
+            var panel;
+            var panelid;
+            var ctx;
+            if (createMultiple)
+            {
+                for (var i = 0; i < chart.length; i++)
+                {
+                    chartId = 'myChart' + i;
+                    newCanvas = $('<canvas/>', { 'id': chartId });
+
+                    panel = `<div class="col-md-6" >
+                                <div class="panel panel-default" id="panel-container-${chartId}">                                     
+                                     <div class="panel-body"></div>
+                                </div>
+                            </div>`;
+
+                    $('#chart-container').append(panel);
+                    panelid = `#panel-container-${chartId} .panel-body`;
+                    $(panelid).html(newCanvas);
+                    ctx = document.getElementById(chartId).getContext('2d');
                     generateChart(ctx, chart[i]);
                 }
             } else {
-                // plot single chart 
-                var chartId = 'myChart';
-                var newCanvas =
-                    $('<canvas/>', { 'class': 'radHuh', 'id': chartId });
+                // plot single chart
+                chartId = 'myChart';
+                newCanvas = $('<canvas/>', { 'id': chartId });
 
-                var panel = `<div class="panel panel-default">
-                              <div class="panel-heading">${chartId}</div>
-                              <div class="panel-body">${newCanvas}</div>
+                panel = `<div class="col-md-12" >
+                                <div class="panel panel-default" id="panel-container-${chartId}">                                     
+                                     <div class="panel-body"></div>
+                                </div>
                             </div>`;
-                $('#chart-container').append(newCanvas);
-                var ctx = document.getElementById('myChart').getContext('2d');
+
+                $('#chart-container').append(panel);
+                panelid = `#panel-container-${chartId} .panel-body`;
+                $(panelid).html(newCanvas);
+                ctx = document.getElementById('myChart').getContext('2d');
                 generateChart(ctx, chart);
             }
 

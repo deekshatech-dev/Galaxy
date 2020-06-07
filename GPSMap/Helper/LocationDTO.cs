@@ -62,4 +62,15 @@ namespace GPSMap.Helper
 
 		public string sCQI { get; set; }
 	}
+
+	public class TreeViewNode
+	{
+		public string id;
+		public string parentid;
+		public string text;
+		public string href;
+		public List<string> tags;
+		public List<TreeViewNode> nodes;
+	}
+
 }

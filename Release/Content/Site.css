@@ -212,6 +212,6 @@ footer {
     margin-top: 17px;
 }*/
 
-.border {
-    border: 1px solid #dee2e6 !important
+.treeview .list-group-item {
+    white-space:nowrap;
 }

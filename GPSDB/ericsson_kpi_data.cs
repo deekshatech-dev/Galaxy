@@ -17,5 +17,6 @@ namespace GPSDB
         public decimal Numerator { get; set; }
         public decimal Denominator { get; set; }
         public DateTime CreatedDate { get; set; }
+        public int? KPIId { get; set; }
     }
 }

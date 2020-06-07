@@ -63,7 +63,7 @@
             'rgb(75, 192, 192)',
             'rgb(54, 162, 235)',
             'rgb(153, 102, 255)',
-            'rgb(201, 203, 207)'
+            'rgb(255, 127, 123)'
         ];
 
         var getRandomChart = function () {
@@ -106,7 +106,7 @@
                         url: '@Url.Action("GetChartData", "Ericsson")',
                         data: JSON.stringify({
                             "Trend": $("#Trend").val(),
-                            "KPIName": $("#KPI").val(),
+                            "KPIId": $("#KPI").val(),
                             "Date": $('#p-for').data('date')
                         }),
                         contentType: "application/json",
@@ -156,6 +156,11 @@
                 datasets.push(chartDatasets);
             }
 
+            var xAxes = "Dates";
+            if ($("#Trend").val() == "Daily") {
+                xAxes = "Hours";
+            }
+
             var myChart = new Chart(ctx,
                 {
                     type: 'line',
@@ -170,7 +175,7 @@
                                     display: true,
                                     scaleLabel: {
                                         display: true,
-                                        labelString: 'Dates | Hours'
+                                        labelString: xAxes
                                     }
                                 }
                             ],
