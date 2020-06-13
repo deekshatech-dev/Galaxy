@@ -4,166 +4,15 @@
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+
 <div class="row">
-    <div class="col-md-3" style="display:none">
-       @* <div class="treeview-animated mx-4 my-4">*@
-            <div id="treeview4" class="treeview"></div>
+    <div class="col-md-3">
+        @* <div class="treeview-animated mx-4 my-4">*@
+        <div id="treeview4" class="treeview"></div>
         @*</div>*@
     </div>
-    <div class="col-md-9">
-        <div id="data" style="display:none">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Dashboard/Index" onclick="toggleDiv('maindiv');">
-                            <img src="~/Images/back.png" alt="" style="width: 25%;" />
-                            <h3>Back</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Upload/Index">
-                            <img src="~/Images/upload.png" alt="" style="width:25%;">
-                            <h3>Upload</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Home/Index">
-                            <img src="~/Images/interface.png" alt="" style="width:25%;">
-                            <h3>Map</h3>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="parser" style="display:none">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Dashboard/Index" onclick="toggleDiv('maindiv');">
-                            <img src="~/Images/back.png" alt="" style="width: 25%;" />
-                            <h3>Back</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Home/XMLResult">
-                            <img src="~/Images/upload.png" alt="" style="width:25%;">
-                            <h3>Parser</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Ericsson/Index">
-                            <img src="~/Images/interface.png" alt="" style="width:25%;">
-                            <h3>5g Parser</h3>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="Reports" style="display:none">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Dashboard/Index" onclick="toggleDiv('maindiv');">
-                            <img src="~/Images/back.png" alt="" style="width: 25%;" />
-                            <h3>Back</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        @*<a href="~/Home/XMLResult">*@
-                        @*<a href="/Dashboard/OpenExe" class="openexe">*@
-                        <a href="javascript:void(0);" class="anchorDetail" data-id="123">
-                            <img src="~/Images/upload.png" alt="" style="width:25%;">
-                            <h3>Report</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-4">
-                    <div class="thumbnail">
-                        <a href="~/Ericsson/Index">
-                            <img src="~/Images/interface.png" alt="" style="width:25%;">
-                            <h3>Geo</h3>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div id="maindiv">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="#">
-                            @*<img src="~/Images/auto-cm.jpg" style="width: 70%;" alt="auto-cm">*@
-                            <h3>Auto CM Configuration</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="#">
-                            @*<img src="~/Images/data-storage.jpg" style="width: 70%;" alt="data-storage">*@
-                            <h3>Data Storage</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="javascript:void(0)" onclick="toggleDiv('data');">
-                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="network-audit">*@
-                            <h3>Network Audit</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="javascript:void(0)" onclick="toggleDiv('parser');">
-                            @*<img src="~/Images/pm-counter.jpg" style="width: 70%;" alt="pm-counter">*@
-                            <h3>PM Counter</h3>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        @*<a href="javascript:void(0);" class="anchorDetail" data-id="123">*@
-                        <a href="~/Tab/Index">
-                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="Network-Audit">*@
-                            <h3>Network Audit</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="javascript:void(0)" onclick="toggleDiv('Reports');">
-                            @*<img src="~/Images/oss.jpg" style="width: 70%;" alt="OSS">*@
-                            <h3>Oss Reporting</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="">
-                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="trace">*@
-                            <h3>Trace Analyser</h3>
-                        </a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
 </div>
+
 
 <div id='myModal' class='modal'>
     <div class="modal-dialog">
@@ -224,7 +73,8 @@
                             Object
                         </dt>
                         <dd>
-                            PLMN
+                            <div id="treeviewPLMNObject" class="treeview"></div>
+                            @*PLMN*@
                             @*@Html.DisplayFor(model => model.Name)*@
                         </dd>
                         <br />
@@ -250,15 +100,40 @@
             </div>
         </div>
     </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="thumbnail">
+                @*<a href="#">*@
+                @*<a href="/Dashboard/OpenExe" class="openexe">*@
+                <a href="javascript:void(0);" class="anchorDetail" data-id="123">
+                    <img src="~/Images/network-audit.png" style="width: 50%;" alt="">
+                </a>
+                @*<a href="javascript:void(0);" class="anchorDetail" data-id="@item.Id">Details</a>*@
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="/Home">
+                    <img src="~/Images/oss.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <a href="/Home">
+                    <img src="~/Images/trace.png" style="width: 50%;" alt="">
+                </a>
+            </div>
+        </div>
+    </div>
 </div>
-@section css{
 
-    <link href="~/Content/bootstrap-treeview.css" rel="stylesheet" />
-
-}
 
 @section scripts{
     <script src="~/js/bootstrap-treeview.js"></script>
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <script>
         function toggleDiv(sectionName) {
             $(".icons").hide();
@@ -377,10 +252,44 @@
 
                 color: "#428bca",
                 //data: defaultData
+                onNodeSelected: function (event, data) {
+                    if (data.isDirectory == false) {
+                        alert(data.text);
+                        var options = { "backdrop": "static", keyboard: true };
+                        $('#myModal').modal(options);
+                        $('#myModal').modal('show');
+                    }
+                },
                 data: @Html.Raw(ViewBag.TreeViewData)
             });
 
+            $('#treeviewPLMNObject').treeview({
+
+                color: "#428bca",
+                //data: defaultData
+                multiSelect: false,
+                showCheckbox: true,
+                onNodeChecked: function (event, data) { },
+                onNodeSelected: function (event, data) { },
+                data: @Html.Raw(ViewBag.TreeViewPLMNObjectData)
+            });
+
         });
+
+                        //$("a.openexe").on("click", function (event) {
+                        //    alert('onclicked');
+                        //    event.preventDefault();
+
+                        //    if ($(this).hasClass('clicked')) {
+                        //        alert('hasclicked');
+                        //        return false;
+                        //    } else {
+                        //        alert('notclicked');
+                        //        $(this).addClass('clicked').trigger('click');
+                        //        return true;
+                        //    }
+                        //});
+
 
     </script>
 }

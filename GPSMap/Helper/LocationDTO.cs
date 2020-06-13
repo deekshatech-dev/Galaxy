@@ -69,6 +69,8 @@ namespace GPSMap.Helper
 		public string parentid;
 		public string text;
 		public string href;
+		public bool isDirectory;
+		public string path;
 		public List<string> tags;
 		public List<TreeViewNode> nodes;
 	}

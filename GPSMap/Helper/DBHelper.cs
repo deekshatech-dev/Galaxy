@@ -227,12 +227,47 @@ namespace GPSMap.Helper
 			return lst;
 		}
 
+		// Get folder structure data
 		public List<TreeViewNode> GetIFSData()
 		{
 			List<TreeViewNode> lstIFSData = new List<TreeViewNode>();
 
 			//string query = "SELECT id,object_id,session_id,kpiLTE_UE_GPS FROM lte_drive_test.tt_kpi_data2;";
-			string query = "select id, parent_id, name from tt_ifs where type = 0;"; // get directories only not files
+			//string query = "select id, parent_id, name from tt_ifs where type = 0;"; // get directories only not files
+			string query = "select id, parent_id, name, type from tt_ifs;"; // get directories only not files
+
+			// Create an instance of the User class
+
+			TreeViewNode treeViewNode;
+
+			using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_Ericsson, query))
+			{
+				// Check if the reader returned any rows
+
+				if (reader.HasRows)
+				{
+					while (reader.Read())
+					{
+						treeViewNode = new TreeViewNode();
+
+						treeViewNode.id = Convert.ToString(reader[0]);
+						treeViewNode.parentid = Convert.ToString(reader[1]);
+						treeViewNode.text = Convert.ToString(reader[2]);
+						treeViewNode.isDirectory = !Convert.ToBoolean(reader[3]);
+
+						lstIFSData.Add(treeViewNode);
+					}
+				}
+			}
+			return lstIFSData;
+		}
+
+		// Get PLMN Object data
+		public List<TreeViewNode> GetPLMNObjectData()
+		{
+			List<TreeViewNode> lstIFSData = new List<TreeViewNode>();
+
+			string query = "select id, parent_id, object_name from tt_object;";
 
 			// Create an instance of the User class
 
@@ -258,6 +293,5 @@ namespace GPSMap.Helper
 			}
 			return lstIFSData;
 		}
-
 	}
 }

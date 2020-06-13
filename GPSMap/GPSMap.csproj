@@ -194,8 +194,11 @@
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EricssonController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Controllers\ifsController.cs" />
     <Compile Include="Controllers\MultipleController.cs" />
+    <Compile Include="Controllers\TabController.cs" />
     <Compile Include="Models\ChartSearchModel.cs" />
+    <Compile Include="Models\ConfigParamModel.cs" />
     <Compile Include="Models\KPIChartDataModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -308,6 +311,8 @@
     <Content Include="Views\Ericsson\Dashboard.cshtml" />
     <Content Include="Views\Multiple\Index.cshtml" />
     <Content Include="Views\Multiple\_MapContainer.cshtml" />
+    <Content Include="Views\ifs\Index.cshtml" />
+    <Content Include="Views\Tab\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
