@@ -214,7 +214,45 @@ namespace GPSMap.Controllers
 
         }
 
-        public ActionResult SendEmail()
+        [HttpPost]
+        public JsonResult SaveFile(FileContentModel fileContent)
+        {
+            var fileName = DateTime.Now.Ticks + ".txt";
+            if (!System.IO.Directory.Exists(Path.Combine(Server.MapPath("~/EricosnUpload"))))
+            {
+                System.IO.Directory.CreateDirectory(Path.Combine(Server.MapPath("~/EricosnUpload")));
+            }
+            var path = Path.Combine(Server.MapPath("~/EricosnUpload/"), fileName);
+            var returnValue = new JSONReturnValue();
+            try
+            {
+                using (System.IO.StreamWriter file = new System.IO.StreamWriter(path))
+                {
+                    file.WriteLine(fileContent.Content);
+                }
+            }
+            catch (Exception)
+            {
+                returnValue.Status = false;
+                returnValue.Message = "File Not Saved.";
+            }
+            try
+            {
+                SendEmail(path);
+
+                returnValue.Status = true;
+                returnValue.Message = "Mail with file attachment send successfully.";
+            }
+            catch (Exception)
+            {
+                returnValue.Status = false;
+                returnValue.Message = "Error Sending Mail.";
+            }
+
+            return Json(returnValue);
+        }
+
+        public bool SendEmail(string fileFullPath)
         {
             //var fromAddress = new MailAddress("hiteshshah4478@gmail.com", "From Pritesh");
             //var toAddress = new MailAddress("hiteshshah4478@gmail.com", "To Hitesh");
@@ -242,21 +280,27 @@ namespace GPSMap.Controllers
             //}
 
             MailMessage msg = new MailMessage();
-            var path = Path.Combine(Server.MapPath("~/EricosnUpload"), "Generated.txt");
             msg.From = new MailAddress("hiteshshah4478@gmail.com");
-                        msg.To.Add("mihirdoza@gmail.com");
+            msg.To.Add("prashantkanakhara1988@gmail.com");
             msg.Subject = "Bat File Approval";
             msg.Body = @"Hello Mihir <br /><br /> Please approve the attached batch file. Click <b>here</b> approve.";
             msg.Priority = MailPriority.High;
             msg.IsBodyHtml = true;
-            msg.Attachments.Add(new Attachment(path));
+            msg.Attachments.Add(new Attachment(fileFullPath));
             SmtpClient client = new SmtpClient("smtp.gmail.com");
             client.EnableSsl = true;
             client.Credentials = new NetworkCredential("hiteshshah4478@gmail.com", "Hitesh@123");
             client.DeliveryMethod = SmtpDeliveryMethod.Network;
             client.Port = 587;
-            client.Send(msg);
-            return View("EricssonXMLResult");
+            try
+            {
+                client.Send(msg);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
 
         }
 

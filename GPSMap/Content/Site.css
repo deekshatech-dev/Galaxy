@@ -176,3 +176,7 @@ footer {
 .treeview .list-group-item {
     white-space:nowrap;
 }
+
+#grid-tbl tbody td {
+    width:9%;
+}

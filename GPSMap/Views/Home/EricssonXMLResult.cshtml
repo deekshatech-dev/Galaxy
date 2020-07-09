@@ -6,63 +6,91 @@
 }
 @using (Html.BeginForm("XMLResult", "Home", FormMethod.Post, new { @class = "form-inline" }))
 {
-    <div class="container">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="panel panel-default" style="margin-top:10px;">
-                        <div class="panel-body">
-                            <div class="form-group">
-                                <label for="exampleInputName2">Select Vendor</label>
-                                @Html.DropDownListFor(x => x.VendorType, new List<SelectListItem>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="panel panel-default" style="margin-top:10px;">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <label for="exampleInputName2">Select Vendor</label>
+                        @Html.DropDownListFor(x => x.VendorType, new List<SelectListItem>
 
-                                    {
-                                       new SelectListItem{ Text="Select Vendor", Value = "0" },
-                                       new SelectListItem{ Text="Nokia", Value = "Nokia" },
-                                       new SelectListItem{ Text="Ericsson", Value = "Ericsson" }
-                                    }, new { @class = "form-control" })
+                            {
+                               new SelectListItem{ Text="Select Vendor", Value = "0" },
+                               new SelectListItem{ Text="Nokia", Value = "Nokia" },
+                               new SelectListItem{ Text="Ericsson", Value = "Ericsson" }
+                            }, new { @class = "form-control" })
 
-                            </div>
-                            <div class="form-group">
-                                <div class='input-group date' id='p-from'>
-                                    @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <div class='input-group date' id='p-to'>
-                                    @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
-                                    <span class="input-group-addon">
-                                        <span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
-                                </div>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="exampleInputName2">Select Batch</label>
-                                @Html.DropDownListFor(x => x.BatchID, new List<SelectListItem>
-
-                                    {
-                                       new SelectListItem{ Text="Select Batch", Value = "0" },
-                                       new SelectListItem{ Text="1", Value = "1" },
-                                       new SelectListItem{ Text="2", Value = "2" }
-                                    }, new { @class = "form-control" })
-
-                            </div>
-                            <button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>
-
-                            
-                            @Html.ActionLink("Generate Bat File", "SendEmail")
-
+                    </div>
+                    <div class="form-group">
+                        <div class='input-group date' id='p-from'>
+                            @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
                         </div>
                     </div>
-                </div>
+                    <div class="form-group">
+                        <div class='input-group date' id='p-to'>
+                            @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-calendar"></span>
+                            </span>
+                        </div>
+                    </div>
 
-                <div class="col-md-12">
-                    <table id="example" class="cell-border compact stripe" style="width:100%">
-                        <thead>
+                    <div class="form-group">
+                        <label for="exampleInputName2">Select Batch</label>
+                        @Html.DropDownListFor(x => x.BatchID, new List<SelectListItem>
+
+                            {
+                               new SelectListItem{ Text="Select Batch", Value = "0" },
+                               new SelectListItem{ Text="1", Value = "1" },
+                               new SelectListItem{ Text="2", Value = "2" }
+                            }, new { @class = "form-control" })
+
+                    </div>
+                    <button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>
+                    <button id="generateBatchFile" class="btn btn-primary btn-sm" type="button" onclick="ParseBatchFileValue()">Generate File</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12">
+            <div class="table-responsive">
+                <table id="grid-tbl" class="table table-striped table-bordered responsive"></table>
+            </div>
+            @*<table id="example" class="cell-border compact stripe" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>SubNetwork</th>
+                            <th>MeContext</th>
+                            <th>UeMeasControl</th>
+                            <th>DataContainer</th>
+                            <th>MOC</th>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>GUIValue</th>
+                            <th>Discrepency</th>
+                            <th>New Value</th>
+                            <th>Schedule</th>
+
+
+                        </tr>
+                    </thead>
+
+                </table>*@
+        </div>
+
+    </div>
+}
+
+@section scripts{
+    <script>
+        var editor;
+        var gridData = @Html.Raw(Json.Encode(ViewBag.map));
+        var popupSearchIds = [];
+
+        var thead = `<thead>
                             <tr>
                                 <th>SubNetwork</th>
                                 <th>MeContext</th>
@@ -75,37 +103,19 @@
                                 <th>Discrepency</th>
                                 <th>New Value</th>
                                 <th>Schedule</th>
-
-
                             </tr>
-                        </thead>
+                        </thead>`;
 
-                    </table>
-                </div>
-
-            </div>
-        </div>
-    </div>
-}
-
-@section scripts{
-    <script>
-        var editor;
-        var gridData = @Html.Raw(Json.Encode(ViewBag.map));
-        var popupSearchIds = [];
         var table = null;
 
             $(document).ready(function () {
                 if (gridData && gridData.length > 0) {
                     editor = new $.fn.dataTable.Editor({
-                        table: "#example"
+                        table: "#grid-tbl"
                     });
                 } else {
                     toastr.error("No Records found for the selected dates");
                 }
-
-
-                
             });
 
 
@@ -118,16 +128,44 @@
         });
 
         // Activate an inline edit on click of a table cell
-        $('#example').on('click', 'tbody td:not(:first-child)', function (e) {
-            alert('Hi');
-            editor.inline(this);
-        });
+        if ($.fn.DataTable.isDataTable('#grid-tbl')) {
+            $('#grid-tbl').DataTable().destroy();
+        }
 
+        $('#grid-tbl').html(thead);
 
+        function setUpInputElement() {
+            // Setup - add a text input to New Value and Schedule
+            //ref: https://datatables.net/extensions/fixedheader/examples/options/columnFiltering.html
+            $('#grid-tbl tbody tr').each(function (i) {
+                var $currTr = $(this);
+                var $newValueCell = $currTr.find("td:eq(9)");
+                var $scheduleCell = $currTr.find("td:eq(10)");
+                var title = $newValueCell.text();
+                $newValueCell.html(`<input class="form-control" type="text" placeholder"${title}" />`);
 
-        table = $('#example').DataTable({
+                var scheduleTitle = $newValueCell.text();
+                $scheduleCell.html(`<div class='input-group datepicker'> <input class="form-control" type="text" placeholder"${scheduleTitle}" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    </div>`);
+            });
+
+            setTimeout(() => {
+                $(".datepicker").datetimepicker({
+                    format: 'DD/MM/YYYY',
+                    showClear: true
+                });
+            }, 1000);
+        }
+
+        table = $('#grid-tbl').DataTable({
             data: gridData,
             dom: 'Bfrtip',
+            "initComplete": function () {
+                setUpInputElement();
+            },
             buttons: [
                 {
                     text: 'clear filter',
@@ -172,6 +210,36 @@
             })
         });
 
+        function ParseBatchFileValue() {
+            $.blockUI();
+            var fileContent = "";
+            $('#grid-tbl tbody tr').each(function (i) {
+                var $currTr = $(this);
+                var $newValueInput = $currTr.find("td:eq(9) input");
+                var $scheduleInput = $currTr.find("td:eq(10) input");
+                if ($newValueInput.val() != "" || $scheduleInput.val() != "") {
+                    fileContent += "set ";
+                    var $mocCell = $currTr.find("td:eq(4)");
+                    var $dataContainerCell = $currTr.find("td:eq(3)");
+                    var $uemeasCtrlCell = $currTr.find("td:eq(2)");
+                    fileContent += `${$mocCell.text()} = ${$dataContainerCell.text()},UeMeasControl = ${$uemeasCtrlCell.text()} ${$newValueInput.val()} = ${$scheduleInput.val()}`;
+                    fileContent += `\n`;
+                }
+            });
+            $.post('@Url.Action("SaveFile")', {
+                Content: `${fileContent}`
+            },
+                function (response) {
+                    console.log(response);
+                    if (response.Status) {
+                        toastr.success(response.Message);
+                    } else {
+                        toastr.error(response.Message);
+                    }
+                }).always(function () {
+                    $.unblockUI();
+            });
+        }
     </script>
 }
 

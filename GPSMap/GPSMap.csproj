@@ -208,6 +208,7 @@
     <Compile Include="Models\ChartSearchModel.cs" />
     <Compile Include="Models\ConfigParamModel.cs" />
     <Compile Include="Models\EricssonGV.cs" />
+    <Compile Include="Models\JSONReturnValue.cs" />
     <Compile Include="Models\KPIChartDataModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Controllers\UploadController.cs" />
