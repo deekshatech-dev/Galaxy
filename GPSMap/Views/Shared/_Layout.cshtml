@@ -11,64 +11,67 @@
     <link rel="stylesheet" href="~/Content/bootstrap-datetimepicker.css" />
     <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet"> @*https://www.bootstraptoggle.com/*@
     <link href="http://cdn.rawgit.com/davidstutz/bootstrap-multiselect/master/dist/css/bootstrap-multiselect.css" rel="stylesheet" type="text/css" />
-
+    <link href="~/Content/editor.bootstrap.min.css" rel="stylesheet" />
     @Styles.Render("~/Content/css")
     @RenderSection("css", required: false)
 </head>
 <body>
-<nav class="navbar navbar-default">
-    <div class="container-fluid">
-      
-        <!-- Brand and toggle get grouped for better mobile display -->
-        <div class="navbar-header">
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                <span class="sr-only">Toggle navigation</span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-                <span class="icon-bar"></span>
-            </button>
-            <a class="navbar-brand" href="@Url.Action("Index", "Dashboard")">
-            
-            </a>
-        </div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
 
-        <!-- Collect the nav links, forms, and other content for toggling -->
-        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav">
-               
-                @if (User.Identity.IsAuthenticated)
-                {
-                    <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("Upload Nmf", "Index", "Upload")</li>
-                            <li>@Html.ActionLink("Reports", "Index", "Home")</li>
-                        </ul>
-                    </li>
-                    <li class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PM Counter <span class="caret"></span></a>
-                        <ul class="dropdown-menu">
-                            <li>@Html.ActionLink("5g Parser", "Index", "Ericsson")</li>
-                            <li>@Html.ActionLink("Parser", "XMLResult", "Home")</li>
-                            <li>@Html.ActionLink("Dashboard", "Index", "Multiple")</li>
-                        </ul>
-                    </li>
-                    <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
-                }
-                else
-                {
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="@Url.Action("Index", "Dashboard")">
 
-                    <li>@Html.ActionLink("LogIn", "LogIn", "Account")</li>
-                }
-            </ul>
-            <ul class="nav navbar-nav navbar-right">
-                <img src="~/Images/logo_21.png" style="height: 40px; padding-right: 8px;"/><img src="~/Images/logo3.png"/>
-            </ul>
-        </div><!-- /.navbar-collapse -->
-    </div><!-- /.container-fluid -->
-</nav>
-<div class="body-content">
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Dashboard", "Index", "Dashboard")</li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Data <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("Upload Nmf", "Index", "Upload")</li>
+                                <li>@Html.ActionLink("Reports", "Index", "Home")</li>
+                            </ul>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">PM Counter <span class="caret"></span></a>
+                            <ul class="dropdown-menu">
+                                <li>@Html.ActionLink("5g Parser", "Index", "Ericsson")</li>
+                                <li>@Html.ActionLink("Parser", "XMLResult", "Home")</li>
+                                <li>@Html.ActionLink("Ericsson Upload", "Index", "EricssonUpload")</li>
+                                <li>@Html.ActionLink("Dashboard", "Index", "Multiple")</li>
+                            </ul>
+
+                        </li>
+                        <li>@Html.ActionLink("Logout", "Logout", "Account")</li>
+                    }
+                    else
+                    {
+
+                        <li>@Html.ActionLink("LogIn", "LogIn", "Account")</li>
+                    }
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <img src="~/Images/logo_21.png" style="height: 40px; padding-right: 8px;" />
+                    <img src="~/Images/logo3.png" />
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+    <div class="body-content">
         @RenderBody()
     </div>
     <footer>
@@ -87,6 +90,10 @@
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/autofill/2.3.4/js/dataTables.autoFill.min.js"></script>
     <script src="https://cdn.datatables.net/autofill/2.3.4/js/autoFill.bootstrap.min.js"></script>
+    @*<script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>*@
+    <script src="~/js/dataTables.editor.min.js"></script>
+
+    
     <script type="text/javascript" src="~/scripts/moment.min.js"></script>
     <script type="text/javascript" src="~/scripts/bootstrap-datetimepicker.js"></script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>

@@ -63,16 +63,36 @@ namespace GPSMap.Helper
 		public string sCQI { get; set; }
 	}
 
-	public class TreeViewNode
+	public class IFSDataModel
 	{
 		public string id;
 		public string parentid;
 		public string text;
+		public bool isDirectory;
+		public string data_id;
+		public string template;
+	}
+
+	public class TreeViewNode
+	{
+		public string text;
 		public string href;
 		public bool isDirectory;
 		public string path;
+		public string data_id;
 		public List<string> tags;
 		public List<TreeViewNode> nodes;
+
+		public string name;
+		public string desc;
+		public List<string> geoFilterAttributes;
+	}
+
+	public class TabDetailModel
+	{
+		public string tabHeaderHtml;
+		public string tabContentHtml;
+		public string tabnodes;
 	}
 
 }

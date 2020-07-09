@@ -35,6 +35,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -44,6 +45,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="BouncyCastle.Crypto, Version=1.8.3.0, Culture=neutral, PublicKeyToken=0e99375e54769942">
@@ -54,6 +56,9 @@
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+    </Reference>
+    <Reference Include="EPPlus, Version=4.5.3.3, Culture=neutral, PublicKeyToken=ea159fdaa78159a1, processorArchitecture=MSIL">
+      <HintPath>..\packages\EPPlus.4.5.3.3\lib\net40\EPPlus.dll</HintPath>
     </Reference>
     <Reference Include="Google.Protobuf, Version=3.6.1.0, Culture=neutral, PublicKeyToken=a7d26565bac4d604, processorArchitecture=MSIL">
       <HintPath>..\packages\Google.Protobuf.3.6.1\lib\net45\Google.Protobuf.dll</HintPath>
@@ -74,6 +79,7 @@
     <Reference Include="MySql.Data.EntityFramework, Version=8.0.20.0, Culture=neutral, PublicKeyToken=c5687fc88969c44d, processorArchitecture=MSIL">
       <HintPath>..\packages\MySql.Data.EntityFramework.8.0.20\lib\net452\MySql.Data.EntityFramework.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationCore" />
     <Reference Include="Renci.SshNet, Version=2016.1.0.0, Culture=neutral, PublicKeyToken=1cee9f8bde3db106, processorArchitecture=MSIL">
       <HintPath>..\packages\SSH.NET.2016.1.0\lib\net40\Renci.SshNet.dll</HintPath>
     </Reference>
@@ -98,6 +104,7 @@
       <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.4.6.0\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Security" />
+    <Reference Include="System.Threading.Tasks" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -193,12 +200,14 @@
     <Compile Include="Controllers\DailyValues.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EricssonController.cs" />
+    <Compile Include="Controllers\EricssonUploadController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ifsController.cs" />
     <Compile Include="Controllers\MultipleController.cs" />
-    <Compile Include="Controllers\TabController.cs" />
+    <Compile Include="Controllers\PMDataAnalysisController.cs" />
+    <Compile Include="Helper\Helper.cs" />
     <Compile Include="Models\ChartSearchModel.cs" />
     <Compile Include="Models\ConfigParamModel.cs" />
+    <Compile Include="Models\EricssonGV.cs" />
     <Compile Include="Models\KPIChartDataModel.cs" />
     <Compile Include="Models\LoginViewModel.cs" />
     <Compile Include="Controllers\UploadController.cs" />
@@ -225,6 +234,7 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\editor.bootstrap.min.css" />
     <Content Include="Content\nav-bar.css" />
     <Content Include="Content\switch.css" />
     <Content Include="Content\toastr.css" />
@@ -251,6 +261,7 @@
     <Content Include="Images\upload.png" />
     <Content Include="Images\ylw-blank-lv.png" />
     <Content Include="js\bootstrap-treeview.js" />
+    <Content Include="js\dataTables.editor.min.js" />
     <Content Include="Scripts\app\map-controller.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.js" />
     <Content Include="Scripts\bootstrap-datetimepicker.min.js" />
@@ -262,6 +273,7 @@
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile1.pubxml" />
     <None Include="Properties\PublishProfiles\FolderProfile2.pubxml" />
+    <None Include="Properties\PublishProfiles\FolderProfile3.pubxml" />
     <None Include="Scripts\jquery-3.4.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.4.1.js" />
     <Content Include="Scripts\jquery-3.4.1.min.js" />
@@ -311,11 +323,12 @@
     <Content Include="Views\Ericsson\Dashboard.cshtml" />
     <Content Include="Views\Multiple\Index.cshtml" />
     <Content Include="Views\Multiple\_MapContainer.cshtml" />
-    <Content Include="Views\ifs\Index.cshtml" />
-    <Content Include="Views\Tab\Index.cshtml" />
+    <Content Include="Views\PMDataAnalysis\Explorer.cshtml" />
+    <Content Include="Views\EricssonUpload\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="EricosnUpload\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

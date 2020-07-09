@@ -53,6 +53,9 @@
                             </div>
                             <button id="generateplot" class="btn btn-primary btn-sm" type="submit">Get Data</button>
 
+                            
+                            @Html.ActionLink("Generate Bat File", "SendEmail")
+
                         </div>
                     </div>
                 </div>
@@ -63,14 +66,17 @@
                             <tr>
                                 <th>SubNetwork</th>
                                 <th>MeContext</th>
-                                <th>ManagedElementId</th>
+                                <th>UeMeasControl</th>
                                 <th>DataContainer</th>
                                 <th>MOC</th>
                                 <th>Parameter</th>
                                 <th>Value</th>
                                 <th>GUIValue</th>
                                 <th>Discrepency</th>
+                                <th>New Value</th>
                                 <th>Schedule</th>
+
+
                             </tr>
                         </thead>
 
@@ -84,20 +90,24 @@
 
 @section scripts{
     <script>
-
+        var editor;
         var gridData = @Html.Raw(Json.Encode(ViewBag.map));
         var popupSearchIds = [];
         var table = null;
-        if (gridData) {
+
             $(document).ready(function () {
                 if (gridData && gridData.length > 0) {
-                    plotToMap.init($("#KPI").val(), gridData);
-                    plotToMap.loadMap();
+                    editor = new $.fn.dataTable.Editor({
+                        table: "#example"
+                    });
                 } else {
                     toastr.error("No Records found for the selected dates");
                 }
+
+
+                
             });
-        }
+
 
         $('#p-from').datetimepicker({
             format: 'DD/MM/YYYY'
@@ -106,6 +116,14 @@
         $('#p-to').datetimepicker({
             format: 'DD/MM/YYYY'
         });
+
+        // Activate an inline edit on click of a table cell
+        $('#example').on('click', 'tbody td:not(:first-child)', function (e) {
+            alert('Hi');
+            editor.inline(this);
+        });
+
+
 
         table = $('#example').DataTable({
             data: gridData,
@@ -126,13 +144,14 @@
             columns: [
                 { data: "SubNetwork" },
                 { data: "MeContext" },
-                { data: "ManagedElementId" },
+                { data: "UeMeasControlId" },
                 { data: "DataContainer" },
-                { data: "MOC" },
+                { data: "MOC"},
                 { data: "Parameter" },
                 { data: "Value" },
                 { data: "GUIValue" },
                 { data: "Discrepency" },
+                { data: "NewValue" ,},
                 { data: "Schedule" }
             ],
             orderCellsTop: true,
@@ -140,6 +159,7 @@
             responsive: true,
             scrollX: false,
             autoWidth: true,
+            editor: true
         });
 
         table.on('search.dt', function () {

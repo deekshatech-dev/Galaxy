@@ -228,18 +228,21 @@ namespace GPSMap.Helper
 		}
 
 		// Get folder structure data
-		public List<TreeViewNode> GetIFSData()
+		public List<IFSDataModel> GetIFSData()
 		{
-			List<TreeViewNode> lstIFSData = new List<TreeViewNode>();
+			List<IFSDataModel> lstIFSData = new List<IFSDataModel>();
 
-			//string query = "SELECT id,object_id,session_id,kpiLTE_UE_GPS FROM lte_drive_test.tt_kpi_data2;";
 			//string query = "select id, parent_id, name from tt_ifs where type = 0;"; // get directories only not files
-			string query = "select id, parent_id, name, type from tt_ifs;"; // get directories only not files
+			//string query = "select id, parent_id, name, type, data_id from tt_ifs;";
+			string query = "select ifs.id, ifs.parent_id, ifs.name, ifs.type, ifs.data_id, ifsdata.data " +
+							" from tt_ifs ifs " +
+							" left join tt_ifs_data ifsdata on ifs.data_id = ifsdata.id;";
 
 			// Create an instance of the User class
 
-			TreeViewNode treeViewNode;
+			IFSDataModel iFSDataModel;
 
+			//using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_reference, query))
 			using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_Ericsson, query))
 			{
 				// Check if the reader returned any rows
@@ -248,14 +251,18 @@ namespace GPSMap.Helper
 				{
 					while (reader.Read())
 					{
-						treeViewNode = new TreeViewNode();
+						iFSDataModel = new IFSDataModel();
 
-						treeViewNode.id = Convert.ToString(reader[0]);
-						treeViewNode.parentid = Convert.ToString(reader[1]);
-						treeViewNode.text = Convert.ToString(reader[2]);
-						treeViewNode.isDirectory = !Convert.ToBoolean(reader[3]);
-
-						lstIFSData.Add(treeViewNode);
+						iFSDataModel.id = Convert.ToString(reader["id"]);
+						iFSDataModel.parentid = Convert.ToString(reader["parent_id"]);
+						iFSDataModel.text = Convert.ToString(reader["name"]);
+						iFSDataModel.isDirectory = !Convert.ToBoolean(reader["type"]);
+						iFSDataModel.data_id = Convert.ToString(reader["data_id"]);
+						if (!(reader["data"] is System.DBNull))
+						{
+							iFSDataModel.template = System.Text.Encoding.UTF8.GetString((byte[])reader["data"]);
+						}
+						lstIFSData.Add(iFSDataModel);
 					}
 				}
 			}
@@ -263,16 +270,17 @@ namespace GPSMap.Helper
 		}
 
 		// Get PLMN Object data
-		public List<TreeViewNode> GetPLMNObjectData()
+		public List<IFSDataModel> GetPLMNObjectData()
 		{
-			List<TreeViewNode> lstIFSData = new List<TreeViewNode>();
+			List<IFSDataModel> lstIFSData = new List<IFSDataModel>();
 
 			string query = "select id, parent_id, object_name from tt_object;";
 
 			// Create an instance of the User class
 
-			TreeViewNode treeViewNode;
+			IFSDataModel iFSDataModel;
 
+			//using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_reference, query))
 			using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_Ericsson, query))
 			{
 				// Check if the reader returned any rows
@@ -281,17 +289,40 @@ namespace GPSMap.Helper
 				{
 					while (reader.Read())
 					{
-						treeViewNode = new TreeViewNode();
+						iFSDataModel = new IFSDataModel();
 
-						treeViewNode.id = Convert.ToString(reader[0]);
-						treeViewNode.parentid = Convert.ToString(reader[1]);
-						treeViewNode.text = Convert.ToString(reader[2]);
+						iFSDataModel.id = Convert.ToString(reader[0]);
+						iFSDataModel.parentid = Convert.ToString(reader[1]);
+						iFSDataModel.text = Convert.ToString(reader[2]);
 
-						lstIFSData.Add(treeViewNode);
+						lstIFSData.Add(iFSDataModel);
 					}
 				}
 			}
 			return lstIFSData;
 		}
+
+		public string GetReportTemplate()
+		{
+			string strdata = string.Empty;
+
+			string query = "SELECT id, data FROM tt_ifs_data where id=303;";
+
+			//using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_reference, query))
+			using (MySqlDataReader reader = MySqlHelper.ExecuteReader(connectionLTE_Ericsson, query))
+			{
+				// Check if the reader returned any rows
+
+				if (reader.HasRows)
+				{
+					while (reader.Read())
+					{
+						strdata = System.Text.Encoding.UTF8.GetString((byte[])reader["data"]);
+					}
+				}
+			}
+			return strdata;
+		}
+
 	}
 }

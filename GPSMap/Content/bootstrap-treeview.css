@@ -18,7 +18,8 @@
  * ========================================================= */
 
 .treeview .list-group-item {
-	cursor: pointer;
+    cursor: pointer;
+    white-space: normal;
 }
 
 .treeview span.indent {

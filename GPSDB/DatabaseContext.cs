@@ -30,7 +30,7 @@ namespace GPSDB
         public DbSet<KPIMaster> kpimaster { get; set; }
 
         public DbSet<Users> Users { get; set; }
-
+        public DbSet<Report_ExcelData> Report_ExcelData { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
@@ -38,3 +38,4 @@ namespace GPSDB
         }
     }
 }
+

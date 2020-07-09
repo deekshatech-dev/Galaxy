@@ -71,23 +71,23 @@ namespace GPSMap.Controllers
 
             DBHelper db = new DBHelper();
             //List<TreeViewNode> lstIFSData = db.GetIFSData();
-            lstIFSData = db.GetIFSData();
+            //lstIFSData = db.GetIFSData();
 
-            foreach (TreeViewNode item in lstIFSData.Where(x => x.parentid == "0" && x.text == "PublicFolders"))
-            {
-                TreeViewNode node = new TreeViewNode();
-                node.text = item.text;
-                node.href = "#" + item.text;
-                node.tags = new List<string>() { "0" };
+            //foreach (TreeViewNode item in lstIFSData.Where(x => x.parentid == "0" && x.text == "PublicFolders"))
+            //{
+            //    TreeViewNode node = new TreeViewNode();
+            //    node.text = item.text;
+            //    node.href = "#" + item.text;
+            //    node.tags = new List<string>() { "0" };
 
-                //node.nodes = new List<TreeViewNode>();
-                //node.nodes.Add(airintrfaceNode);
-                //node.nodes.Add(servicesNode);
+            //    //node.nodes = new List<TreeViewNode>();
+            //    //node.nodes.Add(airintrfaceNode);
+            //    //node.nodes.Add(servicesNode);
 
-                node.nodes = getChildNodes(item.id);
+            //    node.nodes = getChildNodes(item.id);
 
-                treeNode.nodes.Add(node);
-            }
+            //    treeNode.nodes.Add(node);
+            //}
 
             List<TreeViewNode> treeNodelist = new List<TreeViewNode>();
             treeNodelist.Add(treeNode);
@@ -102,25 +102,25 @@ namespace GPSMap.Controllers
         {
             List<TreeViewNode> childnodes = null;
 
-            if (lstIFSData.Any(x => x.parentid == id))
-            {
-                childnodes = new List<TreeViewNode>();
-                foreach (TreeViewNode item in lstIFSData.Where(x => x.parentid == id))
-                {
-                    TreeViewNode node = new TreeViewNode();
-                    node.text = item.text;
-                    node.href = "#" + item.text;
-                    node.tags = new List<string>() { "0" };
+            //if (lstIFSData.Any(x => x.parentid == id))
+            //{
+            //    childnodes = new List<TreeViewNode>();
+            //    foreach (TreeViewNode item in lstIFSData.Where(x => x.parentid == id))
+            //    {
+            //        TreeViewNode node = new TreeViewNode();
+            //        node.text = item.text;
+            //        node.href = "#" + item.text;
+            //        node.tags = new List<string>() { "0" };
 
-                    //node.nodes = new List<TreeViewNode>();
-                    //node.nodes.Add(airintrfaceNode);
-                    //node.nodes.Add(servicesNode);
+            //        //node.nodes = new List<TreeViewNode>();
+            //        //node.nodes.Add(airintrfaceNode);
+            //        //node.nodes.Add(servicesNode);
 
-                    node.nodes = getChildNodes(item.id);
+            //        node.nodes = getChildNodes(item.id);
 
-                    childnodes.Add(node);
-                }
-            }
+            //        childnodes.Add(node);
+            //    }
+            //}
 
             return childnodes;
         }

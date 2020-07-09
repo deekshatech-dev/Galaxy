@@ -9,6 +9,9 @@ using GPSDB;
 using GPSMap.Models;
 using System.Web.Script.Serialization;
 using GPSMap.Data;
+using System.Net;
+using System.Net.Mail;
+using System.IO;
 
 namespace GPSMap.Controllers
 {
@@ -187,30 +190,75 @@ namespace GPSMap.Controllers
                 }
                 else
                 {
-                    //var map = dbContext.ericssonxmldetail.AsQueryable();
+                    var map = dbContext.ericssonxmldetail.AsQueryable();
 
-                    //if (form.ToDate != null)
-                    //{
-                    //    map = map.Where(t => t.CreatedDate <= form.ToDate.Value);
-                    //}
-                    //if (form.FromDate != null)
-                    //{
-                    //    map = map.Where(t => t.CreatedDate >= form.FromDate.Value);
-                    //}
+                    if (form.ToDate != null)
+                    {
+                        map = map.Where(t => t.CreatedDate <= form.ToDate.Value);
+                    }
+                    if (form.FromDate != null)
+                    {
+                        map = map.Where(t => t.CreatedDate >= form.FromDate.Value);
+                    }
 
-                    //var maplist = map.ToList().Take(5000);
+                    var maplist = map.ToList().Take(5000);
 
-                    //ViewBag.map = maplist;
-                    //return View("EricssonXMLResult");
+                    ViewBag.map = maplist;
+                    return View("EricssonXMLResult");
 
-                    return View(form);
+                    //return View(form);
 
                 }
             }
 
-           
+
         }
 
+        public ActionResult SendEmail()
+        {
+            //var fromAddress = new MailAddress("hiteshshah4478@gmail.com", "From Pritesh");
+            //var toAddress = new MailAddress("hiteshshah4478@gmail.com", "To Hitesh");
+            //const string fromPassword = "Hitesh@123";
+            //const string subject = "Approve Bat File";
+            //const string body = "Body";
+
+            //using (MailMessage mm = new MailMessage("hiteshshah4478@gmail.com", "hiteshshah4478@gmail.com"))
+            //{
+            //    mm.Subject = subject;
+            //    mm.Body = body;
+
+            //    var path = Path.Combine(Server.MapPath("~/EricosnUpload"), "mockforbat.bat");
+            //    mm.Attachments.Add(new Attachment(path));
+            //    mm.IsBodyHtml = true;
+            //    SmtpClient smtp = new SmtpClient();
+            //    smtp.Host = "smtp.gmail.com";
+            //    smtp.EnableSsl = true;
+            //    smtp.UseDefaultCredentials = false;
+            //    NetworkCredential NetworkCred = new NetworkCredential("hiteshshah4478@gmail.com", fromPassword);
+            //    smtp.Credentials = NetworkCred;
+            //    smtp.Port = 587;
+            //    smtp.Send(mm);
+            //    ViewBag.Message = "Email sent.";
+            //}
+
+            MailMessage msg = new MailMessage();
+            var path = Path.Combine(Server.MapPath("~/EricosnUpload"), "Generated.txt");
+            msg.From = new MailAddress("hiteshshah4478@gmail.com");
+                        msg.To.Add("mihirdoza@gmail.com");
+            msg.Subject = "Bat File Approval";
+            msg.Body = @"Hello Mihir <br /><br /> Please approve the attached batch file. Click <b>here</b> approve.";
+            msg.Priority = MailPriority.High;
+            msg.IsBodyHtml = true;
+            msg.Attachments.Add(new Attachment(path));
+            SmtpClient client = new SmtpClient("smtp.gmail.com");
+            client.EnableSsl = true;
+            client.Credentials = new NetworkCredential("hiteshshah4478@gmail.com", "Hitesh@123");
+            client.DeliveryMethod = SmtpDeliveryMethod.Network;
+            client.Port = 587;
+            client.Send(msg);
+            return View("EricssonXMLResult");
+
+        }
 
         protected override JsonResult Json(object data,
            string contentType, Encoding contentEncoding,
