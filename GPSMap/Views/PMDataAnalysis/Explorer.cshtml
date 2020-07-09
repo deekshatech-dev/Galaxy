@@ -1,0 +1,349 @@
+﻿@using GPSMap.Data;
+@using System.Data;
+@model GPSMap.Models.ConfigParamModel
+@{
+    ViewBag.Title = "Explorer";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="container col-md-4" style="width: 35%; height: 500px; overflow-x: auto; overflow-y: auto;">
+
+        <ul class="nav nav-tabs" id="tabHeader">
+            @*<li class="active"><a data-toggle="tab" href="#geo">Geo</a></li>
+                <li><a data-toggle="tab" href="#report">Report</a></li>*@
+        </ul>
+
+        <div class="tab-content" id="tabContent">
+            @*<div id="geo" class="tab-pane fade in active">
+                    <h3>Geo</h3>
+                    <p>Geo Tree structure</p>
+                </div>
+                <div id="report" class="tab-pane fade">
+                    <h3>Report</h3>
+                    <p>Report Tree structure</p>
+                </div>*@
+        </div>
+    </div>
+    <div class="container col-md-8" style="width: 65%; height: 500px; overflow-x: auto; overflow-y: auto;">
+        @if (Model.ReportExcelData != null)
+        {
+            if (Model.ReportExcelData.Rows.Count == 0)
+            {
+                <div>
+                    <span>No data found</span>
+                </div>
+            }
+            else
+            {
+                <table>
+                    <thead>
+                        <tr>
+                            @foreach (DataColumn col in Model.ReportExcelData.Columns)
+                            {
+                                <th style="border: 1px solid #ddd; padding: 8px;">@col.ColumnName</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (DataRow row in Model.ReportExcelData.Rows)
+                        {
+                            <tr>
+                                @foreach (DataColumn col in Model.ReportExcelData.Columns)
+                                {
+                                    <td style="border: 1px solid #ddd; padding: 8px;">@row[col.ColumnName]</td>
+                                }
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+        else if (Model.GeoReportData != null)
+        {
+            <div>
+                <span>The ttg file is generated at this path: @Model.GeoReportData </span>
+            </div>
+        }
+    </div>
+</div>
+
+<div id='myModal' class='modal'>
+    <div class="modal-dialog" style="width: 70%; height: 90%;">
+        <div class="modal-content">
+            <div id='myModalContent'>
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Report Parameters</h4>
+                </div>
+                <hr />
+                @using (Html.BeginForm("Calculate", "PMDataAnalysis", FormMethod.Post, new { @class = "form-inline" }))
+                {
+                    <dl class="dl-horizontal">
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Path
+                            @Html.HiddenFor(model => model.Path)
+                            @Html.HiddenFor(model => model.ReportName)
+                            @Html.HiddenFor(model => model.ReportType)
+                            @Html.HiddenFor(model => model.IFSDataId)
+                        </dt>
+                        <dd id="ddPath">
+                            @*/PublicFolders/Reports/Dashboard/Cluster daily*@
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <dt>
+                            Name
+                        </dt>
+                        <dd id="ddName"></dd>
+                        <dt>
+                            Description
+                        </dt>
+                        <dd id="ddDesc"></dd>
+                        <dd id="ddAttr"></dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Time From
+                        </dt>
+                        <dd>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-from'>
+                                    @Html.TextBoxFor(x => x.FromDate, new { placeholder = "Period From", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Time To
+                        </dt>
+                        <dd>
+                            <div class="form-group">
+                                <div class='input-group date' id='p-to'>
+                                    @Html.TextBoxFor(x => x.ToDate, new { placeholder = "Period To", @class = "form-control", autocomplete = "off" })
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                </div>
+                            </div>
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                        <br />
+                        <dt class="geo-filter-param">
+                            Pixel Size (Meters)
+                        </dt>
+                        <dd class="geo-filter-param">
+                            <div class="form-group">
+                                <div class='input-group' id='pixelSize'>
+                                    @*@Html.TextBoxFor(x => x.PixelSizeMeters, new { @class = "form-control digit", autocomplete = "off", type = "number" })*@
+                                    @Html.TextBoxFor(x => x.PixelSizeMeters, new { @class = "form-control digit", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </dd>
+                        <br />
+                        <dt class="geo-filter-param">
+                            EUARFCN
+                        </dt>
+                        <dd class="geo-filter-param">
+                            <div class="form-group">
+                                <div class='input-group' id='euarfcn'>
+                                    @Html.TextBoxFor(x => x.EUARFCN, new { @class = "form-control digit", autocomplete = "off" })
+                                </div>
+                            </div>
+                        </dd>
+                        <br />
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+                            Object
+                            @Html.HiddenFor(model => model.PLMNObjects)
+                        </dt>
+                        <dd>
+                            <div id="treeviewPLMNObject" class="treeview" style="width: 95%; height: 200px; overflow-x: auto; overflow-y: auto;"></div>
+                            @*PLMN*@
+                            @*@Html.DisplayFor(model => model.Name)*@
+                            @*style="height: 110px; overflow-x: hidden; overflow-y: auto;"*@
+                        </dd>
+                        <br />
+                        @*<dt>
+                                //@Html.DisplayNameFor(model => model.Name)
+                                file path
+                            </dt>
+                            <dd>
+                                D:/weekly_reports/$[yyyy]_$[mm]_$[dd]_Cluster daily.ttr
+                                //@Html.DisplayFor(model => model.Name)
+                            </dd>
+                            <br />*@
+                        <dt>
+                            @*@Html.DisplayNameFor(model => model.Name)*@
+
+                        </dt>
+                        <dd>
+                            <button id="calculate" class="btn btn-primary btn-sm" type="submit">Calculate</button>
+                            @*@Html.DisplayFor(model => model.Name)*@
+                        </dd>
+                    </dl>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@*<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>*@
+
+@section scripts{
+    <script src="~/js/bootstrap-treeview.js"></script>
+    <link href="~/Content/bootstrap-treeview.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.10.2.min.js"></script>
+    <script src="~/Scripts/bootstrap.js"></script>
+    <script src="~/Scripts/bootstrap.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //debugger;
+            var tabHeader = @Html.Raw(ViewBag.TabHeaderHtml);
+            var tabContent = @Html.Raw(ViewBag.TabContentHtml);
+            var tabNodes = @Html.Raw(ViewBag.TabNodes);
+
+            $('#tabHeader').html(tabHeader);
+            $('#tabContent').html(tabContent);
+
+            tabNodes.forEach((element) => {
+                //alert(element.text);
+                //debugger;
+                //alert(element);
+                $('#treeview' + element.text.toLowerCase()).treeview({
+                    color: "#428bca",
+                    onNodeSelected: function (event, data) {
+                        if (data.isDirectory == false) {
+                            debugger;
+                            //alert(data.path);
+                            $('#ddPath').html(data.path);
+                            $('#ddName').html(data.name);
+                            $('#ddDesc').html(data.desc);
+                            if (data.geoFilterAttributes != null) {
+                                $('#ddAttr').html(data.geoFilterAttributes.join());
+                            }
+                            else {
+                                $('#ddAttr').html('');
+                            }
+                            document.getElementById('Path').value = data.path;
+                            document.getElementById('ReportName').value = data.text;
+                            document.getElementById('IFSDataId').value = data.data_id;
+
+                            var reportType = event.target.id.replace('treeview', '');
+                            document.getElementById('ReportType').value = reportType;
+
+                            if (reportType == "geo") {
+                                $(".geo-filter-param").show();
+                            } else {
+                                $(".geo-filter-param").hide();
+                            }
+
+                            var options = { "backdrop": "static", keyboard: true };
+                            $('#myModal').modal(options);
+                            $('#myModal').modal('show');
+                        }
+                    },
+                    //data: @Html.Raw(ViewBag.TreeViewData)
+                    //data: element
+                    //data: [{ text: 'Public Directories' }, { text: 'child' }]
+                    data: JSON.stringify(element.nodes)
+                });
+
+                //collapse the tree
+                $('#treeview' + element.text.toLowerCase()).treeview('collapseAll', { silent: true });
+            });
+
+            $("#closbtn").click(function () {
+                $('#myModal').modal('hide');
+            });
+
+            $('#p-from').datetimepicker({
+                format: 'DD/MM/YYYY',
+                showClear: true
+            });
+
+            $('#p-to').datetimepicker({
+                format: 'DD/MM/YYYY',
+                showClear: true
+            });
+
+            $('#treeviewPLMNObject').treeview({
+
+                color: "#428bca",
+                //data: defaultData
+                multiSelect: false,
+                showCheckbox: true,
+                onNodeChecked: function (event, data) { },
+                onNodeSelected: function (event, data) { },
+                data: @Html.Raw(ViewBag.TreeViewPLMNObjectData)
+            });
+
+            $('#calculate').on('click', function () {
+                var message = "";
+
+                var fromdate = document.getElementById('FromDate').value;
+                if (fromdate == "") {
+                    message = "Please select From Date";
+                    alert(message);
+                    return false;
+                }
+
+                var todate = document.getElementById('ToDate').value;
+                if (todate == "") {
+                    message = "Please select To Date";
+                    alert(message);
+                    return false;
+                }
+
+                var reportType = document.getElementById('ReportType').value;
+                if (reportType == "geo") {
+                    var pixelSizeMeters = document.getElementById('PixelSizeMeters').value;
+                    if (pixelSizeMeters == "") {
+                        message = "Please select Pixel Size";
+                        alert(message);
+                        return false;
+                    }
+
+                    var euarfcn = document.getElementById('EUARFCN').value;
+                    if (euarfcn == "") {
+                        message = "Please select EUARFCN";
+                        alert(message);
+                        return false;
+                    }
+                }
+
+                var checked = $('#treeviewPLMNObject').treeview('getChecked');
+                if (checked.length == 0) {
+                    message = "Please select atleast one object for calculation";
+                    alert(message);
+                    return false;
+                }
+                else {
+                    document.getElementById('PLMNObjects').value = checked.map(x => x.text).join(",");
+                }
+
+                $('#myModal').modal('hide');
+                $.blockUI();
+
+                return true;
+            });
+
+            $(".digit").keypress(function (e) {
+                if (e.which != 8 && e.which != 0 && (e.which < 48 || e.which > 57)) {
+                    //$("#errormsg").html("Digits Only").show().fadeOut("slow");
+                    return false;
+                }
+            });
+
+        });
+    </script>
+}
