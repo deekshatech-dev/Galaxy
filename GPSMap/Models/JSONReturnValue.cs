@@ -14,5 +14,6 @@ namespace GPSMap.Models
     public class FileContentModel
     {
         public string Content { get; set; }
+        public string[] Statements { get; set; }
     }
 }

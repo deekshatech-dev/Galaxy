@@ -226,7 +226,7 @@ namespace GPSMap.Controllers
             var returnValue = new JSONReturnValue();
             try
             {
-                using (System.IO.StreamWriter file = new System.IO.StreamWriter(path))
+                using (var file = new System.IO.StreamWriter(path))
                 {
                     file.WriteLine(fileContent.Content);
                 }
@@ -238,10 +238,20 @@ namespace GPSMap.Controllers
             }
             try
             {
-                SendEmail(path);
+                var batMasterId = SaveBatMasterAndDetails(fileName, fileContent.Statements);
+                if (batMasterId > 0)
+                {
+                    SendEmail(path, batMasterId);
+                    returnValue.Status = true;
+                    returnValue.Message = "Mail with file attachment send successfully.";
+                }
+                else
+                {
+                    returnValue.Status = false;
+                    returnValue.Message = "Record not saved. Please try again";
+                }
 
-                returnValue.Status = true;
-                returnValue.Message = "Mail with file attachment send successfully.";
+
             }
             catch (Exception)
             {
@@ -252,7 +262,7 @@ namespace GPSMap.Controllers
             return Json(returnValue);
         }
 
-        public bool SendEmail(string fileFullPath)
+        public bool SendEmail(string fileFullPath, int batMasterId)
         {
             //var fromAddress = new MailAddress("hiteshshah4478@gmail.com", "From Pritesh");
             //var toAddress = new MailAddress("hiteshshah4478@gmail.com", "To Hitesh");
@@ -283,7 +293,8 @@ namespace GPSMap.Controllers
             msg.From = new MailAddress("hiteshshah4478@gmail.com");
             msg.To.Add("prashantkanakhara1988@gmail.com");
             msg.Subject = "Bat File Approval";
-            msg.Body = @"Hello Mihir <br /><br /> Please approve the attached batch file. Click <b>here</b> approve.";
+            var url = "http://localhost:61961/bat/Approve?batMasterId=" + batMasterId;
+            msg.Body = string.Format("Hello Mihir <br /><br /> Please approve the attached batch file. Click <a href=\"{0}\" target=\"_blank\">here</a> approve.", url);
             msg.Priority = MailPriority.High;
             msg.IsBodyHtml = true;
             msg.Attachments.Add(new Attachment(fileFullPath));
@@ -318,5 +329,34 @@ namespace GPSMap.Controllers
             };
         }
 
+
+        public int SaveBatMasterAndDetails(string batFileName, string[] statements)
+        {
+            var batMasterId = 0;
+            using (var dbContext = new DatabaseContext())
+            {
+                var batMaster = new BatMaster();
+                batMaster.CreatedOn = DateTime.Now;
+                batMaster.BatCreatedBy = 1;
+                batMaster.BatCreatedOn = DateTime.Now;
+                batMaster.BatFileName = batFileName;
+                dbContext.BatMaster.Add(batMaster);
+                dbContext.SaveChanges();
+                batMasterId = batMaster.BatMasterId;
+                foreach (var statement in statements)
+                {
+                    var batDetails = new BatDetails();
+                    batDetails.CreatedOn = DateTime.Now;
+                    batDetails.BatMasterId = batMaster.BatMasterId;
+                    batDetails.StatementType = "set";
+                    batDetails.Statement = statement;
+                    dbContext.BatDetails.Add(batDetails);
+                    dbContext.SaveChanges();
+                }
+
+            }
+
+            return batMasterId;
+        }
     }
 }

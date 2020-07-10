@@ -197,6 +197,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BatController.cs" />
     <Compile Include="Controllers\DailyValues.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
     <Compile Include="Controllers\EricssonController.cs" />

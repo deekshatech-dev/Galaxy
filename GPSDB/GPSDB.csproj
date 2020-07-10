@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BatMaster.cs" />
     <Compile Include="ericsson_5gdetail.cs" />
     <Compile Include="ericsson_5gmaster.cs" />
     <Compile Include="DatabaseContext.cs" />

@@ -213,6 +213,7 @@
         function ParseBatchFileValue() {
             $.blockUI();
             var fileContent = "";
+            var statements = [];
             $('#grid-tbl tbody tr').each(function (i) {
                 var $currTr = $(this);
                 var $newValueInput = $currTr.find("td:eq(9) input");
@@ -222,12 +223,15 @@
                     var $mocCell = $currTr.find("td:eq(4)");
                     var $dataContainerCell = $currTr.find("td:eq(3)");
                     var $uemeasCtrlCell = $currTr.find("td:eq(2)");
-                    fileContent += `${$mocCell.text()} = ${$dataContainerCell.text()},UeMeasControl = ${$uemeasCtrlCell.text()} ${$newValueInput.val()} = ${$scheduleInput.val()}`;
+                    var statement = `${$mocCell.text()} = ${$dataContainerCell.text()},UeMeasControl = ${$uemeasCtrlCell.text()} ${$newValueInput.val()} = ${$scheduleInput.val()}`;
+                    fileContent += statement;
                     fileContent += `\n`;
+                    statements.push("set " + statement);
                 }
             });
             $.post('@Url.Action("SaveFile")', {
-                Content: `${fileContent}`
+                Content: `${fileContent}`,
+                Statements: statements
             },
                 function (response) {
                     console.log(response);

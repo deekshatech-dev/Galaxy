@@ -30,6 +30,8 @@ namespace GPSDB
         public DbSet<KPIMaster> kpimaster { get; set; }
 
         public DbSet<Users> Users { get; set; }
+        public DbSet<BatMaster> BatMaster { get; set; }
+        public DbSet<BatDetails> BatDetails { get; set; }
         public DbSet<Report_ExcelData> Report_ExcelData { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
