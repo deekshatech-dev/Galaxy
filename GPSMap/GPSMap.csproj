@@ -205,6 +205,7 @@
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\MultipleController.cs" />
     <Compile Include="Controllers\PMDataAnalysisController.cs" />
+    <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Helper\Helper.cs" />
     <Compile Include="Models\ChartSearchModel.cs" />
     <Compile Include="Models\ConfigParamModel.cs" />
@@ -225,6 +226,7 @@
     <Compile Include="Models\MapAttributesModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\SearchXMLViewModel.cs" />
+    <Compile Include="Models\UserModel.cs" />
     <Compile Include="Parser\NMFParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -327,6 +329,9 @@
     <Content Include="Views\Multiple\_MapContainer.cshtml" />
     <Content Include="Views\PMDataAnalysis\Explorer.cshtml" />
     <Content Include="Views\EricssonUpload\Index.cshtml" />
+    <Content Include="Views\User\Create.cshtml" />
+    <Content Include="Views\User\Edit.cshtml" />
+    <Content Include="Views\User\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

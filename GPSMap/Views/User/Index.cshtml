@@ -1,0 +1,86 @@
+﻿@model GPSMap.Models.UserModel
+
+@{
+    ViewBag.Title = "Users";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<span style="display:none;" id="status">@ViewBag.Status</span>
+<div class="container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <table id="users" class="cell-border compact stripe" style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>UserName</th>
+                            <th>IsActive</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                @Html.ActionLink("Create new user", "Create")
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+<script type="text/javascript">
+        $(document).ready(() => {
+            if ($("#status").text() != null && $("#status").text() != "")
+            {
+                if (ViewBag.status == "Created") {
+                    toastr.success("New user has been created");
+                }
+                if (ViewBag.status == "Updated") {
+                    toastr.success("User record has been udpated");
+                }
+
+                if (ViewBag.status == "Deleted") {
+                    toastr.success("User record has been deleted");
+                }
+                if (ViewBag.status == "DeleteError") {
+                    toastr.success("User record cannot be deleted. Please try again or contact administrator.");
+                }
+            }
+        });
+        var gridData = @Html.Raw(Json.Encode(Model.users));
+         var table = $('#users').DataTable({
+            data: gridData,
+            dom: 'Bfrtip',
+            buttons: [
+                {
+                    text: 'clear filter',
+                    className: 'btn btn-primary btn-sm',
+                    action: function (e, dt, node, config) {
+
+                        table
+                            .search('')
+                            .columns().search('')
+                            .draw();
+                    }
+                }
+            ],
+            columns: [
+                { data: "UserName" },
+                { data: "IsActive" }
+                { data: "UserId" }
+            ],
+            orderCellsTop: true,
+            fixedHeader: true,
+            responsive: true,
+            scrollX: false,
+            autoWidth: true,
+        });
+
+        table.on('search.dt', function () {
+            popupSearchIds = $.map(table.rows({ filter: 'applied' }).data(), function (item) {
+                return item.Id;
+            })
+        });
+</script>
+}

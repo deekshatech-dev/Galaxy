@@ -177,6 +177,7 @@ footer {
     white-space:nowrap;
 }
 
-#grid-tbl tbody td {
-    width:9%;
+div.dataTables_wrapper {
+    width: 100%;
+    margin: 0 auto;
 }

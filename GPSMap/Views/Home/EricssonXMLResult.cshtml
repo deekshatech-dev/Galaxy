@@ -195,11 +195,13 @@
             orderCellsTop: true,
             fixedHeader: true,
             responsive: true,
-            scrollX: false,
-            autoWidth: true,
+            scrollY: 300,
+            scrollX: true,
             editor: true
         });
-
+        table.on('order.dt', function () {
+            setUpInputElement();
+        });
         table.on('search.dt', function () {
             //number of filtered rows
             //console.log(table.rows({ filter: 'applied' }).nodes().length);
