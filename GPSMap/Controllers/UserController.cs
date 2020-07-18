@@ -117,32 +117,35 @@ namespace GPSMap.Controllers
         }
 
         [HttpPost]
-        public ActionResult Delete(UserMaster userMaster)
+        public JsonResult Delete(int UserId)
         {
+            var returnValue = new JSONReturnValue();
             try
             {
                 using (var dbContext = new DatabaseContext())
                 {
-                    var user = dbContext.Users.FirstOrDefault(u => u.UserId == userMaster.UserId);
+                    var user = dbContext.Users.FirstOrDefault(u => u.UserId == UserId);
                     if (user != null)
                     {
                         dbContext.Users.Remove(user);
                         dbContext.SaveChanges();
-                        ViewBag.Status = "Deleted";
-                        return View();
+                        returnValue.Status = true;
+                        returnValue.Message = "Record has been deleted successfully";
                     }
                     else
                     {
-                        ViewBag.Status = "Duplicate";
-                        return View();
+                        returnValue.Status = false;
+                        returnValue.Message = "Record not found.";
                     }
                 }
             }
             catch (Exception ex)
             {
-                ViewBag.Status = "Failed";
-                return View();
+                returnValue.Status = false;
+                returnValue.Message = "Some error in delete. Please check access or contact administrator.";
             }
+
+            return Json(returnValue);
         }
     }
 }

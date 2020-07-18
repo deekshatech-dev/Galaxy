@@ -57,7 +57,23 @@
 
         <div class="col-md-12">
             <div class="table-responsive">
-                <table id="grid-tbl" class="table table-striped table-bordered responsive"></table>
+                <table id="grid-tbl" class="table table-striped table-bordered responsive">
+                    <thead>
+                        <tr>
+                            <th>SubNetwork</th>
+                            <th>MeContext</th>
+                            <th>UeMeasControl</th>
+                            <th>DataContainer</th>
+                            <th>MOC</th>
+                            <th>Parameter</th>
+                            <th>Value</th>
+                            <th>GUIValue</th>
+                            <th>Discrepency</th>
+                            <th>New Value</th>
+                            <th>Schedule</th>
+                        </tr>
+                    </thead>
+                </table>
             </div>
             @*<table id="example" class="cell-border compact stripe" style="width:100%">
                     <thead>
@@ -90,35 +106,7 @@
         var gridData = @Html.Raw(Json.Encode(ViewBag.map));
         var popupSearchIds = [];
 
-        var thead = `<thead>
-                            <tr>
-                                <th>SubNetwork</th>
-                                <th>MeContext</th>
-                                <th>UeMeasControl</th>
-                                <th>DataContainer</th>
-                                <th>MOC</th>
-                                <th>Parameter</th>
-                                <th>Value</th>
-                                <th>GUIValue</th>
-                                <th>Discrepency</th>
-                                <th>New Value</th>
-                                <th>Schedule</th>
-                            </tr>
-                        </thead>`;
-
         var table = null;
-
-            $(document).ready(function () {
-                if (gridData && gridData.length > 0) {
-                    editor = new $.fn.dataTable.Editor({
-                        table: "#grid-tbl"
-                    });
-                } else {
-                    toastr.error("No Records found for the selected dates");
-                }
-            });
-
-
         $('#p-from').datetimepicker({
             format: 'DD/MM/YYYY'
         });
@@ -131,8 +119,6 @@
         if ($.fn.DataTable.isDataTable('#grid-tbl')) {
             $('#grid-tbl').DataTable().destroy();
         }
-
-        $('#grid-tbl').html(thead);
 
         function setUpInputElement() {
             // Setup - add a text input to New Value and Schedule
@@ -160,11 +146,18 @@
             }, 1000);
         }
 
+        function setDatePicker() {
+            $(".datepicker").datetimepicker({
+                format: 'DD/MM/YYYY',
+                showClear: true
+            });
+        }
+
         table = $('#grid-tbl').DataTable({
             data: gridData,
             dom: 'Bfrtip',
             "initComplete": function () {
-                setUpInputElement();
+                setDatePicker();
             },
             buttons: [
                 {
@@ -189,18 +182,29 @@
                 { data: "Value" },
                 { data: "GUIValue" },
                 { data: "Discrepency" },
-                { data: "NewValue" ,},
-                { data: "Schedule" }
+                {
+                    title: "NewValue",
+                    mRender: function (data, type, row) {
+                        return `<input class="form-control" type="text" placeholder"New Value" />`;
+                    }
+                },
+                {
+                    title: "Schedule",
+                    mRender: function (data, type, row) {
+                        return `<div class='input-group datepicker'> <input class="form-control" type="text" placeholder"Schedule" />
+                                    <span class="input-group-addon">
+                                        <span class="glyphicon glyphicon-calendar"></span>
+                                    </span>
+                                    </div>`;
+                    }
+                }
             ],
-            orderCellsTop: true,
-            fixedHeader: true,
-            responsive: true,
             scrollY: 300,
-            scrollX: true,
-            editor: true
+            orderCellsTop: true,
+            fixedHeader: true
         });
         table.on('order.dt', function () {
-            setUpInputElement();
+            setDatePicker();
         });
         table.on('search.dt', function () {
             //number of filtered rows

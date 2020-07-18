@@ -4,48 +4,32 @@
     ViewBag.Title = "Users";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-<span style="display:none;" id="status">@ViewBag.Status</span>
+
 <div class="container">
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
-                <table id="users" class="cell-border compact stripe" style="width:100%">
+                <table id="users" class="table table-striped table-bordered responsive">
                     <thead>
                         <tr>
                             <th>UserName</th>
                             <th>IsActive</th>
+                            <th>Action</th>
                         </tr>
                     </thead>
                 </table>
             </div>
 
         </div>
-        <div class="row">
-            <div class="col-md-12">
-                @Html.ActionLink("Create new user", "Create")
-            </div>
-        </div>
     </div>
 </div>
 
 @section scripts {
-<script type="text/javascript">
+    <script type="text/javascript">
         $(document).ready(() => {
             if ($("#status").text() != null && $("#status").text() != "")
             {
-                if (ViewBag.status == "Created") {
-                    toastr.success("New user has been created");
-                }
-                if (ViewBag.status == "Updated") {
-                    toastr.success("User record has been udpated");
-                }
 
-                if (ViewBag.status == "Deleted") {
-                    toastr.success("User record has been deleted");
-                }
-                if (ViewBag.status == "DeleteError") {
-                    toastr.success("User record cannot be deleted. Please try again or contact administrator.");
-                }
             }
         });
         var gridData = @Html.Raw(Json.Encode(Model.users));
@@ -54,7 +38,7 @@
             dom: 'Bfrtip',
             buttons: [
                 {
-                    text: 'clear filter',
+                    text: 'Clear Filter',
                     className: 'btn btn-primary btn-sm',
                     action: function (e, dt, node, config) {
 
@@ -63,12 +47,24 @@
                             .columns().search('')
                             .draw();
                     }
+                },
+                {
+                    text: 'Add New User',
+                    className: 'btn btn-primary btn-sm',
+                    action: function (e, dt, node, config) {
+                        window.location.href = "create";
+                    }
                 }
             ],
             columns: [
                 { data: "UserName" },
-                { data: "IsActive" }
-                { data: "UserId" }
+                { data: "IsActive" },
+                {
+                    title: "Action",
+                    mRender: function (data, type, row) {
+                        return `<a class="table-edit" href="edit/${row.UserId}">Edit</a> | <a href="javascript:void(0);" class="table-edit" data-id="${row.userId}" onclick="DeleteRecord(${row.UserId});">Delete</a>`
+                    }
+                },
             ],
             orderCellsTop: true,
             fixedHeader: true,
@@ -82,5 +78,24 @@
                 return item.Id;
             })
         });
-</script>
+
+    function DeleteRecord(userId) {
+        if (confirm("Are you sure you want to delete a record?")) {
+            $.blockUI();
+            $.post('@Url.Action("Delete")', {
+                UserId: userId
+            },
+                function (response) {
+                    console.log(response);
+                    if (response.Status) {
+                        toastr.success(response.Message);
+                    } else {
+                        toastr.error(response.Message);
+                    }
+                }).always(function () {
+                    $.unblockUI();
+            });
+        }
+    }
+    </script>
 }

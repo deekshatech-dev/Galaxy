@@ -71,6 +71,7 @@
             </div><!-- /.navbar-collapse -->
         </div><!-- /.container-fluid -->
     </nav>
+    <span style="display:none;" id="status">@(ViewBag.Status)</span>
     <div class="body-content">
         @RenderBody()
     </div>
@@ -84,16 +85,12 @@
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
     @Scripts.Render("~/bundles/galaxy")
-    <script src="//cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js"></script>
     <script src="https://cdn.datatables.net/buttons/1.6.1/js/dataTables.buttons.min.js"></script>
     <script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap.min.js"></script>
     <script src="https://cdn.datatables.net/autofill/2.3.4/js/dataTables.autoFill.min.js"></script>
     <script src="https://cdn.datatables.net/autofill/2.3.4/js/autoFill.bootstrap.min.js"></script>
-    @*<script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>*@
-    <script src="~/js/dataTables.editor.min.js"></script>
 
-    
     <script type="text/javascript" src="~/scripts/moment.min.js"></script>
     <script type="text/javascript" src="~/scripts/bootstrap-datetimepicker.js"></script>
     <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
@@ -131,6 +128,32 @@
                 "preventDuplicates": true,
                 "preventOpenDuplicates": true
             };
+        });
+    </script>
+    <script type="text/javascript">
+        $(document).ready(() => {
+            var statusValue = $("#status").text();
+            if (statusValue != null && statusValue != "") {
+                if (statusValue == "Duplicate") {
+                    toastr.error("Record already exists");
+                }
+                if (statusValue == "Failed") {
+                    toastr.error("Some error occured. Please try again");
+                }
+                if (statusValue == "Created") {
+                    toastr.success("Record has been created");
+                }
+                if (statusValue == "Updated") {
+                    toastr.success("Record has been udpated");
+                }
+
+                if (statusValue == "Deleted") {
+                    toastr.success("Record has been deleted");
+                }
+                if (statusValue == "DeleteError") {
+                    toastr.success("Record cannot be deleted. Please try again or contact administrator.");
+                }
+            }
         });
     </script>
     @RenderSection("scripts", required: false)
