@@ -9,6 +9,8 @@ namespace GPSMap.Models
     {
         public string Message { get; set; }
         public bool Status { get; set; }
+
+        public UserModel Users { get; set; }
     }
 
     public class FileContentModel

@@ -14,6 +14,12 @@ namespace GPSMap.Controllers
         // GET: User
         public ActionResult Index()
         {
+            var userModel = this.GetUsers();
+            return View(userModel);
+        }
+
+        public UserModel GetUsers()
+        {
             var userModel = new UserModel();
             using (var dbContext = new DatabaseContext())
             {
@@ -26,8 +32,9 @@ namespace GPSMap.Controllers
                 }).ToList();
                 userModel.users = users;
             }
-            return View(userModel);
+            return userModel;
         }
+
 
         public ActionResult Create()
         {
@@ -129,8 +136,10 @@ namespace GPSMap.Controllers
                     {
                         dbContext.Users.Remove(user);
                         dbContext.SaveChanges();
+                        ViewBag.Users = this.GetUsers();
                         returnValue.Status = true;
                         returnValue.Message = "Record has been deleted successfully";
+                        
                     }
                     else
                     {

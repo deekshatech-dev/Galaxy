@@ -27,75 +27,80 @@
 @section scripts {
     <script type="text/javascript">
         $(document).ready(() => {
-            if ($("#status").text() != null && $("#status").text() != "")
-            {
-
-            }
-        });
-        var gridData = @Html.Raw(Json.Encode(Model.users));
-         var table = $('#users').DataTable({
-            data: gridData,
-            dom: 'Bfrtip',
-            buttons: [
-                {
-                    text: 'Clear Filter',
-                    className: 'btn btn-primary btn-sm',
-                    action: function (e, dt, node, config) {
-
-                        table
-                            .search('')
-                            .columns().search('')
-                            .draw();
-                    }
-                },
-                {
-                    text: 'Add New User',
-                    className: 'btn btn-primary btn-sm',
-                    action: function (e, dt, node, config) {
-                        window.location.href = "create";
-                    }
-                }
-            ],
-            columns: [
-                { data: "UserName" },
-                { data: "IsActive" },
-                {
-                    title: "Action",
-                    mRender: function (data, type, row) {
-                        return `<a class="table-edit" href="edit/${row.UserId}">Edit</a> | <a href="javascript:void(0);" class="table-edit" data-id="${row.userId}" onclick="DeleteRecord(${row.UserId});">Delete</a>`
-                    }
-                },
-            ],
-            orderCellsTop: true,
-            fixedHeader: true,
-            responsive: true,
-            scrollX: false,
-            autoWidth: true,
+            var gridData = @Html.Raw(Json.Encode(Model.users));
+            Bindusers(gridData);
         });
 
-        table.on('search.dt', function () {
-            popupSearchIds = $.map(table.rows({ filter: 'applied' }).data(), function (item) {
-                return item.Id;
-            })
-        });
+        function Bindusers(gridData) {
+            var table = $('#users').DataTable({
+                data: gridData,
+                dom: 'Bfrtip',
+                buttons: [
+                    {
+                        text: 'Clear Filter',
+                        className: 'btn btn-primary btn-sm',
+                        action: function (e, dt, node, config) {
 
-    function DeleteRecord(userId) {
-        if (confirm("Are you sure you want to delete a record?")) {
-            $.blockUI();
-            $.post('@Url.Action("Delete")', {
-                UserId: userId
-            },
-                function (response) {
-                    console.log(response);
-                    if (response.Status) {
-                        toastr.success(response.Message);
-                    } else {
-                        toastr.error(response.Message);
+                            table
+                                .search('')
+                                .columns().search('')
+                                .draw();
+                        }
+                    },
+                    {
+                        text: 'Add New User',
+                        className: 'btn btn-primary btn-sm',
+                        action: function (e, dt, node, config) {
+                            window.location.href = "create";
+                        }
                     }
-                }).always(function () {
-                    $.unblockUI();
+                ],
+                columns: [
+                    { data: "UserName" },
+                    { data: "IsActive" },
+                    {
+                        title: "Action",
+                        mRender: function (data, type, row) {
+                            return `<a class="table-edit" href="edit/${row.UserId}">Edit</a> | <a href="javascript:void(0);" class="table-edit" data-id="${row.userId}" onclick="DeleteRecord(${row.UserId});">Delete</a>`
+                        }
+                    },
+                ],
+                orderCellsTop: true,
+                fixedHeader: true,
+                responsive: true,
+                scrollX: false,
+                autoWidth: true,
+            });
+
+            table.on('search.dt', function () {
+                popupSearchIds = $.map(table.rows({ filter: 'applied' }).data(), function (item) {
+                    return item.Id;
+                })
             });
         }
-    }
+
+        function DeleteRecord(userId) {
+            if (confirm("Are you sure you want to delete a record?")) {
+                $.blockUI();
+                $.post('@Url.Action("Delete")', {
+                    UserId: userId
+                },
+                    function (response) {
+                        console.log(response);
+                        if (response.Status) {
+                            if ($.fn.DataTable.isDataTable('#users')) {
+                                $('#users').DataTable().destroy();
+                            }
+                            var users = @Html.Raw(Json.Encode(ViewBag.Users));
+                            Bindusers(users);;
+                            toastr.success(response.Message);
+                        } else {
+                            toastr.error(response.Message);
+                        }
+                    }).always(function () {
+                        $.unblockUI();
+                });
+            }
+        }
     </script>
 }
