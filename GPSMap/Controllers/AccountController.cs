@@ -36,6 +36,7 @@ namespace GPSMap.Controllers
                     {
                         //set cookie for logged in user
                         FormsAuthentication.SetAuthCookie(model.UserName.ToLower(), true);
+                        Session["UserId"] = user.UserId;
                         return RedirectToAction("Index", "Dashboard");
                     }
                     else

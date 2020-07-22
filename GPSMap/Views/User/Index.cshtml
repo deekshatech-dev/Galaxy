@@ -61,7 +61,8 @@
                     {
                         title: "Action",
                         mRender: function (data, type, row) {
-                            return `<a class="table-edit" href="edit/${row.UserId}">Edit</a> | <a href="javascript:void(0);" class="table-edit" data-id="${row.userId}" onclick="DeleteRecord(${row.UserId});">Delete</a>`
+                            return `<a class="table-edit" href="edit/${row.UserId}">Edit</a> | <a href="javascript:void(0);" class="table-edit" data-id="${row.userId}" onclick="DeleteRecord(${row.UserId});">Delete</a>
+                                    | <a href="accessrights/${row.UserId}" class="table-edit" data-id="${row.userId}">Access Rights</a>`
                         }
                     },
                 ],
@@ -86,7 +87,6 @@
                     UserId: userId
                 },
                     function (response) {
-                        console.log(response);
                         if (response.Status) {
                             if ($.fn.DataTable.isDataTable('#users')) {
                                 $('#users').DataTable().destroy();

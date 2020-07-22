@@ -1,0 +1,112 @@
+﻿@model GPSMap.Models.RightsModel
+
+@{
+    ViewBag.Title = "AccessRights";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm())
+{
+    <div class="container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-md-12">
+                    <table id="accessrights" class="table table-striped table-bordered responsive">
+                        <thead>
+                            <tr>
+                                <th>User Name</th>
+                                <th>Rights Name</th>
+                                <th>Read</th>
+                                <th>Write</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+}
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(() => {
+            var gridData = @Html.Raw(Json.Encode(Model.rights));
+            BindAccessRights(gridData);
+        });
+
+        function BindAccessRights(gridData) {
+            console.log(gridData);
+            var table = $('#accessrights').DataTable({
+                data: gridData,
+                dom: 'Bt',
+                buttons: [
+                    {
+                        text: 'Save Access Rigghts',
+                        className: 'btn btn-primary btn-sm',
+                        action: function (e, dt, node, config) {
+                            $.blockUI();
+                            var fileContent = "";
+                            var statements = [];
+                            var list = [];
+                            $('#accessrights tbody tr').each(function (i) {
+                                var accessright = {};
+                                var $currTr = $(this);
+                                var $readCell = $currTr.find("td:eq(2)");
+                                var $writeCell = $currTr.find("td:eq(3)");
+                                accessright.UserId = $readCell.find("span").text();
+                                accessright.RightsId = $writeCell.find("span").text();
+                                accessright.Read = $readCell.find("input").is(":checked");
+                                accessright.Write = $writeCell.find("input").is(":checked");
+                                list.push(accessright);
+                            });
+                            $.post('@Url.Action("AccessRights")', {
+                                rights: list
+                            },
+                                function (response) {
+                                    console.log(response);
+                                    if (response.Status) {
+                                        window.location.href = "/index";
+                                    } else {
+                                        toastr.error(response.Message);
+                                    }
+                                }).always(function () {
+                                    $.unblockUI();
+                            });
+                        }
+                    }
+                ],
+                columns: [
+                    { data: "UserName" },
+                    { data: "RightsName" },
+                    {
+                        title: "Read",
+                        mRender: function (data, type, row) {
+                            console.log(row);
+                            if (row.Read) {
+                                return `<input class="form-control" type="checkbox" checked /> <span id="userid" style="display:none">${row.UserId}</span>`
+                            } else {
+                                return `<input class="form-control" type="checkbox" /> <span id="userid" style="display:none">${row.UserId}</span>`
+                            }
+                        }
+                    },
+                    {
+                        title: "Write",
+                        mRender: function (data, type, row) {
+                            if (row.Write) {
+                                return `<input class="form-control" type="checkbox" checked /> <span id="userid" style="display:none">${row.RightsId}</span>`
+                            } else {
+                                return `<input class="form-control" type="checkbox" /> <span id="userid" style="display:none">${row.RightsId}</span>`
+                            }
+                        }
+                    }
+                ],
+                orderCellsTop: true,
+                fixedHeader: true,
+                responsive: true,
+                scrollX: false,
+                autoWidth: true,
+            });
+        }
+
+    </script>
+}

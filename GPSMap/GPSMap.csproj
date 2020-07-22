@@ -197,6 +197,7 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\BaseController.cs" />
     <Compile Include="Controllers\BatController.cs" />
     <Compile Include="Controllers\DailyValues.cs" />
     <Compile Include="Controllers\DashboardController.cs" />
@@ -207,6 +208,7 @@
     <Compile Include="Controllers\PMDataAnalysisController.cs" />
     <Compile Include="Controllers\UserController.cs" />
     <Compile Include="Helper\Helper.cs" />
+    <Compile Include="Helper\Logger.cs" />
     <Compile Include="Models\ChartSearchModel.cs" />
     <Compile Include="Models\ConfigParamModel.cs" />
     <Compile Include="Models\EricssonGV.cs" />
@@ -224,6 +226,7 @@
     <Compile Include="Models\MapPointsModel.cs" />
     <Compile Include="Models\Ericsson5gXMLSearch.cs" />
     <Compile Include="Models\MapAttributesModel.cs" />
+    <Compile Include="Models\RightsModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Models\SearchXMLViewModel.cs" />
     <Compile Include="Models\UserModel.cs" />
@@ -332,10 +335,12 @@
     <Content Include="Views\User\Create.cshtml" />
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
+    <Content Include="Views\User\AccessRights.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="EricosnUpload\" />
+    <Folder Include="Error\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />

@@ -33,6 +33,9 @@ namespace GPSDB
         public DbSet<BatMaster> BatMaster { get; set; }
         public DbSet<BatDetails> BatDetails { get; set; }
         public DbSet<Report_ExcelData> Report_ExcelData { get; set; }
+        public DbSet<UserRights> UserRights { get; set; }
+        public DbSet<RightsItems> RightsItems { get; set; }
+        public DbSet<Log> Log { get; set; }
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
