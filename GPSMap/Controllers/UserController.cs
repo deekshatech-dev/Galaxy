@@ -13,14 +13,10 @@ namespace GPSMap.Controllers
     [Authorize]
     public class UserController : BaseController
     {
-        public UserController() {
-            base.Logged();
-        }
-
         // GET: User
         public ActionResult Index()
         {
-            Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Index", "Get");
+            // Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Index", "Get");
             var userModel = this.GetUsers();
 
             return View(userModel);
@@ -46,7 +42,7 @@ namespace GPSMap.Controllers
 
         public ActionResult Create()
         {
-            Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Create", "Get");
+            // Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Create", "Get");
             return View();
         }
 
@@ -55,7 +51,7 @@ namespace GPSMap.Controllers
         {
             try
             {
-                Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Create", "Post");
+                // Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Create", "Post");
                 using (var dbContext = new DatabaseContext())
                 {
                     var dupUser = dbContext.Users.FirstOrDefault(u => u.UserName == userMaster.UserName);
@@ -88,7 +84,7 @@ namespace GPSMap.Controllers
 
         public ActionResult Edit(int id)
         {
-            Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Edit", "Get");
+            // Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Edit", "Get");
             var userMaster = new UserMaster();
             using (var dbContext = new DatabaseContext())
             {
@@ -107,7 +103,7 @@ namespace GPSMap.Controllers
         {
             try
             {
-                Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Edit", "Post");
+                // Logger.LoggedMe(Convert.ToInt32(Session["UserId"]), "User", "Edit", "Post");
                 using (var dbContext = new DatabaseContext())
                 {
                     var dupUser = dbContext.Users.FirstOrDefault(u => u.UserName == userMaster.UserName && u.UserId != userMaster.UserId);

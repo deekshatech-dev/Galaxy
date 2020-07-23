@@ -250,6 +250,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="Images\403.jpg" />
     <Content Include="Images\auto-cm.png" />
     <Content Include="Images\back.png" />
     <Content Include="Images\blu-blank-lv.png" />
@@ -336,6 +337,7 @@
     <Content Include="Views\User\Edit.cshtml" />
     <Content Include="Views\User\Index.cshtml" />
     <Content Include="Views\User\AccessRights.cshtml" />
+    <Content Include="Views\Account\NotAuthorised.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

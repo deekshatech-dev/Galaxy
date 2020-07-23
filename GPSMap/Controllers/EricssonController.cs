@@ -12,13 +12,20 @@ namespace GPSMap.Controllers
 
 
     [Authorize]
-    public class EricssonController : Controller
+    public class EricssonController : BaseController
     {
         public List<GPSDB.ericsson_5gdetail> p_ericsson_5gdetail { get; set; }
         // GET: Ericsson
         public ActionResult Index()
         {
-            return View();
+            if (this.hasRights("OSS Reporting") || this.hasRights("PM Counter"))
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/Account/NotAuthorised");
+            }
         }
         [HttpPost]
         [MultipleButton(Name = "action", Argument = "Index")]
@@ -159,7 +166,7 @@ namespace GPSMap.Controllers
                                     }
 
                                     chartValues.ChartData.Add(dayKPIValue.ToString());
-                                    chartValues.Labels.Add(string.Format("{0}/{1}/{2}", date.Year, date.Month.ToString("00"),item.ToString("00")));
+                                    chartValues.Labels.Add(string.Format("{0}/{1}/{2}", date.Year, date.Month.ToString("00"), item.ToString("00")));
                                 }
                             }
                         }
@@ -188,12 +195,12 @@ namespace GPSMap.Controllers
                         }
 
 
-                        KPI.KPI = dbContext.kpimaster.FirstOrDefault(s=>s.KPIId == id).KPIName;
+                        KPI.KPI = dbContext.kpimaster.FirstOrDefault(s => s.KPIId == id).KPIName;
                         KPI.ChartData = chartValues;
                         KPIValues.Add(KPI);
                     }
                 }
-            } 
+            }
             return Json(KPIValues, JsonRequestBehavior.AllowGet);
         }
 

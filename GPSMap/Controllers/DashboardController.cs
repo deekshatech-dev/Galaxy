@@ -12,7 +12,7 @@ using GPSMap.Helper;
 namespace GPSMap.Controllers
 {
     [Authorize]
-    public class DashboardController : Controller
+    public class DashboardController : BaseController
     {
         // GET: Dashboard
         public List<TreeViewNode> lstIFSData;
@@ -95,7 +95,11 @@ namespace GPSMap.Controllers
             string treeViewDatajson = JsonConvert.SerializeObject(treeNodelist);
             ViewBag.TreeViewData = treeViewDatajson;
 
-            return View();
+            var userName = System.Web.HttpContext.Current.User.Identity.Name;
+            var userRights = this.GetRights(userName).Where(e => e.Read || e.Write).ToList();
+            var returnValue = new SearchViewModel();
+            returnValue.rights = userRights;
+            return View(returnValue);
         }
 
         private List<TreeViewNode> getChildNodes(string id)

@@ -47,5 +47,11 @@ namespace GPSMap.Controllers
             }
             return View(model);
         }
+
+        [AllowAnonymous]
+        public ActionResult NotAuthorised()
+        {
+            return View();
+        }
     }
 }

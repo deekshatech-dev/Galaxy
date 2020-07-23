@@ -6,8 +6,8 @@
 }
 <div class="row">
     <div class="col-md-3" style="display:none">
-       @* <div class="treeview-animated mx-4 my-4">*@
-            <div id="treeview4" class="treeview"></div>
+        @* <div class="treeview-animated mx-4 my-4">*@
+        <div id="treeview4" class="treeview"></div>
         @*</div>*@
     </div>
     <div class="col-md-9">
@@ -98,67 +98,36 @@
             </div>
         </div>
         <div id="maindiv">
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="#">
-                            @*<img src="~/Images/auto-cm.jpg" style="width: 70%;" alt="auto-cm">*@
-                            <h3>Auto CM Configuration</h3>
-                        </a>
-                    </div>
+            @if (Model.rights.Count() > 0)
+            {
+                <div class="row">
+                    @foreach (var item in Model.rights.Take(4))
+                    {
+                        <div class="col-md-3">
+                            <div class="thumbnail">
+                                <a href="javascrip:void(0);" onclick="Navigateme('@item.RightsName')">
+                                    <h3>@item.RightsName</h3>
+                                </a>
+                            </div>
+                        </div>
+                    }
                 </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="#">
-                            @*<img src="~/Images/data-storage.jpg" style="width: 70%;" alt="data-storage">*@
-                            <h3>Data Storage</h3>
-                        </a>
+                if (Model.rights.Count() > 4)
+                {
+                    <div class="row">
+                        @foreach (var item in Model.rights.Skip(4).Take(4))
+                        {
+                            <div class="col-md-3">
+                                <div class="thumbnail">
+                                    <a href="javascrip:void(0);" onclick="Navigateme('@item.RightsName')">
+                                        <h3>@item.RightsName</h3>
+                                    </a>
+                                </div>
+                            </div>
+                        }
                     </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="javascript:void(0)" onclick="toggleDiv('data');">
-                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="network-audit">*@
-                            <h3>Network Audit</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="javascript:void(0)" onclick="toggleDiv('parser');">
-                            @*<img src="~/Images/pm-counter.jpg" style="width: 70%;" alt="pm-counter">*@
-                            <h3>PM Counter</h3>
-                        </a>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        @*<a href="javascript:void(0);" class="anchorDetail" data-id="123">*@
-                        <a href="~/PMDataAnalysis/Explorer">
-                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="Network-Audit">*@
-                            <h3>PM Data Analysis</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="javascript:void(0)" onclick="toggleDiv('Reports');">
-                            @*<img src="~/Images/oss.jpg" style="width: 70%;" alt="OSS">*@
-                            <h3>Oss Reporting</h3>
-                        </a>
-                    </div>
-                </div>
-                <div class="col-md-3">
-                    <div class="thumbnail">
-                        <a href="">
-                            @*<img src="~/Images/network-audit.jpg" style="width: 70%;" alt="trace">*@
-                            <h3>Trace Analyser</h3>
-                        </a>
-                    </div>
-                </div>
-            </div>
+                }
+            }
         </div>
     </div>
 
@@ -260,6 +229,29 @@
 @section scripts{
     <script src="~/js/bootstrap-treeview.js"></script>
     <script>
+        function Navigateme(sectionName) {
+            switch (sectionName.toLowerCase()) {
+                case "network audit":
+                    toggleDiv("data");
+                    break;
+
+                case "pm counter":
+                    toggleDiv("parser");
+                    break;
+
+                case "oss reporting":
+                    toggleDiv("Reports");
+                    break;
+
+                case "pm data analysis":
+                    window.location.href = "/PMDataAnalysis/Explorer";
+                    break;
+
+                default:
+                    return false;
+            }
+
+        }
         function toggleDiv(sectionName) {
             $(".icons").hide();
             $("#maindiv").hide();

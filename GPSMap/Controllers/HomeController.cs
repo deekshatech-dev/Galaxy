@@ -16,49 +16,63 @@ using System.IO;
 namespace GPSMap.Controllers
 {
     [Authorize]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
         public ActionResult Index()
         {
-            ViewBag.map = "{}";
-            ViewBag.KPIValues = KPIValues.LTE_UE_CQI_CQI.ToSelectList();
-            var form = new SearchViewModel();
-            return View(form);
+            if (this.hasRights("Network Audit"))
+            {
+                ViewBag.map = "{}";
+                ViewBag.KPIValues = KPIValues.LTE_UE_CQI_CQI.ToSelectList();
+                var form = new SearchViewModel();
+                return View(form);
+            }
+            else
+            {
+                return Redirect("/Account/NotAuthorised");
+            }
         }
 
         [HttpPost]
         public ActionResult Index(SearchViewModel form, FormCollection formData)
         {
-            using (var dbContext = new DatabaseContext())
+            if (this.hasRights("Network Audit"))
             {
-                var map = dbContext.MapPoints.Join(dbContext.MapAttributes,
-                     mp => mp.attribute_id,
-                     ma => ma.attributeid,
-                    (mp, ma) => new { MapPoints = mp, MapAttributes = ma }).AsQueryable();
-
-                if (form.ToDate != null)
+                using (var dbContext = new DatabaseContext())
                 {
-                    map = map.Where(t => t.MapPoints.period_to <= form.ToDate.Value);
-                }
-                if (form.FromDate != null)
-                {
-                    map = map.Where(t => t.MapPoints.period_from >= form.FromDate.Value);
-                }
-                if (form.Id != null && form.Id.Any())
-                {
-                    map = map.Where(t => form.Id.Contains(t.MapPoints.Id));
+                    var map = dbContext.MapPoints.Join(dbContext.MapAttributes,
+                         mp => mp.attribute_id,
+                         ma => ma.attributeid,
+                        (mp, ma) => new { MapPoints = mp, MapAttributes = ma }).AsQueryable();
+
+                    if (form.ToDate != null)
+                    {
+                        map = map.Where(t => t.MapPoints.period_to <= form.ToDate.Value);
+                    }
+                    if (form.FromDate != null)
+                    {
+                        map = map.Where(t => t.MapPoints.period_from >= form.FromDate.Value);
+                    }
+                    if (form.Id != null && form.Id.Any())
+                    {
+                        map = map.Where(t => form.Id.Contains(t.MapPoints.Id));
+                    }
+
+                    var maplist = map.ToList();
+
+                    JavaScriptSerializer serializer = new JavaScriptSerializer();
+                    serializer.MaxJsonLength = Int32.MaxValue;
+                    ViewBag.map = serializer.Serialize(maplist);
                 }
 
-                var maplist = map.ToList();
-
-                JavaScriptSerializer serializer = new JavaScriptSerializer();
-                serializer.MaxJsonLength = Int32.MaxValue;
-                ViewBag.map = serializer.Serialize(maplist);
+                ViewBag.KPIValues = KPIValues.LTE_UE_CQI_CQI.ToSelectList(formData["KPI"]);
+                form.KPI = formData["KPI"];
+                return View(form);
             }
-
-            ViewBag.KPIValues = KPIValues.LTE_UE_CQI_CQI.ToSelectList(formData["KPI"]);
-            form.KPI = formData["KPI"];
-            return View(form);
+            else
+            {
+                return Redirect("/Account/NotAuthorised");
+            }
         }
 
         public ActionResult GPSMap()
@@ -163,8 +177,16 @@ namespace GPSMap.Controllers
         public ActionResult XMLResult()
         {
             ViewBag.map = null;
-            return View();
+            if (this.hasRights("PM Counter"))
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/Account/NotAuthorised");
+            }
         }
+
         [HttpPost]
         public ActionResult XMLResult(SearchXMLViewModel form)
         {

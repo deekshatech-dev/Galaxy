@@ -25,5 +25,6 @@ namespace GPSMap.Models
                 return Enumerable.Empty<int>();
             }
         }
+        public List<Rights> rights { get; set; }
     }
 }

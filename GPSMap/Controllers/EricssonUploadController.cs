@@ -13,12 +13,19 @@ using GPSMap.Data;
 
 namespace GPSMap.Controllers
 {
-    public class EricssonUploadController : Controller
+    public class EricssonUploadController : BaseController
     {
         // GET: EricssonUpload
         public ActionResult Index()
         {
-            return View();
+            if (this.hasRights("PM Counter"))
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/Account/NotAuthorised");
+            }
         }
 
 

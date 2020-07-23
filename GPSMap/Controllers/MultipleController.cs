@@ -6,12 +6,20 @@ using GPSMap.Models;
 
 namespace GPSMap.Controllers
 {
-    public class MultipleController : Controller
+    public class MultipleController : BaseController
     {
         public ActionResult Index()
         {
-            return View();
+            if (this.hasRights("PM Counter"))
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/Account/NotAuthorised");
+            }
         }
+    
         public ActionResult GetBaseMapResultContainer()
         {
             var chart = new KPIChartDataModel();

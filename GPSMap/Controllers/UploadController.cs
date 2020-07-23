@@ -15,12 +15,19 @@ using GPSMap.Models;
 namespace GPSMap.Controllers
 {
     [Authorize]
-    public class UploadController : Controller
+    public class UploadController : BaseController
     {
         // GET: Upload
         public ActionResult Index()
         {
-            return View();
+            if (base.hasRights("Network Audit"))
+            {
+                return View();
+            }
+            else
+            {
+                return Redirect("/Account/NotAuthorised");
+            }
         }
 
         [HttpPost]

@@ -19,7 +19,7 @@ namespace GPSMap.Helper
                 log.Type = type;
                 log.CreatedOn= System.DateTime.Now;
                 dbContext.Log.Add(log);
-                dbContext.SaveChanges();
+                // dbContext.SaveChanges();
             }
         }
     }
