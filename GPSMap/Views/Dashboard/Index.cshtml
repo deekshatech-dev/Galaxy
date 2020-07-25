@@ -242,8 +242,23 @@
                     toggleDiv("data");
                     break;
 
+                case "auto cm configuration":
+                    setTimeout(function () {
+                        window.location.href = "/Home/XMLResult";
+                    }, 500);
+                    
+                    break;
+
+                case "data storage":
+                    setTimeout(function () {
+                        window.location.href = "/Ericsson/Index";
+                    }, 500);
+                    break;
+
                 case "network audit":
-                    window.location.href = "/Multiple/Index";
+                    setTimeout(function () {
+                        window.location.href = "/Multiple/Index";
+                    }, 500);
                     break;
 
                 case "pm counter":
@@ -255,7 +270,9 @@
                     break;
 
                 case "pm data analysis":
-                    window.location.href = "/PMDataAnalysis/Explorer";
+                    setTimeout(function () {
+                        window.location.href = "/PMDataAnalysis/Explorer";
+                    }, 500);
                     break;
 
                 default:
