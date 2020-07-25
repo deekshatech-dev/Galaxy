@@ -36,14 +36,17 @@ namespace GPSMap.Controllers
                 string type = System.Web.HttpContext.Current.Request.HttpMethod;
                 var userName = System.Web.HttpContext.Current.User.Identity.Name;
                 var user = dbContext.Users.FirstOrDefault(u => u.UserName == userName);
-                var log = new Log();
-                log.UserId = user.UserId;
-                log.Controller = controller;
-                log.Action = action;
-                log.Type = type;
-                log.CreatedOn = System.DateTime.Now;
-                dbContext.Log.Add(log);
-                dbContext.SaveChanges();
+                if (user != null)
+                {
+                    var log = new Log();
+                    log.UserId = user.UserId;
+                    log.Controller = controller;
+                    log.Action = action;
+                    log.Type = type;
+                    log.CreatedOn = System.DateTime.Now;
+                    dbContext.Log.Add(log);
+                    dbContext.SaveChanges();
+                }
             }
         }
         public List<Rights> GetRights(string Username)
@@ -60,6 +63,7 @@ namespace GPSMap.Controllers
                                   {
                                       RightsId = d.RightsId,
                                       RightsName = e.RightsName,
+                                      IconName = e.IconName,
                                       Read = d.Read,
                                       Write = d.Write,
                                       UserId = d.UserId,
@@ -77,7 +81,8 @@ namespace GPSMap.Controllers
             var returnValue = true;
             var userName = System.Web.HttpContext.Current.User.Identity.Name;
             var userRights = this.GetRights(userName).Where(e => e.Read || e.Write).ToList();
-            if (!userRights.Any(a => a.RightsName == pageName)) {
+            if (!userRights.Any(a => a.RightsName == pageName))
+            {
                 returnValue = false;
             }
 

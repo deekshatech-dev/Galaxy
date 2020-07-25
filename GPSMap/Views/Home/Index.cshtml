@@ -2,14 +2,23 @@
 @model GPSMap.Models.SearchViewModel
 @{
     ViewBag.Title = "Home Page";
+    Layout = "~/Views/Shared/_GalaxyLayout.cshtml";
 }
 
 
-@using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-inline" }))
-{
-    @Html.HiddenFor(x => x.Ids)
+<div class="content">
     <div class="container">
-        <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <div class="page-title-box">
+                    <h4 class="page-title">Map</h4>
+                    <div class="clearfix"></div>
+                </div>
+            </div>
+        </div>
+        @using (Html.BeginForm("Index", "Home", FormMethod.Post, new { @class = "form-inline" }))
+        {
+            @Html.HiddenFor(x => x.Ids)
             <div class="row">
                 <div class="col-md-12">
                     <div class="panel panel-default" style="margin-top:10px;">
@@ -25,7 +34,7 @@
                                         {
                                             if (item.Text != null)
                                             {
-                                                if (Model.KPI != null && Model.KPI.Split(',').ToList().Any(s=>s.ToLower() == item.Value.ToLower()))
+                                                if (Model.KPI != null && Model.KPI.Split(',').ToList().Any(s => s.ToLower() == item.Value.ToLower()))
                                                 {
                                                     <option value="@item.Value" selected>
                                                         @item.Text
@@ -69,18 +78,18 @@
                 <div class="col-md-12" id="map_section" style="display:none;">
                     <div class="panel panel-default">
                         <div class="panel-body" style="overflow:hidden" id="map_view">
-                           @* <fieldset id="map_view">*@
+                            @* <fieldset id="map_view">*@
 
-                                @*<div id="gpstest1" style="width: auto; height: auto;">
+                            @*<div id="gpstest1" style="width: auto; height: auto;">
                                 </div>*@
                             @*</fieldset>*@
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        }
     </div>
-}
+</div>
 
 
 

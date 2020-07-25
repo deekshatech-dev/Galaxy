@@ -17,6 +17,7 @@ namespace GPSDB
         public int RightsId{ get; set; }
         [Column("tt_RightsName")]
         public string RightsName { get; set; }
+        public string IconName { get; set; }
         public int CreatedBy { get; set; }
         public DateTime CreatedDateTime { get; set; }
     }

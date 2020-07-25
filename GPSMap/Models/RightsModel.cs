@@ -11,6 +11,7 @@ namespace GPSMap.Models
         public string UserName { get; set; }
         public int RightsId { get; set; }
         public string RightsName { get; set; }
+        public string IconName { get; set; }
         public bool Read { get; set; }
         public bool Write { get; set; }
         public int CreatedBy { get; set; }
